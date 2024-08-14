@@ -1,11 +1,17 @@
+"use client";
 import React from "react";
-import Image from "next/image";
 import Link from "next/link";
+import ThemeToggle from "@/components/ThemeToggle";
 
 export default function Home() {
   return (
-    <main>
-      <h1 className="my-10 text-5xl font-bold leading-loose text-center">Hello <br />Atlas Tech <br />Kanban App </h1>
+    <main className="flex items-center justify-center h-svh">
+      <div className="fixed top-0 right-0">
+        <ThemeToggle />
+      </div>
+      <Link href={"/board"} className="btn">
+        Start
+      </Link>
     </main>
   );
 }
