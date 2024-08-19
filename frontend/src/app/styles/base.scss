@@ -1,0 +1,37 @@
+/* globals.scss */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import "./utilities/variables";
+@import "./components/buttons";
+
+.transition-theme {
+  transition: background-color 1000ms, color 1000ms;
+}
+
+html.light {
+  body {
+    background-color: $color-bg-light;
+    color: $color-text-light;
+  }
+  button {
+    background-color: $color-bg-dark;
+    color: $color-text-dark;
+    padding: .5rem 1rem;
+    border-radius: 1rem;
+  }
+}
+
+html.dark {
+  body {
+    background-color: $color-bg-dark;
+    color: $color-text-dark;
+  }
+  button {
+    background-color: $color-bg-light;
+    color: $color-text-light;
+    padding: .5rem 1rem;
+    border-radius: 1rem;
+  }
+}
