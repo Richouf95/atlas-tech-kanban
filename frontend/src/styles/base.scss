@@ -35,3 +35,8 @@ html.dark {
     border-radius: 1rem;
   }
 }
+
+input {
+  padding: .5rem;
+  @apply rounded-md
+}
