@@ -33,7 +33,7 @@ function BoardColumn() {
   };
 
   return (
-    <div className="mx-5 border p-5 min-w-64 bg-red-300">
+    <div className="mx-5 border p-5 min-w-64 bg-gray-50">
       <div className="bg-blue-300 drag-handle">Column name</div>
       <>
         <ReactSortable<ItemInterface>
