@@ -3,7 +3,7 @@ export interface User {
     email: string;
     name: string;
     token: string
-}
+} null
 
 export interface AuthState {
     user: User | null;

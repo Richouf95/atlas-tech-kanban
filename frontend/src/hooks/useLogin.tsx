@@ -26,9 +26,6 @@ export const useLogin = () => {
         return;
       }
 
-      // Stockage local des informations de l'utilisateur
-      localStorage.setItem("atlas-user", JSON.stringify(resultJson));
-
       // Dispatch de l'action login avec les données de l'utilisateur
       dispatch(loginAction(resultJson));
 

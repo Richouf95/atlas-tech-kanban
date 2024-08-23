@@ -22,25 +22,24 @@ function BoardContainer() {
 
   // Fonction pour mettre à jour la liste après tri
   const handleSortEnd = (newList: ItemInterface[]) => {
-    console.log("New order:", newList);
+    // console.log("New order:", newList);
     // Mettez à jour l'état ou faites d'autres actions nécessaires
   };
 
   return (
-<ReactSortable<ItemInterface>
-  list={columnsList}
-  setList={handleSortEnd}
-  group={"Columns"}
-  className="flex"
-  handle=".drag-handle"  // Ajout de handle ici
->
-  {columnsList.map((item) => (
-    <div>
-      <BoardColumn key={item.id} />
-    </div>
-  ))}
-</ReactSortable>
-
+    <ReactSortable<ItemInterface>
+      list={columnsList}
+      setList={handleSortEnd}
+      group={"Columns"}
+      className="flex"
+      handle=".drag-handle" // Ajout de handle ici
+    >
+      {columnsList.map((item) => (
+        <div>
+          <BoardColumn key={item.id} />
+        </div>
+      ))}
+    </ReactSortable>
   );
 }
 

@@ -28,7 +28,7 @@ function BoardColumn() {
 
   // Fonction pour mettre à jour la liste après tri
   const handleSortEnd = (newList: ItemInterface[]) => {
-    console.log("New order:", newList);
+    // console.log("New order:", newList);
     // Mettez à jour l'état ou faites d'autres actions nécessaires
   };
 

@@ -1,14 +1,11 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Inter } from "next/font/google";
 import "./globals.scss";
 import { Provider, useSelector, useDispatch } from "react-redux";
 import store from "@/store/store";
 import { RootState } from "@/store/store";
 import { setTheme } from "@/store/reducers/theme/themeSlice";
-
-const inter = Inter({ subsets: ["latin"] });
 
 function ThemeWrapper({ children }: { children: React.ReactNode }) {
   const theme = useSelector((state: RootState) => state.theme.theme);
@@ -23,28 +20,26 @@ function ThemeWrapper({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const htmlElement = document.documentElement;
-    htmlElement.classList.remove("light", "dark"); // Remove previous theme classes
-    htmlElement.classList.add(theme); // Add new theme class
+    htmlElement.classList.remove("light", "dark"); // Supprimer les classes de thème précédentes
+    htmlElement.classList.add(theme); // Ajouter la nouvelle classe de thème
   }, [theme]);
 
   if (!isThemeLoaded) {
-    // Render a loading indicator or nothing until the theme is set
+    // Afficher un indicateur de chargement ou rien jusqu'à ce que le thème soit chargé
     return null;
   }
 
-  return (
-    <html lang="en" className={theme}>
-      <body className={inter.className}>
-        {children}
-      </body>
-    </html>
-  );
+  return <>{children}</>; // Ne pas inclure de balises <html> ou <body> ici
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <Provider store={store}>
-      <ThemeWrapper>{children}</ThemeWrapper>
-    </Provider>
+    <html lang="fr">
+      <body>
+        <Provider store={store}>
+          <ThemeWrapper>{children}</ThemeWrapper>
+        </Provider>
+      </body>
+    </html>
   );
 }

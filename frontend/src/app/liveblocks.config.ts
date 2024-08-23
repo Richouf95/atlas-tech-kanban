@@ -1,49 +1,79 @@
 // Define Liveblocks types for your application
 // https://liveblocks.io/docs/api-reference/liveblocks-react#Typing-your-data
-declare global {
-  interface Liveblocks {
-    // Each user's Presence, for useMyPresence, useOthers, etc.
-    Presence: {
-      // Example, real-time cursor coordinates
-      // cursor: { x: number; y: number };
-    };
+import { LiveList, LiveObject, createClient } from "@liveblocks/client";
+import { createRoomContext } from "@liveblocks/react";
 
-    // The Storage tree for the room, for useMutation, useStorage, etc.
-    Storage: {
-      // Example, a conflict-free list
-      // animals: LiveList<string>;
-    };
+const client = createClient({
+  authEndpoint: "/api/liveblocks-auth",
+  throttle: 100,
+});
 
-    // Custom user info set when authenticating with a secret key
-    UserMeta: {
-      id: string;
-      info: {
-        // Example properties, for useSelf, useUser, useOthers, etc.
-        name: string;
-        email: string;
-      };
-    };
+export type Column = {
+  name: string;
+  id: string;
+  index: number;
+};
 
-    // Custom events, for useBroadcastEvent, useEventListener
-    RoomEvent: {};
-      // Example has two events, using a union
-      // | { type: "PLAY" } 
-      // | { type: "REACTION"; emoji: "🔥" };
+export type Card = {
+  name: string;
+  id: string;
+  index: number;
+  columnId: string;
+};
 
-    // Custom metadata set on threads, for useThreads, useCreateThread, etc.
-    ThreadMetadata: {
-      // Example, attaching coordinates to a thread
-      // x: number;
-      // y: number;
-    };
+// Each user's Presence, for useMyPresence, useOthers, etc.
+export type Presence = {
+  // Example, real-time cursor coordinates
+  boardId?: null | string;
+  cardId?: null | string;
+};
 
-    // Custom room info set with resolveRoomsInfo, for useRoomInfo
-    RoomInfo: {
-      // Example, rooms with a title and url
-      id: string;
-      title: string;
-    };
-  }
-}
+// The Storage tree for the room, for useMutation, useStorage, etc.
+export type Storage = {
+  // Example, a conflict-free list
+  columns: LiveList<LiveObject<Column>>;
+  cards: LiveList<LiveObject<Card>>;
+};
+
+// Custom user info set when authenticating with a secret key
+export type UserMeta = {
+  id: string;
+  info: {
+    name: string;
+    email: string;
+  };
+};
+// Custom events, for useBroadcastEvent, useEventListener
+export type RoomEvent = {};
+// Example has two events, using a union
+// | { type: "PLAY" }
+// | { type: "REACTION"; emoji: "🔥" };
+
+// Custom metadata set on threads, for useThreads, useCreateThread, etc.
+export type ThreadMetadata = {
+  // Example, attaching coordinates to a thread
+  cardId: string;
+};
+
+// Custom room info set with resolveRoomsInfo, for useRoomInfo
+export type RoomInfo = {
+  // Example, rooms with a title and url
+  // title: string;
+  // url: string;
+};
+
+export const {
+  RoomProvider,
+  useMyPresence,
+  useUpdateMyPresence,
+  useStorage,
+  useMutation,
+  useRoom,
+  useSelf,
+  useOthers,
+  useThreads,
+} = createRoomContext<Presence, Storage, UserMeta, RoomEvent, ThreadMetadata>(
+  client
+);
 
 export {};
