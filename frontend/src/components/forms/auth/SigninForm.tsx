@@ -13,6 +13,7 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useLogin } from "@/hooks/useLogin";
+import GoogleAuthProvider from "./GoogleAuthProvider";
 
 function SigninForm() {
   const [showPassword, setShowPassword] = React.useState(false);
@@ -55,10 +56,14 @@ function SigninForm() {
 
   return (
     <div className="flex justify-center items-center px-5 mb-10 md:p-10">
-      <div
-        className="p-6 rounded-lg py-10 max-w-lg" id="loginForm"
-      >
+      <div className="p-6 rounded-lg py-10 max-w-lg" id="loginForm">
         <h2 className="text-3xl mb-5 mt-2 text-center font-bold">Connexion</h2>
+        <GoogleAuthProvider />
+        <div className="grid grid-cols-11 my-1">
+          <div className="border-b-2 col-span-5 mb-2"></div>
+          <span className="col-span-1 text-center">Or</span>
+          <div className="border-b-2 col-span-5 mb-2"></div>
+        </div>
         <form onSubmit={handleSubmit}>
           <Box sx={{ display: "flex", flexWrap: "wrap", width: 1 }}>
             <FormControl sx={{ m: 1, width: 1 }} variant="outlined">

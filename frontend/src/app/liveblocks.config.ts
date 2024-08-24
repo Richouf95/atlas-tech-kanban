@@ -1,25 +1,14 @@
 // Define Liveblocks types for your application
 // https://liveblocks.io/docs/api-reference/liveblocks-react#Typing-your-data
-import { LiveList, LiveObject, createClient } from "@liveblocks/client";
-import { createRoomContext } from "@liveblocks/react";
+import { createClient } from "@liveblocks/client";
+import { LiveList, LiveObject } from "@liveblocks/core";
+import { createRoomContext, createLiveblocksContext } from "@liveblocks/react";
+import { Column, Card } from "@/types";
 
 const client = createClient({
   authEndpoint: "/api/liveblocks-auth",
   throttle: 100,
 });
-
-export type Column = {
-  name: string;
-  id: string;
-  index: number;
-};
-
-export type Card = {
-  name: string;
-  id: string;
-  index: number;
-  columnId: string;
-};
 
 // Each user's Presence, for useMyPresence, useOthers, etc.
 export type Presence = {
@@ -41,8 +30,10 @@ export type UserMeta = {
   info: {
     name: string;
     email: string;
+    image: string;
   };
 };
+
 // Custom events, for useBroadcastEvent, useEventListener
 export type RoomEvent = {};
 // Example has two events, using a union
@@ -75,5 +66,11 @@ export const {
 } = createRoomContext<Presence, Storage, UserMeta, RoomEvent, ThreadMetadata>(
   client
 );
+
+export const {
+  LiveblocksProvider,
+  useInboxNotifications,
+  // Other hooks
+} = createLiveblocksContext(client);
 
 export {};

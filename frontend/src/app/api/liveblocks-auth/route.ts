@@ -1,16 +1,19 @@
-import { liveblocksClient } from "@/lib/liveblocksClient";
+import {authOptions} from "@/lib/authOptions";
+import {liveblocksClient} from "@/lib/liveblocksClient";
+import {getServerSession} from "next-auth";
 
 export async function POST(request: Request) {
-  const userLocalStorage = localStorage.getItem("atlas-user");
+  // Get the current user from your database
+  const session = await getServerSession(authOptions);
 
-  if (!userLocalStorage) {
-    return new Response("Unauthorized", { status: 401 });
+  if (!session || !session.user) {
+    return new Response('Unauthorized', { status: 401 });
   }
 
-  const user = JSON.parse(userLocalStorage);
+  const user = session.user;
+  const email = user.email || '';
 
-  const email = user.email;
-
+  // Identify the user and return the result
   const { status, body } = await liveblocksClient.identifyUser(
     {
       userId: email,
@@ -18,10 +21,11 @@ export async function POST(request: Request) {
     },
     {
       userInfo: {
-        name: user.name || "",
+        name: user.name || '',
         email: email,
-      },
-    }
+        image: user.image,
+      }
+    },
   );
 
   return new Response(body, { status });

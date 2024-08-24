@@ -1,29 +1,19 @@
 "use client";
 
+import { RoomProvider, ClientSideSuspense } from "@liveblocks/react";
+import { LiveList } from "@liveblocks/client";
 import React from "react";
-import NewBoardColumnForm from "@/components/forms/boardForms/NewBoardColumnForm";
 import BoardContainer from "./BoardContainer";
-import { shallow, useRoom, useStorage } from "@liveblocks/react/suspense";
-import { Column } from "@/app/liveblocks.config";
+import { LiveblocksProvider } from "@/app/liveblocks.config";
+import { Room } from "@/app/Room";
 
-function Borad() {
-  // const room = useRoom();
-
-  // console.log(room);
-
-  // const columns = useStorage(
-  //   (root) => root.columns.map((c) => ({ ...c })),
-  //   shallow
-  // );
-
+function Borad({ id, name }: { id: string; name: string }) {
   return (
-    <div className="mb-20 p-5 flex mr-10">
-      <div>
+    <div>
+      <h1 className="text-2xl">Board: {name}</h1>
+      <Room id={id}>
         <BoardContainer />
-      </div>
-      <div className="min-w-64 max-w-64 mx-5 pr-5 border">
-        <NewBoardColumnForm />
-      </div>
+      </Room>
     </div>
   );
 }

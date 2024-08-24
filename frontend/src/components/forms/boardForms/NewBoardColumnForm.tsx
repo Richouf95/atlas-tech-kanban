@@ -1,19 +1,40 @@
 "use client";
 
+import { useMutation, useRoom, useStorage } from "@/app/liveblocks.config";
+import { LiveList } from "@liveblocks/client";
+import { LiveObject } from "@liveblocks/core";
 import React, { FormEvent, useState } from "react";
+import uniqid from "uniqid";
 
 function NewBoardColumnForm() {
   const [editMode, setEditMode] = useState<boolean>(false);
   const [newColumnName, setNewColumnName] = useState<string>("");
-  
+
+  const addColumn = useMutation(({ storage }, colName) => {
+    const columns = storage.get("columns");
+    const initialColumn = new LiveList([]);
+    const columIndex = !columns ? 0 : columns.length;
+
+    if (!columns) {
+      storage.set("columns", initialColumn);
+    }
+
+    const columnId = uniqid("column-");
+    return storage.get("columns").push(
+      new LiveObject({
+        name: colName,
+        id: columnId,
+        index: columIndex,
+        projectId: "N/A"
+      })
+    );
+  }, []);
+  const storage = useStorage((root) => root.columns);
 
   const handleNewBoardColum = (e: FormEvent) => {
     e.preventDefault();
     setEditMode(false);
-
-    
-
-    alert(newColumnName);
+    addColumn(newColumnName);
   };
   return (
     <>
@@ -44,7 +65,7 @@ function NewBoardColumnForm() {
             </button>
             <button
               onClick={() => {
-                setNewColumnName('');
+                setNewColumnName("");
                 setEditMode(false);
               }}
               className="flex-1"

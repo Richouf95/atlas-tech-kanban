@@ -1,29 +1,37 @@
-"use client";
-
-import React from "react";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
-import { User } from "@/types";
-import {
-  LiveblocksProvider,
-  RoomProvider,
-  ClientSideSuspense,
-} from "@liveblocks/react/suspense";
 import Borad from "@/components/dashboardComponents/board/Borad";
-import { LiveList, LiveObject } from "@liveblocks/client";
-import { Column } from "@/app/liveblocks.config";
+import { liveblocksClient } from "@/lib/liveblocksClient";
+import { getUserEmail } from "@/lib/userClient";
+import React from "react";
 
-function BoardPage({ params }: { params: { boardId: string } }) {
-  const { boardId } = params;
+async function BoardPage({
+  params,
+}: {
+  params: {
+    boardId: string;
+  };
+}) {
+  const boardId = params.boardId;
+  const userEmail = await getUserEmail();
+  const thisBoard = await liveblocksClient.getRoom(boardId);
+  const thisBoardUserAccess = thisBoard.usersAccesses?.[userEmail];
+  const thisUserHasAccess =
+    thisBoardUserAccess && [...thisBoardUserAccess].includes("room:write");
 
-  const user: User | null = useSelector((state: RootState) => state.auth.user);
+  if (!thisUserHasAccess) {
+    return <div>Access denied</div>;
+  }
 
-  const newColumns:LiveObject<Column>[] = [];
-
-  // return (
-  //   <Borad />
-  // );
-  return <div>BoardPage</div>;
+  return (
+    <div>
+      <div className="mb-10">
+        Board Page boardId: {boardId} <br />
+        user email : {userEmail}
+      </div>
+      {thisBoard && (
+        <Borad id={boardId} name={thisBoard.metadata.boardName.toString()} />
+      )}
+    </div>
+  );
 }
 
 export default BoardPage;
