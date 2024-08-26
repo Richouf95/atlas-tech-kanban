@@ -6,27 +6,28 @@ import FormControl from "@mui/material/FormControl";
 import TextField from "@mui/material/TextField";
 import { createBoard } from "@/lib/boardActions";
 import { useRouter } from "next/navigation";
+import uniqid from "uniqid";
 
-function NewRoom() {
+function NewProjectForm() {
   const [newRoomName, setNewRoomName] = useState<string>("");
   const router = useRouter();
 
   const handleNewRoom = async (e: React.FormEvent) => {
     e.preventDefault();
-    const room = await createBoard(newRoomName, "N/A");
+    const newProjectId = uniqid("project-");
+    const room = await createBoard(newRoomName, newProjectId);
     if (room) {
-      router.push(`/dashboard/board/${room.id}`);
+      router.push(`/dashboard/project/${newProjectId}`);
     }
   };
-
   return (
     <form onSubmit={handleNewRoom} className="loginForm">
       <Box sx={{ width: 1 }}>
-        <h1 className="text-2xl mb-2 text-center">Create new board</h1>
+        <h1 className="text-2xl mb-2 text-center">Create new project</h1>
         <FormControl sx={{ width: 1 }} variant="outlined">
           <TextField
             className="textInputForm"
-            label="Board name"
+            label="Project name"
             variant="outlined"
             type="text"
             value={newRoomName}
@@ -43,4 +44,4 @@ function NewRoom() {
   );
 }
 
-export default NewRoom;
+export default NewProjectForm;

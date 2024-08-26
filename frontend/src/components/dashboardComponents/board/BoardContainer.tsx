@@ -34,37 +34,26 @@ function BoardContainer() {
   };
 
   return (
-    <div>
-      {columns && (
-        <ReactSortable
-          group={"columns"}
-          list={columns}
-          setList={setColumnOrder}
-        >
-          {columns.length > 0 &&
-            columns.map((col) => (
-              <div>
-                <BoardColumn key={col.id} {...col} />
-              </div>
-            ))}
-        </ReactSortable>
-      )}
-      {/* <ReactSortable<ItemInterface>
-        list={columnsList}
-        setList={handleSortEnd}
-        group={"Columns"}
-        className="flex"
-        handle=".drag-handle" // Ajout de handle ici
-      >
-        {columns && columns?.length > 0 && columns.map((column) => (
-          <div>
-            <BoardColumn key={column.id} />
-          </div>
-        ))}
-      </ReactSortable> */}
-      <div>
-        <NewBoardColumnForm />
-      </div>
+    <div className="flex overflow-x-auto space-x-4">
+        {columns && (
+          <ReactSortable
+            group={"columns"}
+            list={columns}
+            setList={setColumnOrder}
+            className="flex gap-5 mx-5 space-x-4"
+            handle=".uniquement"
+          >
+            {columns.length > 0 &&
+              columns.map((col) => (
+                <div key={col.id} className="flex-shrink-0">
+                  <BoardColumn {...col} />
+                </div>
+              ))}
+          </ReactSortable>
+        )}
+        <div className="min-w-64 flex-shrink-0">
+          <NewBoardColumnForm />
+        </div>
     </div>
   );
 }

@@ -1,6 +1,8 @@
+import { Room } from "@/app/Room";
 import Borad from "@/components/dashboardComponents/board/Borad";
 import { liveblocksClient } from "@/lib/liveblocksClient";
 import { getUserEmail } from "@/lib/userClient";
+import { redirect, useRouter } from "next/navigation";
 import React from "react";
 
 async function BoardPage({
@@ -18,19 +20,20 @@ async function BoardPage({
     thisBoardUserAccess && [...thisBoardUserAccess].includes("room:write");
 
   if (!thisUserHasAccess) {
+    redirect('/');
     return <div>Access denied</div>;
   }
 
+  const { id, ...rest } = thisBoard;
+
   return (
-    <div>
-      <div className="mb-10">
-        Board Page boardId: {boardId} <br />
-        user email : {userEmail}
-      </div>
-      {thisBoard && (
-        <Borad id={boardId} name={thisBoard.metadata.boardName.toString()} />
-      )}
-    </div>
+    <>
+      <Room id={boardId}>
+        {thisBoard && (
+          <Borad name={thisBoard.metadata.boardName.toString()} {...thisBoard} />
+        )}
+      </Room>
+    </>
   );
 }
 

@@ -55,11 +55,11 @@ function SigninForm() {
   };
 
   return (
-    <div className="flex justify-center items-center px-5 mb-10 md:p-10">
-      <div className="p-6 rounded-lg py-10 max-w-lg" id="loginForm">
+    <div className="flex justify-center items-center px-5 p-10">
+      <div className="p-6 rounded-lg py-10 max-w-lg loginForm loginShadow">
         <h2 className="text-3xl mb-5 mt-2 text-center font-bold">Connexion</h2>
         <GoogleAuthProvider />
-        <div className="grid grid-cols-11 my-1">
+        <div className="grid grid-cols-11 my-2">
           <div className="border-b-2 col-span-5 mb-2"></div>
           <span className="col-span-1 text-center">Or</span>
           <div className="border-b-2 col-span-5 mb-2"></div>
@@ -92,6 +92,15 @@ function SigninForm() {
                       onClick={handleClickShowPassword}
                       onMouseDown={handleMouseDownPassword}
                       edge="end"
+                      sx={{
+                        '&:hover': {
+                          backgroundColor: 'inherit',
+                        },
+                        '&:focus': {
+                          outline: 'none',
+                        },
+                        padding: 0, 
+                      }}
                     >
                       {showPassword ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
@@ -147,7 +156,7 @@ function SigninForm() {
               <p>Vous êtes nouveau ?</p>
               <Link
                 href={"/signup"}
-                className="font-bold text-orange-500 text-xl"
+                className="font-bold text-xl"
               >
                 Inscrivez vous
               </Link>

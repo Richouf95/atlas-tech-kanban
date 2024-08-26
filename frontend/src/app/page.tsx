@@ -1,22 +1,16 @@
-import Link from "next/link";
-import ThemeToggle from "../components/ThemeToggle";
+"use server";
+import HomeHeader from "@/components/HomeHeader";
+import HomePageMaine from "@/components/HomePageMain";
+import { authOptions } from "@/lib/authOptions";
+import { getServerSession } from "next-auth";
 
-export default function Home() {
+export default async function Home() {
+  const session = await getServerSession(authOptions);
+
   return (
-    <main>
-      <div className="container h-screen flex justify-center items-center relative mx-auto">
-        <div className="absolute top-5 right-5">
-          <Link href={"/signin"}>
-            <button>Signin</button>
-          </Link>
-          <ThemeToggle />
-        </div>
-        <div>
-          <Link href={"/dashboard"}>
-            <button>Start</button>
-          </Link>
-        </div>
-      </div>
+    <main className="h-screen flex flex-col">
+      <HomeHeader session={session} />
+      <HomePageMaine />
     </main>
   );
 }

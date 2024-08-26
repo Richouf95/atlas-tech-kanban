@@ -10,11 +10,11 @@ export function Room({ id, children }: { id: string; children: ReactNode }) {
     <LiveblocksProvider>
       <RoomProvider
         id={id}
-        initialPresence={{}}
-        initialStorage={{ columns: new LiveList([]) }}
+        initialPresence={{ cardId: null, boardId: null }}
+        initialStorage={{ columns: new LiveList([]), cards: new LiveList([]) }}
       >
         <ClientSideSuspense fallback={<div>Loading…</div>}>
-          {children}
+          {() => <>{children}</>}
         </ClientSideSuspense>
       </RoomProvider>
     </LiveblocksProvider>

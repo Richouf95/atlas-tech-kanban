@@ -3,6 +3,7 @@ import SigninForm from "@/components/forms/auth/SigninForm";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/authOptions";
 import { redirect } from "next/navigation";
+import HomeHeader from "@/components/HomeHeader";
 
 async function SignIn() {
   const session = await getServerSession(authOptions);
@@ -13,6 +14,7 @@ async function SignIn() {
 
   return (
     <div>
+      <HomeHeader />
       <SigninForm />
     </div>
   );

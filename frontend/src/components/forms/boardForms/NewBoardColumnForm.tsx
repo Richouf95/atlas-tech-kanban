@@ -24,8 +24,7 @@ function NewBoardColumnForm() {
       new LiveObject({
         name: colName,
         id: columnId,
-        index: columIndex,
-        projectId: "N/A"
+        index: columIndex
       })
     );
   }, []);
@@ -39,41 +38,45 @@ function NewBoardColumnForm() {
   return (
     <>
       {!editMode && (
-        <button
-          onClick={() => setEditMode(true)}
-          className="w-full bg-[#F4F4F4]"
-        >
-          Clique sur moi
-        </button>
+        <div className="mr-5">
+          <button
+            onClick={() => setEditMode(true)}
+            className="w-full bg-[#F4F4F4] "
+          >
+            Add new column
+          </button>
+        </div>
       )}
       {editMode && (
-        <form
-          onSubmit={handleNewBoardColum}
-          className="p-2 rounded-md bg-[#F4F4F4] shadow"
-        >
-          <div className="my-1 w-full">
-            <input
-              onChange={(e) => setNewColumnName(e.target.value)}
-              type="text"
-              placeholder="écris"
-              className="w-full"
-            />
-          </div>
-          <div className="mt-3 flex gap-2">
-            <button type="submit" className="flex-1">
-              submit
-            </button>
-            <button
-              onClick={() => {
-                setNewColumnName("");
-                setEditMode(false);
-              }}
-              className="flex-1"
-            >
-              Cancel
-            </button>
-          </div>
-        </form>
+        <div className="mr-5">
+          <form
+            onSubmit={handleNewBoardColum}
+            className="p-2 rounded-md columnsClass shadow"
+          >
+            <div className="my-1 w-full">
+              <input
+                onChange={(e) => setNewColumnName(e.target.value)}
+                type="text"
+                placeholder="Column name"
+                className="w-full text-black"
+              />
+            </div>
+            <div className="mt-3 flex gap-2">
+              <button type="submit" className="flex-1">
+                submit
+              </button>
+              <button
+                onClick={() => {
+                  setNewColumnName("");
+                  setEditMode(false);
+                }}
+                className="flex-1"
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
       )}
     </>
   );
