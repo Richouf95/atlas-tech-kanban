@@ -14,7 +14,7 @@ async function SignIn() {
 
   return (
     <div>
-      <HomeHeader />
+      <HomeHeader session={session} />
       <SigninForm />
     </div>
   );
