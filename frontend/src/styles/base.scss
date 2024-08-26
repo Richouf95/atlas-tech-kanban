@@ -5,6 +5,7 @@
 
 @import "./utilities/variables";
 @import "./components/buttons";
+@import "./fonts/fonts";
 
 .transition-theme {
   transition: background-color 1000ms, color 1000ms;
@@ -14,12 +15,62 @@ html.light {
   body {
     background-color: $color-bg-light;
     color: $color-text-light;
+    font-family: "Inter", sans-serif;
   }
-  button {
+  button,
+  .btn,
+  .themeSwitchBtn {
     background-color: $color-bg-dark;
     color: $color-text-dark;
-    padding: .5rem 1rem;
-    border-radius: 1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 0.7rem;
+  }
+  .themeSwitchBtn {
+    padding: 0.4rem 0.8rem;
+  }
+  .loginForm {
+    .loginShadow {
+      box-shadow: 0px -1px 26px 7px rgba(80, 89, 88, 0.91);
+    }
+    label {
+      color: $color-text-light;
+    }
+    .MuiIconButton-root {
+      margin-right: 0px;
+    }
+    .MuiIconButton-root:hover {
+      background-color: rgba(23, 23, 23, 0.637);
+    }
+  }
+
+  // .userNavBar,
+  // .boardNavBar {
+  //   // background-color: $color-main-navBar-light;
+  // }
+  .userNavBar {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.333);
+  }
+  .boardNavBar {
+    // border-right: 1px solid rgba(0, 0, 0, 0.333);
+    @media screen and (max-width: 1024px) {
+      border-bottom: 1px solid rgba(0, 0, 0, 0.333);
+    }
+  }
+  .roomNavBar {
+    margin-left: 5px;
+    margin-right: 5px;
+    background-color: $color-room-navBar-light;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.25);
+    border-radius: 0px 0px 10px 10px;
+  }
+  .roomCard {
+    background-color: $color-room-card-light;
+  }
+  .columnsClass {
+    background-color: $color-room-card-light;
+  }
+  .columCards{
+    background-color: $color-bg-light;
   }
 }
 
@@ -27,16 +78,90 @@ html.dark {
   body {
     background-color: $color-bg-dark;
     color: $color-text-dark;
+    font-family: "Inter", sans-serif;
   }
-  button {
+  button,
+  .btn,
+  .themeSwitchBtn {
     background-color: $color-bg-light;
     color: $color-text-light;
-    padding: .5rem 1rem;
-    border-radius: 1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 0.7rem;
+  }
+  .themeSwitchBtn {
+    padding: 0.4rem 0.8rem;
+  }
+  .loginForm {
+    .loginShadow {
+      box-shadow: 0px -1px 26px 7px rgba(80, 89, 88, 0.91);
+    }
+
+    label {
+      color: $color-text-dark;
+    }
+    .MuiOutlinedInput-notchedOutline {
+      border: 2px solid rgb(255, 255, 255);
+    }
+    .MuiIconButton-root {
+      margin-right: 0px;
+    }
+    .MuiIconButton-root:hover {
+      background-color: rgba(223, 219, 219, 0.523);
+    }
+  }
+  // .userNavBar,
+  // .boardNavBar {
+  //   // background-color: $color-main-navBar-dark;
+  // }
+  .userNavBar {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.333);
+  }
+  .boardNavBar {
+    // border-right: 1px solid rgba(255, 255, 255, 0.333);
+    @media screen and (max-width: 1024px) {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.333);
+    }
+  }
+  .roomNavBar {
+    margin-left: 5px;
+    margin-right: 5px;
+    background-color: $color-room-navBar-dark;
+    // box-shadow: 0px 2px 10px rgba(255, 255, 255, 0.25);
+    border-radius: 0px 0px 10px 10px;
+  }
+  .roomCard {
+    background-color: $color-room-card-dark;
+  }
+  .columnsClass {
+    background-color: $color-room-card-dark;
+  }
+  .columCards{
+    background-color: $color-bg-dark;
   }
 }
 
+// #171717 mainsNavBar dark bg
+// #ffffff mainsNavBar light bg
+
+// #ffffff roomNavBar dark bg
+// #ffffff roomNavBar light bg
+
 input {
-  padding: .5rem;
-  @apply rounded-md
+  padding: 0.5rem;
+  @apply rounded-md;
+}
+
+/* Personnalisation de la scrollbar pour tous les éléments avec un défilement */
+* {
+  scrollbar-width: thin; /* Pour Firefox */
+  scrollbar-color: transparent transparent; /* Couleur de la scrollbar pour Firefox */
+}
+
+*::-webkit-scrollbar {
+  width: 0; /* Masquer la scrollbar en réduisant sa taille à zéro */
+  height: 0; /* Masquer la scrollbar horizontale */
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: transparent; /* Rendre le curseur transparent */
 }

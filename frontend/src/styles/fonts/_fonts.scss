@@ -1,0 +1,15 @@
+/* src/styles/_fonts.scss */
+@font-face {
+    font-family: 'Inter';
+    src: url('./Inter/Inter-VariableFont_opsz\,wght.ttf') format('truetype');
+    font-weight: 100 900;
+    font-style: normal;
+  }
+  
+  @font-face {
+    font-family: 'Inter';
+    src: url('/Inter/Inter-Italic-VariableFont_opsz,wght.ttf') format('truetype');
+    font-weight: 100 900;
+    font-style: italic;
+  }
+  
