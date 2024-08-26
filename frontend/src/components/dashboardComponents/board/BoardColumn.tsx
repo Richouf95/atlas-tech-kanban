@@ -64,7 +64,7 @@ function BoardColumn({ id, name }: { id: string; name: string }) {
           group={"Cards"}
         >
           {columnsCards.map((item) => (
-            <div className="mx-2">
+            <div key={item.id} className="mx-2">
               <BoardCard key={item.id} id={item.id} name={item.name} />
             </div>
           ))}
