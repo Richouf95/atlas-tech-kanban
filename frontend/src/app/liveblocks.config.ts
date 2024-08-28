@@ -3,7 +3,7 @@
 import { createClient } from "@liveblocks/client";
 import { LiveList, LiveObject } from "@liveblocks/core";
 import { createRoomContext, createLiveblocksContext } from "@liveblocks/react";
-import { Column, Card } from "@/types";
+import { Column, Card, LabelType } from "@/types";
 
 const client = createClient({
   authEndpoint: "/api/liveblocks-auth",
@@ -22,6 +22,7 @@ export type Storage = {
   // Example, a conflict-free list
   columns: LiveList<LiveObject<Column>>;
   cards: LiveList<LiveObject<Card>>;
+  labels: LiveList<LiveObject<LabelType>>;
 };
 
 // Custom user info set when authenticating with a secret key

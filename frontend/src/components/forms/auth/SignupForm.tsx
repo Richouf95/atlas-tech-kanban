@@ -12,16 +12,17 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useLogin } from "@/hooks/useLogin";
+import { useSignup } from "@/hooks/useSignup";
 import GoogleAuthProvider from "./GoogleAuthProvider";
 
-function SigninForm() {
-  const [showPassword, setShowPassword] = React.useState(false);
+function SignupForm() {
+  const [showPassword, setShowPassword] = React.useState<boolean>(false);
+  const [name, setName] = React.useState<string>("");
   const [email, setEmail] = React.useState<string>("");
   const [pwd, setPwd] = React.useState<string>("");
   const [errorFront, setErrorFront] = React.useState<string | null>(null);
 
-  const { login, isLoading, error } = useLogin();
+  const { signup, isLoading, error } = useSignup();
   const router = useRouter();
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -47,7 +48,7 @@ function SigninForm() {
     }
 
     try {
-      await login(email, pwd);
+      await signup(name, email, pwd);
     } catch (error) {
       console.error(error);
       setErrorFront("Erreur de connexion. Veuillez réessayer.");
@@ -57,7 +58,7 @@ function SigninForm() {
   return (
     <div className="flex justify-center items-center px-5 p-10">
       <div className="p-6 rounded-lg py-10 max-w-lg loginForm loginShadow">
-        <h2 className="text-3xl mb-5 mt-2 text-center font-bold">Login</h2>
+        <h2 className="text-3xl mb-5 mt-2 text-center font-bold">Signup</h2>
         <GoogleAuthProvider />
         <div className="grid grid-cols-11 my-2">
           <div className="border-b-2 col-span-5 mb-2"></div>
@@ -66,6 +67,16 @@ function SigninForm() {
         </div>
         <form onSubmit={handleSubmit}>
           <Box sx={{ display: "flex", flexWrap: "wrap", width: 1 }}>
+            <FormControl sx={{ m: 1, width: 1 }} variant="outlined">
+              <TextField
+                required
+                label="name"
+                variant="outlined"
+                type="name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </FormControl>
             <FormControl sx={{ m: 1, width: 1 }} variant="outlined">
               <TextField
                 required
@@ -78,7 +89,7 @@ function SigninForm() {
             </FormControl>
             <FormControl sx={{ m: 1, width: 1 }} variant="outlined">
               <InputLabel htmlFor="outlined-adornment-password">
-                Mot de Passe *
+                Password
               </InputLabel>
               <OutlinedInput
                 id="outlined-adornment-password"
@@ -93,20 +104,20 @@ function SigninForm() {
                       onMouseDown={handleMouseDownPassword}
                       edge="end"
                       sx={{
-                        '&:hover': {
-                          backgroundColor: 'inherit',
+                        "&:hover": {
+                          backgroundColor: "inherit",
                         },
-                        '&:focus': {
-                          outline: 'none',
+                        "&:focus": {
+                          outline: "none",
                         },
-                        padding: 0, 
+                        padding: 0,
                       }}
                     >
                       {showPassword ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
                   </InputAdornment>
                 }
-                label="Mot de Passe *"
+                label="Password"
                 required
               />
             </FormControl>
@@ -115,7 +126,7 @@ function SigninForm() {
               {error && <p className="text-red-500">{error}</p>}
               {errorFront && <p className="text-red-500">{errorFront}</p>}
               <Link href={"#"} className="hover:underline">
-              Forgot your password?
+                Forgot your password?
               </Link>
             </div>
             <div className="flex justify-center w-full">
@@ -141,24 +152,21 @@ function SigninForm() {
                       fill="currentColor"
                     />
                   </svg>
-                  Signin
+                  Signup
                 </button>
               ) : (
                 <button
                   type="submit"
                   className="my-5 px-10 py-3 w-full md:w-3/5 bg-orange-400 btn hover:bg-orange-500 text-white font-bold rounded-full"
                 >
-                  Signin
+                  Signup
                 </button>
               )}
             </div>
             <div className="text-center w-full">
-              <p>Are you a newcomer?</p>
-              <Link
-                href={"/signup"}
-                className="font-bold text-xl"
-              >
-                Inscrivez vous
+              <p>Already have an account ?</p>
+              <Link href={"/signin"} className="font-bold text-xl">
+                Login
               </Link>
             </div>
           </Box>
@@ -168,4 +176,4 @@ function SigninForm() {
   );
 }
 
-export default SigninForm;
+export default SignupForm;

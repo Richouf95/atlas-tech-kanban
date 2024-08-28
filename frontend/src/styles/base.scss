@@ -6,6 +6,8 @@
 @import "./utilities/variables";
 @import "./components/buttons";
 @import "./fonts/fonts";
+@import "@liveblocks/react-ui/styles.css";
+@import "@liveblocks/react-ui/styles/dark/media-query.css";
 
 .transition-theme {
   transition: background-color 1000ms, color 1000ms;
@@ -29,9 +31,7 @@ html.light {
     padding: 0.4rem 0.8rem;
   }
   .loginForm {
-    .loginShadow {
-      box-shadow: 0px -1px 26px 7px rgba(80, 89, 88, 0.91);
-    }
+    box-shadow: 0px -1px 26px 7px rgba(80, 89, 88, 0.91);
     label {
       color: $color-text-light;
     }
@@ -69,8 +69,12 @@ html.light {
   .columnsClass {
     background-color: $color-room-card-light;
   }
-  .columCards{
+  .columCards {
     background-color: $color-bg-light;
+  }
+
+  .navItem {
+    background-color: $color-room-card-light;
   }
 }
 
@@ -92,9 +96,7 @@ html.dark {
     padding: 0.4rem 0.8rem;
   }
   .loginForm {
-    .loginShadow {
-      box-shadow: 0px -1px 26px 7px rgba(80, 89, 88, 0.91);
-    }
+    box-shadow: 0px -1px 26px 7px rgba(80, 89, 88, 0.91);
 
     label {
       color: $color-text-dark;
@@ -135,8 +137,28 @@ html.dark {
   .columnsClass {
     background-color: $color-room-card-dark;
   }
-  .columCards{
+  .columCards {
     background-color: $color-bg-dark;
+  }
+
+  .MuiPaper-root.MuiPopover-paper,
+  .MuiPaper-root.MuiPaper-elevation {
+    background-color: $color-room-card-dark;
+    color: $color-text-dark;
+    .divider {
+      background-color: $color-room-card-light;
+    }
+    .navItem {
+      background-color: $color-room-navBar-dark;
+    }
+  }
+  .boardAndProjectNavItem {
+    @media screen and (min-width: 1024px) {
+      background-color: $color-room-card-dark;
+    }
+  }
+  .MuiInputBase-input {
+    color: white;
   }
 }
 
@@ -164,4 +186,23 @@ input {
 
 *::-webkit-scrollbar-thumb {
   background-color: transparent; /* Rendre le curseur transparent */
+}
+
+.thread,
+.composer {
+  position: relative;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  margin-top: 5px;
+  box-shadow: 0 0 0 1px rgb(0 0 0 / 4%), 0 2px 6px rgb(0 0 0 / 4%),
+    0 8px 26px rgb(0 0 0 / 6%);
+}
+
+.colorPicker::-webkit-color-swatch {
+  border-radius: 0; /* Supprime les coins arrondis du swatch (pour Chrome, Safari, etc.) */
+  border: none;
+}
+
+.colorPicker::-webkit-color-swatch-wrapper {
+  padding: 0;
 }

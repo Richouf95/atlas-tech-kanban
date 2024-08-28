@@ -10,8 +10,6 @@ import NewProjectRoom from "@/components/forms/boardForms/NewProjectRoom";
 function BoardsList({ roomList }: { roomList: any }) {
   const pathName = usePathname();
 
-  console.log(roomList);
-
   return (
     <>
       <div className="p-2">

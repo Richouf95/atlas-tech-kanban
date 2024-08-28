@@ -59,6 +59,7 @@ function NewBoardColumnForm() {
                 type="text"
                 placeholder="Column name"
                 className="w-full text-black"
+                autoFocus
               />
             </div>
             <div className="mt-3 flex gap-2">

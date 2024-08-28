@@ -29,7 +29,6 @@ function ProjectList({ roomList }: { roomList: any }) {
 
   return (
     <>
-      vvv
       <div className="p-2">
         <h1 className=" text-2xl mb-2">Pojects</h1>
         <hr />

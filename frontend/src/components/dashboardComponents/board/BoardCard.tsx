@@ -1,9 +1,32 @@
 import React from "react";
+import CardModal from "@/components/modals/CardModal";
+import { Card } from "@/types";
 
-function BoardCard({ id, name }: { id: string; name: string }) {
-  return <div className="p-5 my-2 rounded-xl columCards cursor-pointer">
-    {name}
-  </div>;
+function BoardCard({
+  name,
+  id,
+  index,
+  columnId,
+  assigned,
+  dueDate,
+  label,
+  description,
+}: Card) {
+  const cardData = {
+    name,
+    id,
+    index,
+    columnId,
+    assigned,
+    dueDate,
+    label,
+    description,
+  };
+  return (
+    <>
+      <CardModal {...cardData} />
+    </>
+  );
 }
 
 export default BoardCard;

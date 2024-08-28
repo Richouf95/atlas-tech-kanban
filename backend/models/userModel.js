@@ -17,6 +17,9 @@ const userSchema = new Schema({
     pwd: {
         type: String,
         required: true
+    },
+    image: {
+        type: String
     }
 });
 
