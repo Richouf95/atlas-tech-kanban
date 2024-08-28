@@ -47,7 +47,10 @@ function SigninForm() {
     }
 
     try {
-      await login(email, pwd);
+      // await login(email, pwd);
+      alert(
+        "Notre service backend est actuellement en cours de développement. Pour continuer, veuillez vous authentifier avec Google. Merci pour votre compréhension !"
+      );
     } catch (error) {
       console.error(error);
       setErrorFront("Erreur de connexion. Veuillez réessayer.");
@@ -93,13 +96,13 @@ function SigninForm() {
                       onMouseDown={handleMouseDownPassword}
                       edge="end"
                       sx={{
-                        '&:hover': {
-                          backgroundColor: 'inherit',
+                        "&:hover": {
+                          backgroundColor: "inherit",
                         },
-                        '&:focus': {
-                          outline: 'none',
+                        "&:focus": {
+                          outline: "none",
                         },
-                        padding: 0, 
+                        padding: 0,
                       }}
                     >
                       {showPassword ? <VisibilityOff /> : <Visibility />}
@@ -115,7 +118,7 @@ function SigninForm() {
               {error && <p className="text-red-500">{error}</p>}
               {errorFront && <p className="text-red-500">{errorFront}</p>}
               <Link href={"#"} className="hover:underline">
-              Forgot your password?
+                Forgot your password?
               </Link>
             </div>
             <div className="flex justify-center w-full">
@@ -154,11 +157,8 @@ function SigninForm() {
             </div>
             <div className="text-center w-full">
               <p>Are you a newcomer?</p>
-              <Link
-                href={"/signup"}
-                className="font-bold text-xl"
-              >
-                Inscrivez vous
+              <Link href={"/signup"} className="font-bold text-xl">
+                Signing up
               </Link>
             </div>
           </Box>

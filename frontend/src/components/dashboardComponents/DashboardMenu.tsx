@@ -1,10 +1,16 @@
 import React from "react";
 import DashBoardMenuContent from "../DashBoardMenuContent";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/authOptions";
 
-function DashboardMenu() {
+async function DashboardMenu() {
+
+  const session = await getServerSession(authOptions);
+
+  const userEmail = session?.user?.email;
 
   return (
-    <DashBoardMenuContent />
+    <DashBoardMenuContent userEmail={userEmail ? userEmail : ""} />
   );
 }
 

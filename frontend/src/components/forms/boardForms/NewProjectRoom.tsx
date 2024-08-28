@@ -24,7 +24,7 @@ function NewProjectRoom() {
     }
   };
   return (
-    <form onSubmit={handleNewRoom} className="loginForm">
+    <form onSubmit={handleNewRoom} className="create">
       <Box sx={{ width: 1 }}>
         <h1 className="text-2xl mb-2 text-center">Create new board for p</h1>
         <FormControl sx={{ width: 1 }} variant="outlined">
