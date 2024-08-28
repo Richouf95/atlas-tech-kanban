@@ -1,36 +1,104 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Atlas Tech Kanban - Frontend Project
 
-## Getting Started
+(**Note**) : For the tests, I invite you to use the goole provider to connect to the application. I'm still working on the backend server.
 
-First, run the development server:
+![Appercu](/frontend/public/Capture_dark.png);
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Description
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+This project is a frontend developed with Next.js, TypeScript et Tailwind CSS.
+The application is designed to provide a responsive and modern user interface for an advanced Kanban board, aimed at helping engineering teams to manage tasks efficiently.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Project Objectives
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+This application is designed on behalf of Atlas Tech Corp Ltd who have expressed the need for an advanced Kanban board application to help their teams manage tasks efficiently.
+The application must support typical Kanban functionality such as :
 
-## Learn More
+- Creating, updating and moving tasks across different columns (e.g. To Do, In Progress, Completed).
+- Additional functionality such as task filtering and sorting.
+- Real-time collaboration, including task threads.
 
-To learn more about Next.js, take a look at the following resources:
+## Installation
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+To install and run this project locally, follow these steps:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+1. **Clone the repository :**
 
-## Deploy on Vercel
+   ```bash
+   git clone https://github.com/Richouf95/atlas-tech-kanban.git
+   cd frontend
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+2. **Installing dependencies :**
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+   ```bash
+   npm install
+   ```
+
+3. **Configuring environment variables :**
+
+````bash
+GOOGLE_CLIENT_ID=<"Key">
+
+GOOGLE_CLIENT_SECRET=<"key">
+
+NEXTAUTH_URL=<"Key">
+
+AUTH_SECRET=<"Key">
+
+MONGODB_URI=<"Key">
+
+NEXT_PUBLIC_LIVEBLOCKS_SECRET_KEY=<"Key">
+
+NEXT_PUBLIC_LIVEBLOCKS_PUBLIC_KEY=<"Key">
+
+NEXT_PUBLIC_API_DOMAIN=<"Key">
+````
+
+## Launch the project locally
+
+````bash
+npm install
+````
+
+## Pages
+
+Here are the different pages of the application:
+
+- Home
+- Signin
+- Signup
+- Dashboard
+- Dashboard/board/:boardId
+- Dashboard/project/:projectId
+- Dashboard/project/:projectId/board/:boardId
+
+## Dépendances
+
+````bash
+- **@auth/mongodb-adapter** : Adapter to connect NextAuth.js to MongoDB.
+- **@liveblocks/client** : Client to manage real-time operations with Liveblocks.
+- **@liveblocks/node** : Node.js package for real-time operations with Liveblocks.
+- **@liveblocks/react** : Liveblocks integration for React to manage real-time shared states.
+- **@liveblocks/react-comments**: Real-time discussion components for React with Liveblocks.
+- **@liveblocks/react-ui**: User interface components for real-time applications with Liveblocks.
+- mongodb** : MongoDB driver for Node.js.
+- mongoose**: ODM (Object Data Modeling) for MongoDB and Node.js.
+- react-redux** : Links between Redux and React.
+- tailwindcss**: CSS framework utility for rapid design creation.
+- sass**: Compiler for SCSS files in CSS.
+- **sortablejs**: Library for making lists and elements sortable.
+- uniqid**: Unique identifier generator.
+````
+
+## Notes
+
+Several planned features have not yet been implemented.
+
+These include
+
+- **Connection to personal backend**: for testing purposes, please use the google provider
+- **Offline mode**: Functionality allowing the application to be used without an internet connection.
+- **Notifications**: Real-time notification system to inform users of important updates.
+- **Mailings**: Sends emails for alerts, updates or invitations.
+- **Security enhancements**: Integration of additional measures to strengthen application security, including management of regular data backups.

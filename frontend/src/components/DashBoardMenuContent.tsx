@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 import { Popover } from "@mui/material";
 import Link from "next/link";
 
-function DashBoardMenuContent() {
+function DashBoardMenuContent({ userEmail }: { userEmail: string }) {
   const [allRooms, setAllRooms] = useState<any>([]);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [currentPopover, setCurrentPopover] = useState<string | null>(null);
@@ -24,12 +24,15 @@ function DashBoardMenuContent() {
     getRooms();
   }, []);
 
-  // if ():
 
-  const boardsWithoutProject = allRooms.filter(
+  const myBoards = allRooms.filter((items: any) =>
+    items.usersAccesses.hasOwnProperty(userEmail)
+  );
+
+  const boardsWithoutProject = myBoards.filter(
     (x: any) => x.metadata.projectId === "N/A"
   );
-  const boardsWithProject = allRooms.filter(
+  const boardsWithProject = myBoards.filter(
     (x: any) => x.metadata.projectId !== "N/A"
   );
 

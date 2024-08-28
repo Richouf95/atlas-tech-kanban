@@ -78,8 +78,8 @@ function UserMenuBtn({ session }: { session: any }) {
           <div className="p-2 my-2">
             <button
               onClick={() => {
-                signOut();
                 router.push("/");
+                signOut();
               }}
               className="w-full flex items-center justify-center gap-2"
             >

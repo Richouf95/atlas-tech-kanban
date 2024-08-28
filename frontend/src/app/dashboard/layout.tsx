@@ -9,7 +9,7 @@ export default function DashBoardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="lg:container mx-auto h-screen">
+    <div className="mx-auto h-screen">
       <div className="flex flex-col flex-1">
         <DashboardHeader />
         <main className="flex flex-col lg:flex-row flex-1 h-full">

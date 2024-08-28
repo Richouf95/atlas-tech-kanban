@@ -9,7 +9,7 @@ function DueDate({ id, dueDate }: { id: string; dueDate: string }) {
   const theme = useSelector((state: RootState) => state.theme.theme);
   const [pickDate, setPickDate] = useState<boolean>(false);
 
-  const updateCardLabel = useMutation(({ storage }, cardId, updateData) => {
+  const updateCardDueDate = useMutation(({ storage }, cardId, updateData) => {
     const cards = storage.get("cards");
     const index = cards.findIndex((card) => card.toObject().id === cardId);
     const thisCard = storage.get("cards").get(index);
@@ -29,8 +29,7 @@ function DueDate({ id, dueDate }: { id: string; dueDate: string }) {
           defaultValue={dueDate}
           onChange={(e) => {
             const selectedDate = e.target.value;
-            updateCardLabel(id, { dueDate: selectedDate });
-            alert(selectedDate);
+            updateCardDueDate(id, { dueDate: selectedDate });
             setPickDate(false);
           }}
           className="text-black"

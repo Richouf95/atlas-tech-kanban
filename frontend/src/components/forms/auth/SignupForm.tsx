@@ -48,7 +48,10 @@ function SignupForm() {
     }
 
     try {
-      await signup(name, email, pwd);
+      // await signup(name, email, pwd);
+      alert(
+        "Notre service backend est actuellement en cours de développement. Pour continuer, veuillez vous authentifier avec Google. Merci pour votre compréhension !"
+      );
     } catch (error) {
       console.error(error);
       setErrorFront("Erreur de connexion. Veuillez réessayer.");
