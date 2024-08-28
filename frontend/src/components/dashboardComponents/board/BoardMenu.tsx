@@ -3,6 +3,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import { deleteBoard } from "@/lib/boardActions";
 import { useRouter } from "next/navigation";
 import BoardSettings from "./BoardSettings";
+import FilterMenu from "./FilterMenu";
 
 function BoardMenu({
   id,
@@ -15,10 +16,15 @@ function BoardMenu({
 }) {
   return (
     <div
-      className="bg-red-300 p-5 sticky top-0 flex justify-end p-2 roomNavBar"
+      className="p-5 sticky top-0 flex justify-end p-2 gap-5 roomNavBar"
       id="BoardMenu"
     >
-      <BoardSettings id={id} usersAccesses={usersAccesses} metadata={metadata} />
+      <FilterMenu id={id} usersAccesses={usersAccesses} metadata={metadata} />
+      <BoardSettings
+        id={id}
+        usersAccesses={usersAccesses}
+        metadata={metadata}
+      />
     </div>
   );
 }

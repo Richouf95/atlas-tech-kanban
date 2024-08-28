@@ -29,6 +29,10 @@ function NewBoardCardForm({ colId }: { colId: string }) {
         id: cardId,
         columnId: colId,
         index: cardIndex,
+        label: "N/A",
+        dueDate: "N/A",
+        assigned: "N/A",
+        description: "N/A"
       })
     );
   }, []);

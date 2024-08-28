@@ -1,24 +1,15 @@
 import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
-import IconButton from "@mui/material/IconButton";
-import List from "@mui/material/List";
 import Divider from "@mui/material/Divider";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
 import SettingsIcon from "@mui/icons-material/Settings";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
 import { useMediaQuery } from "@mui/material";
-import Person2Icon from "@mui/icons-material/Person2";
 import NotesIcon from "@mui/icons-material/Notes";
-import DeleteIcon from "@mui/icons-material/Delete";
 import DeleteBoardBtn from "./DeleteBoardBtn";
 import NewCollaborator from "./NewCollaborator";
 import CollaboaratorsList from "./CollaboaratorsList";
 import UpdateBoardDescription from "./UpdateBoardDescription";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 function BoardSettings({
   id,
@@ -60,20 +51,19 @@ function BoardSettings({
       <div>
         <h2 className="text-center text-2xl font-bold mb-2">Board Settings</h2>
       </div>
-      <Divider />
+      <Divider className="divider" />
       <div>
         <div className="flex text-lg gap-2 justify-center items-center my-2">
-          <Person2Icon />
-          <span>Board administrator</span>
+          <span>Administrator</span>
         </div>
         <div className="flex justify-center gap-2 items-center gap-2 mb-5">
-          <div className="h-16 w-16 rounded-full bg-orange-400"></div>
+          <AccountCircleIcon sx={{ fontSize: 60 }} />
           <div>
             <h2 className="text-lg font-bold">{metadata.ownerName}</h2>
             <h3 className="text-lg">{metadata.ownerEmail}</h3>
           </div>
         </div>
-        <Divider />
+        <Divider className="divider" />
         <div className="my-2">
           <div className="flex justify-between items-center mb-2">
             <NotesIcon /> <span className="text-lg">Description</span>{" "}
@@ -82,7 +72,11 @@ function BoardSettings({
             )}
           </div>
           {editDescription ? (
-            <UpdateBoardDescription id={id} currentDescription={metadata.description} setEditDescription={setEditDescription} />
+            <UpdateBoardDescription
+              id={id}
+              currentDescription={metadata.description}
+              setEditDescription={setEditDescription}
+            />
           ) : (
             <div>
               <p>
@@ -94,7 +88,7 @@ function BoardSettings({
           )}
         </div>
       </div>
-      <Divider />
+      <Divider className="divider" />
       <div>
         <div className="flex justify-between items-center my-2">
           <span className="text-lg">Collaborators</span>{" "}
@@ -107,7 +101,7 @@ function BoardSettings({
         )}
         <CollaboaratorsList id={id} usersAccesses={usersAccesses} />
       </div>
-      <Divider />
+      <Divider className="divider" />
       <DeleteBoardBtn id={id} />
     </Box>
   );
@@ -119,7 +113,7 @@ function BoardSettings({
         className="cursor-pointer"
         aria-label="Open settings"
       >
-        <span>Settings</span> <SettingsIcon />
+        <SettingsIcon /> <span>Settings</span> 
       </div>
       <Drawer
         anchor={isLargeScreen ? "right" : "bottom"}

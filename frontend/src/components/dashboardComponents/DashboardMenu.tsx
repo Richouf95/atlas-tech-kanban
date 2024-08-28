@@ -1,10 +1,10 @@
 import React from "react";
+import DashBoardMenuContent from "../DashBoardMenuContent";
 
 function DashboardMenu() {
+
   return (
-    <div className="lg:min-w-64 p-5 lg:mt-10 boardNavBar">
-      DashboardMenu
-    </div>
+    <DashBoardMenuContent />
   );
 }
 

@@ -5,7 +5,7 @@ import NewBoardCardForm from "@/components/forms/boardForms/NewBoardCardForm";
 import { useMutation, useStorage } from "@/app/liveblocks.config";
 import { Card } from "@/types";
 import { shallow } from "@liveblocks/client";
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import ColumnHeader from "./ColumnHeader";
 
 function BoardColumn({ id, name }: { id: string; name: string }) {
   const columnsCards = useStorage<Card[]>((root) => {
@@ -53,10 +53,7 @@ function BoardColumn({ id, name }: { id: string; name: string }) {
 
   return (
     <div className="min-w-72 max-w-72 border rounded-xl border-0 columnsClass">
-      <div className="flex items-center justify-between rounded-xl cursor-pointer px-4 py-2 uniquement">
-        <h2 className="text-lg font-bold">{name} </h2>
-        <MoreHorizIcon />
-      </div>
+      <ColumnHeader id={id} name={name} />
       {columnsCards && (
         <ReactSortable
           list={columnsCards}
@@ -65,7 +62,7 @@ function BoardColumn({ id, name }: { id: string; name: string }) {
         >
           {columnsCards.map((item) => (
             <div key={item.id} className="mx-2">
-              <BoardCard key={item.id} id={item.id} name={item.name} />
+              <BoardCard {...item} />
             </div>
           ))}
         </ReactSortable>

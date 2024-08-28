@@ -60,11 +60,16 @@ export async function removeCollaboratorOnBoard(id: string, email: string) {
   const room = await liveblocksClient.getRoom(id);
   const usersAccesses: any = room.usersAccesses;
   usersAccesses[email] = null;
-  await liveblocksClient.updateRoom(id, {usersAccesses});
+  await liveblocksClient.updateRoom(id, { usersAccesses });
   return true;
 }
 
 export async function updateBoardDescription(id: string, updateData: any) {
   await liveblocksClient.updateRoom(id, updateData);
   return true;
+}
+
+export async function getAllRooms() {
+  const rooms = await liveblocksClient.getRooms();
+  return rooms;
 }
