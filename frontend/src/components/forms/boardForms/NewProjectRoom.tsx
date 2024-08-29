@@ -7,12 +7,15 @@ import TextField from "@mui/material/TextField";
 import { createBoard } from "@/lib/boardActions";
 import { usePathname, useRouter } from "next/navigation";
 import Spinner from "@/components/Spinner";
+import { useDispatch } from "react-redux";
+import { onRoomCreated } from "@/store/reducers/roomCreated/roomCreatedSlice";
 
 function NewProjectRoom() {
   const [newProjectRoomName, setNewProjectRoomName] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
   const pathName = usePathname();
+  const dispatch = useDispatch();
 
   const projectId = pathName.replace("/dashboard/project/", "");
 
@@ -22,6 +25,7 @@ function NewProjectRoom() {
     e.preventDefault();
     const room = await createBoard(newProjectRoomName, projectId);
     if (room) {
+      dispatch(onRoomCreated());
       router.push(`/dashboard/project/${projectId}/board/${room.id}`);
     }
   };

@@ -20,7 +20,6 @@ function AssignedTo({ id, assigned }: { id: string; assigned: string }) {
   const pathName = usePathname();
   const spltitedPath = pathName.split("/");
   const boardId = spltitedPath[spltitedPath.length - 1];
-  console.log(users);
 
   React.useEffect(() => {
     const fetchUsers = async () => {
