@@ -16,7 +16,7 @@ function BoardMenu({
 }) {
   return (
     <div
-      className="p-5 sticky top-0 flex justify-end p-2 gap-5 roomNavBar"
+      className="p-5 sticky top-0 flex justify-end gap-5 roomNavBar z-10"
       id="BoardMenu"
     >
       <FilterMenu id={id} usersAccesses={usersAccesses} metadata={metadata} />

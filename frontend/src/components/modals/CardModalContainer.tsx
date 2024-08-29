@@ -147,7 +147,7 @@ function CardModalContainer({
                   setConfirmDelete(false);
                 }}
               >
-                Save
+                Delete
               </button>
               <button
                 onClick={() => setConfirmDelete(false)}

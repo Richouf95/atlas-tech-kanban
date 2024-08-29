@@ -8,21 +8,26 @@ import PopupState, { bindTrigger, bindPopover } from "material-ui-popup-state";
 import Skeleton from "@mui/material/Skeleton";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
-import { useRouter } from "next/navigation";
 import { useMutation } from "@/app/liveblocks.config";
 import { Card } from "@/types";
+import { usePathname } from "next/navigation";
+import { liveblocksClient } from "@/lib/liveblocksClient";
 
 function AssignedTo({ id, assigned }: { id: string; assigned: string }) {
-  const [users, setUsers] = React.useState<any>();
+  const [users, setUsers] = React.useState<string[] | null>(null);
   const theme = useSelector((store: RootState) => store.theme.theme);
 
-  const router = useRouter();
+  const pathName = usePathname();
+  const spltitedPath = pathName.split("/");
+  const boardId = spltitedPath[spltitedPath.length - 1];
+  console.log(users);
 
   React.useEffect(() => {
     const fetchUsers = async () => {
-      const response = await fetch("/api/allusers");
-      const data = await response.json();
-      setUsers(data);
+      const response = await liveblocksClient.getRoom(boardId);
+      const usersAccesses = response.usersAccesses;
+      const userList = Object.keys(usersAccesses);
+      setUsers(userList);
     };
 
     fetchUsers();
@@ -54,16 +59,16 @@ function AssignedTo({ id, assigned }: { id: string; assigned: string }) {
                   @{assigned}
                 </p>
               )}
-              {
-                assigned === "N/A" &&             <p
-                {...bindTrigger(popupState)}
-                className={`cursor-pointer px-4 py-2 rounded-lg mt-1 ${
-                  theme === "light" ? "bg-[#D7D7D7]" : "bg-[#212121]"
-                }`}
-              >
-                Assign to someone
-              </p>
-              }
+              {assigned === "N/A" && (
+                <p
+                  {...bindTrigger(popupState)}
+                  className={`cursor-pointer px-4 py-2 rounded-lg mt-1 ${
+                    theme === "light" ? "bg-[#D7D7D7]" : "bg-[#212121]"
+                  }`}
+                >
+                  Assign to someone
+                </p>
+              )}
             </div>
             <Popover
               {...bindPopover(popupState)}
@@ -77,22 +82,22 @@ function AssignedTo({ id, assigned }: { id: string; assigned: string }) {
               }}
             >
               <div className="min-w-64">
-                {users ? (
-                  users.map((user: any) => (
+                {users &&
+                  users.map((user: string) => (
                     <span
-                      key={user.id}
+                      key={user}
                       onClick={() => {
-                        updateAssignment(id, { assigned: user.id });
+                        updateAssignment(id, { assigned: user });
                         popupState.close();
                       }}
                       className={`block p-2 ${
                         theme === "light" ? "bg-[#D7D7D7]" : "bg-[#212121]"
                       } cursor-pointer m-2 rounded-lg`}
                     >
-                      {user.id}
+                      {user}
                     </span>
-                  ))
-                ) : (
+                  ))}
+                {!users && (
                   <Typography component="div" variant={"h1"}>
                     <Skeleton />
                   </Typography>

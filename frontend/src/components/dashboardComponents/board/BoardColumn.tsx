@@ -52,7 +52,7 @@ function BoardColumn({ id, name }: { id: string; name: string }) {
   
 
   return (
-    <div className="min-w-72 max-w-72 border rounded-xl border-0 columnsClass">
+    <div className="min-w-72 max-w-72 rounded-xl columnsClass">
       <ColumnHeader id={id} name={name} />
       {columnsCards && (
         <ReactSortable
