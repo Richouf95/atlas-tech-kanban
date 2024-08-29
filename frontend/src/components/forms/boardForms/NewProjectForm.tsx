@@ -7,9 +7,11 @@ import TextField from "@mui/material/TextField";
 import { createBoard } from "@/lib/boardActions";
 import { useRouter } from "next/navigation";
 import uniqid from "uniqid";
+import Spinner from "@/components/Spinner";
 
 function NewProjectForm() {
   const [newRoomName, setNewRoomName] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
 
   const handleNewRoom = async (e: React.FormEvent) => {
@@ -35,8 +37,12 @@ function NewProjectForm() {
           />
         </FormControl>
         <div>
-          <button className="w-full mx-auto mt-5" type="submit">
-            Create
+          <button
+            type="submit"
+            className="w-full mx-auto mt-5"
+            onClick={() => setIsLoading(true)}
+          >
+            {isLoading && <Spinner />} Create
           </button>
         </div>
       </Box>

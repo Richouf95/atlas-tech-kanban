@@ -10,9 +10,11 @@ import Box from "@mui/material/Box";
 import Menu from "@mui/material/Menu";
 import Divider from "@mui/material/Divider";
 import { signOut } from "next-auth/react";
+import Spinner from "./Spinner";
 
 function UserMenuBtn({ session }: { session: any }) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const open = Boolean(anchorEl);
   const router = useRouter();
 
@@ -78,6 +80,7 @@ function UserMenuBtn({ session }: { session: any }) {
           <div className="p-2 my-2">
             <button
               onClick={() => {
+                setIsLoading(true);
                 router.push("/");
                 signOut();
               }}

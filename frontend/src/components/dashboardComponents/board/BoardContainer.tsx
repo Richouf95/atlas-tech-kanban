@@ -7,6 +7,8 @@ import NewBoardColumnForm from "@/components/forms/boardForms/NewBoardColumnForm
 import { useMutation, useStorage } from "@/app/liveblocks.config";
 import { LiveList, LiveObject, shallow } from "@liveblocks/client";
 import { Column } from "@/types";
+import SpinnerBlock from "@/components/SpinnerBlock";
+import SpinnerAddColumns from "@/components/SpinnerAddColumns";
 
 function BoardContainer() {
   const columns = useStorage(
@@ -33,27 +35,35 @@ function BoardContainer() {
     updateColum(newColumns);
   };
 
+  if (!columns) {
+    return (
+      <div className="flex overflow-x-auto space-x-4">
+        <SpinnerBlock /><SpinnerAddColumns />
+      </div>
+    );
+  }
+
   return (
     <div className="flex overflow-x-auto space-x-4">
-        {columns && (
-          <ReactSortable
-            group={"columns"}
-            list={columns}
-            setList={setColumnOrder}
-            className="flex gap-5 mx-5 space-x-4"
-            handle=".uniquement"
-          >
-            {columns.length > 0 &&
-              columns.map((col) => (
-                <div key={col.id} className="flex-shrink-0">
-                  <BoardColumn {...col} />
-                </div>
-              ))}
-          </ReactSortable>
-        )}
-        <div className="min-w-64 flex-shrink-0">
-          <NewBoardColumnForm />
-        </div>
+      {columns && (
+        <ReactSortable
+          group={"columns"}
+          list={columns}
+          setList={setColumnOrder}
+          className="flex gap-5 mx-5 space-x-4"
+          handle=".uniquement"
+        >
+          {columns.length > 0 &&
+            columns.map((col) => (
+              <div key={col.id} className="flex-shrink-0">
+                <BoardColumn {...col} />
+              </div>
+            ))}
+        </ReactSortable>
+      )}
+      <div className="min-w-64 flex-shrink-0">
+        <NewBoardColumnForm />
+      </div>
     </div>
   );
 }
