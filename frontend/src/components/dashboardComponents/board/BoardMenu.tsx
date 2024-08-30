@@ -9,17 +9,19 @@ function BoardMenu({
   id,
   usersAccesses,
   metadata,
+  setFilterParams,
 }: {
   id: string;
   usersAccesses: any;
   metadata: any;
+  setFilterParams: (items: any) => any;
 }) {
   return (
     <div
-      className="p-5 sticky top-0 flex justify-end p-2 gap-5 roomNavBar"
+      className="p-5 sticky top-0 flex justify-end gap-5 roomNavBar z-10"
       id="BoardMenu"
     >
-      <FilterMenu id={id} usersAccesses={usersAccesses} metadata={metadata} />
+      <FilterMenu setFilterParams={setFilterParams} id={id} usersAccesses={usersAccesses} metadata={metadata} />
       <BoardSettings
         id={id}
         usersAccesses={usersAccesses}

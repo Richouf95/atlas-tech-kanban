@@ -7,12 +7,28 @@ import NewBoardColumnForm from "@/components/forms/boardForms/NewBoardColumnForm
 import { useMutation, useStorage } from "@/app/liveblocks.config";
 import { LiveList, LiveObject, shallow } from "@liveblocks/client";
 import { Column } from "@/types";
+import SpinnerBlock from "@/components/SpinnerBlock";
+import SpinnerAddColumns from "@/components/SpinnerAddColumns";
 
-function BoardContainer() {
+function BoardContainer({ filterParams }: { filterParams: any }) {
   const columns = useStorage(
     (root) => root.columns.map((col) => ({ ...col })),
     shallow
   );
+
+  const filteredColumns =
+    columns &&
+    columns.filter((column) => {
+      // Filtrer par ID de colonne
+      if (
+        filterParams.selectedColumns.length > 0 &&
+        !filterParams.selectedColumns.includes(column.id)
+      ) {
+        return false;
+      }
+
+      return true;
+    });
 
   const updateColum = useMutation(
     ({ storage }, columns: LiveObject<Column>[]) => {
@@ -33,27 +49,36 @@ function BoardContainer() {
     updateColum(newColumns);
   };
 
+  if (!columns) {
+    return (
+      <div className="flex overflow-x-auto space-x-4">
+        <SpinnerBlock />
+        <SpinnerAddColumns />
+      </div>
+    );
+  }
+
   return (
     <div className="flex overflow-x-auto space-x-4">
-        {columns && (
-          <ReactSortable
-            group={"columns"}
-            list={columns}
-            setList={setColumnOrder}
-            className="flex gap-5 mx-5 space-x-4"
-            handle=".uniquement"
-          >
-            {columns.length > 0 &&
-              columns.map((col) => (
-                <div key={col.id} className="flex-shrink-0">
-                  <BoardColumn {...col} />
-                </div>
-              ))}
-          </ReactSortable>
-        )}
-        <div className="min-w-64 flex-shrink-0">
-          <NewBoardColumnForm />
-        </div>
+      {filteredColumns && (
+        <ReactSortable
+          group={"columns"}
+          list={filteredColumns}
+          setList={setColumnOrder}
+          className="flex gap-5 mx-5 space-x-4"
+          handle=".uniquement"
+        >
+          {filteredColumns.length > 0 &&
+            filteredColumns.map((col) => (
+              <div key={col.id} className="flex-shrink-0">
+                <BoardColumn {...col} filterParams={filterParams} />
+              </div>
+            ))}
+        </ReactSortable>
+      )}
+      <div className="min-w-64 flex-shrink-0">
+        <NewBoardColumnForm />
+      </div>
     </div>
   );
 }

@@ -4,11 +4,16 @@ import { liveblocksClient } from "@/lib/liveblocksClient";
 import React, { useEffect, useState } from "react";
 import { Popover } from "@mui/material";
 import Link from "next/link";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+import SpinnerAddColumns from "./SpinnerAddColumns";
 
 function DashBoardMenuContent({ userEmail }: { userEmail: string }) {
   const [allRooms, setAllRooms] = useState<any>([]);
+  const [roomsLoaded, setRoomsLoaded] = useState<boolean>(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [currentPopover, setCurrentPopover] = useState<string | null>(null);
+  const roomCreated = useSelector((state: RootState) => state.counter);
 
   const fetchRooms = async () => {
     const response = await liveblocksClient.getRooms();
@@ -19,11 +24,11 @@ function DashBoardMenuContent({ userEmail }: { userEmail: string }) {
     const getRooms = async () => {
       const rooms = await fetchRooms();
       setAllRooms(rooms.data);
+      setRoomsLoaded(true);
     };
 
     getRooms();
-  }, []);
-
+  }, [roomCreated]);
 
   const myBoards = allRooms.filter((items: any) =>
     items.usersAccesses.hasOwnProperty(userEmail)
@@ -112,6 +117,7 @@ function DashBoardMenuContent({ userEmail }: { userEmail: string }) {
         }}
       >
         <div className="p-2 min-w-64">
+          {!roomsLoaded && <SpinnerAddColumns />}
           {boardsWithoutProject &&
             boardsWithoutProject.length > 0 &&
             boardsWithoutProject.map((item: any) => (
@@ -123,9 +129,9 @@ function DashBoardMenuContent({ userEmail }: { userEmail: string }) {
                 {item.metadata.boardName}
               </Link>
             ))}
-          {boardsWithoutProject && boardsWithoutProject.length === 0 && (
-            <span>No boards yet</span>
-          )}
+          {roomsLoaded &&
+            boardsWithoutProject &&
+            boardsWithoutProject.length === 0 && <span>No boards yet</span>}
         </div>
       </Popover>
 
@@ -143,6 +149,7 @@ function DashBoardMenuContent({ userEmail }: { userEmail: string }) {
         }}
       >
         <div className="p-2 min-w-64">
+          {!roomsLoaded && <SpinnerAddColumns />}
           {projects &&
             projects.length > 0 &&
             projects.map((item: any) => (
@@ -154,7 +161,9 @@ function DashBoardMenuContent({ userEmail }: { userEmail: string }) {
                 {item.metadata.boardName}
               </Link>
             ))}
-          {projects && projects.length === 0 && <span>No project yet</span>}
+          {roomsLoaded && projects && projects.length === 0 && (
+            <span>No project yet</span>
+          )}
         </div>
       </Popover>
 
@@ -168,6 +177,7 @@ function DashBoardMenuContent({ userEmail }: { userEmail: string }) {
             Dashboard
           </Link>
           <h2>Boards</h2>
+          {!roomsLoaded && <SpinnerAddColumns />}
           {boardsWithoutProject &&
             boardsWithoutProject.length > 0 &&
             boardsWithoutProject.map((item: any) => (
@@ -179,12 +189,15 @@ function DashBoardMenuContent({ userEmail }: { userEmail: string }) {
                 {item.metadata.boardName}
               </Link>
             ))}
-          {boardsWithoutProject && boardsWithoutProject.length === 0 && (
-            <span className="ml-4">No boards yet</span>
-          )}
+          {roomsLoaded &&
+            boardsWithoutProject &&
+            boardsWithoutProject.length === 0 && (
+              <span className="ml-4">No boards yet</span>
+            )}
         </div>
         <div className="my-4">
           <h2>Projects</h2>
+          {!roomsLoaded && <SpinnerAddColumns />}
           {projects &&
             projects.length > 0 &&
             projects.map((item: any) => (
@@ -196,7 +209,7 @@ function DashBoardMenuContent({ userEmail }: { userEmail: string }) {
                 {item.metadata.boardName}
               </Link>
             ))}
-          {projects && projects.length === 0 && (
+          {roomsLoaded && projects && projects.length === 0 && (
             <span className="ml-4">No project yet</span>
           )}
         </div>

@@ -121,7 +121,7 @@ function ColumnHeader({ id, name }: { id: string; name: string }) {
                 deleteColumn(id);
                 setConfirmDelete(false);
               }}>
-                Save
+                Delete
               </button>
               <button onClick={() => setConfirmDelete(false)} className="w-full">
                 Cancel
