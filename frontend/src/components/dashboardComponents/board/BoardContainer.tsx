@@ -10,11 +10,25 @@ import { Column } from "@/types";
 import SpinnerBlock from "@/components/SpinnerBlock";
 import SpinnerAddColumns from "@/components/SpinnerAddColumns";
 
-function BoardContainer() {
+function BoardContainer({ filterParams }: { filterParams: any }) {
   const columns = useStorage(
     (root) => root.columns.map((col) => ({ ...col })),
     shallow
   );
+
+  const filteredColumns =
+    columns &&
+    columns.filter((column) => {
+      // Filtrer par ID de colonne
+      if (
+        filterParams.selectedColumns.length > 0 &&
+        !filterParams.selectedColumns.includes(column.id)
+      ) {
+        return false;
+      }
+
+      return true;
+    });
 
   const updateColum = useMutation(
     ({ storage }, columns: LiveObject<Column>[]) => {
@@ -38,25 +52,26 @@ function BoardContainer() {
   if (!columns) {
     return (
       <div className="flex overflow-x-auto space-x-4">
-        <SpinnerBlock /><SpinnerAddColumns />
+        <SpinnerBlock />
+        <SpinnerAddColumns />
       </div>
     );
   }
 
   return (
     <div className="flex overflow-x-auto space-x-4">
-      {columns && (
+      {filteredColumns && (
         <ReactSortable
           group={"columns"}
-          list={columns}
+          list={filteredColumns}
           setList={setColumnOrder}
           className="flex gap-5 mx-5 space-x-4"
           handle=".uniquement"
         >
-          {columns.length > 0 &&
-            columns.map((col) => (
+          {filteredColumns.length > 0 &&
+            filteredColumns.map((col) => (
               <div key={col.id} className="flex-shrink-0">
-                <BoardColumn {...col} />
+                <BoardColumn {...col} filterParams={filterParams} />
               </div>
             ))}
         </ReactSortable>

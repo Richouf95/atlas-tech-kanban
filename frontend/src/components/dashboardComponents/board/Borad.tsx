@@ -27,6 +27,7 @@ function Borad({
 }) {
   const [editBoarName, setEditBoarName] = useState<boolean>(false);
   const [newBoardName, setNewBoardName] = useState<string>(name);
+  const [filterParams, setFilterParams] = useState<any>();
   const updateMyPresence = useUpdateMyPresence();
   const router = useRouter();
 
@@ -48,9 +49,11 @@ function Borad({
     router.refresh();
   };
 
+  console.log(filterParams)
+
   return (
     <div>
-      <BoardMenu id={id} usersAccesses={usersAccesses} metadata={metadata} />
+      <BoardMenu setFilterParams={setFilterParams} id={id} usersAccesses={usersAccesses} metadata={metadata} />
       {!editBoarName && (
         <h1 className="text-2xl p-5 flex gap-2">
           Board: {name}
@@ -85,7 +88,7 @@ function Borad({
         </form>
       )}
 
-      <BoardContainer />
+      <BoardContainer filterParams={filterParams} />
     </div>
   );
 }

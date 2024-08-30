@@ -79,8 +79,6 @@ function DashBoardMenuContent({ userEmail }: { userEmail: string }) {
 
   const open = Boolean(anchorEl);
 
-  console.log(boardsWithoutProject);
-
   return (
     <div className="lg:min-w-64 p-5 lg:mt-10 boardNavBar">
       {/* Titres côte à côte pour écrans < lg */}
