@@ -32,6 +32,18 @@ function UserMenuBtn({ session }: { session: any }) {
     router.push("/");
   }
 
+  const handleSignOut = async () => {
+    setIsLoading(true);
+    try {
+      await signOut({ redirect: false });
+      router.push("/");
+    } catch (error) {
+      console.error("Erreur lors de la déconnexion :", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <React.Fragment>
       <Box sx={{ display: "flex", alignItems: "center", textAlign: "center" }}>
@@ -79,14 +91,10 @@ function UserMenuBtn({ session }: { session: any }) {
           </div>
           <div className="p-2 my-2">
             <button
-              onClick={() => {
-                setIsLoading(true);
-                router.push("/");
-                signOut();
-              }}
+              onClick={handleSignOut}
               className="w-full flex items-center justify-center gap-2"
             >
-              Logout <LogoutIcon />
+              {isLoading && <Spinner />} Logout <LogoutIcon />
             </button>
           </div>
         </div>

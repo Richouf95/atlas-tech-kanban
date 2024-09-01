@@ -14,14 +14,15 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useLogin } from "@/hooks/useLogin";
 import GoogleAuthProvider from "./GoogleAuthProvider";
+import { signIn } from "next-auth/react";
 
 function SigninForm() {
   const [showPassword, setShowPassword] = React.useState(false);
   const [email, setEmail] = React.useState<string>("");
   const [pwd, setPwd] = React.useState<string>("");
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [errorFront, setErrorFront] = React.useState<string | null>(null);
 
-  const { login, isLoading, error } = useLogin();
   const router = useRouter();
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -32,14 +33,9 @@ function SigninForm() {
     event.preventDefault();
   };
 
-  React.useEffect(() => {
-    if (!isLoading && localStorage.getItem("atlas-user")) {
-      router.push("/dashboard");
-    }
-  }, [isLoading]);
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
 
     if (!email || !pwd) {
       setErrorFront("Veuillez remplir tous les champs.");
@@ -47,10 +43,18 @@ function SigninForm() {
     }
 
     try {
-      // await login(email, pwd);
-      alert(
-        "Notre service backend est actuellement en cours de développement. Pour continuer, veuillez vous authentifier avec Google. Merci pour votre compréhension !"
-      );
+      const res = await signIn('credentials', {
+        email,
+        password: pwd,
+        redirect: false
+      })
+      
+      if(res?.error) {
+        setErrorFront(res.error);
+        return;
+      }
+
+      router.push('/dashboard')
     } catch (error) {
       console.error(error);
       setErrorFront("Erreur de connexion. Veuillez réessayer.");
@@ -115,7 +119,6 @@ function SigninForm() {
             </FormControl>
 
             <div className="ml-5">
-              {error && <p className="text-red-500">{error}</p>}
               {errorFront && <p className="text-red-500">{errorFront}</p>}
               <Link href={"#"} className="hover:underline">
                 Forgot your password?
