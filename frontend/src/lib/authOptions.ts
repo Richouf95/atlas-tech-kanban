@@ -5,6 +5,7 @@ import { AuthOptions } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import bcrypt from "bcryptjs";
+import mongoose from "mongoose";
 
 export const authOptions: AuthOptions = {
   secret: process.env.AUTH_SECRET,
@@ -23,7 +24,13 @@ export const authOptions: AuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        await clientPromise;
+        const connectionString = process.env.MONGODB_URI;
+        if (!connectionString) {
+          return new Response("no db connection string", { status: 500 });
+        }
+      
+        await mongoose.connect(connectionString);
+        
         const user = await UserSchema.findOne({ email: credentials?.email });
         if (!user) throw Error("User not exist");
         const correctPass = await bcrypt.compare(

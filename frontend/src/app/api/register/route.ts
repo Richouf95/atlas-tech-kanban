@@ -2,10 +2,16 @@ import clientPromise from "@/lib/mongoClient";
 import { UserSchema } from "@/types";
 import { NextRequest } from "next/server";
 import bcrypt from "bcryptjs";
+import mongoose from "mongoose";
 
 export async function POST(req: NextRequest) {
   try {
-    await clientPromise;
+    const connectionString = process.env.MONGODB_URI;
+    if (!connectionString) {
+      return new Response("no db connection string", { status: 500 });
+    }
+  
+    await mongoose.connect(connectionString);
 
     const body = await req.json();
     const { name, email, password } = body;

@@ -39,25 +39,28 @@ function SigninForm() {
 
     if (!email || !pwd) {
       setErrorFront("Veuillez remplir tous les champs.");
+      setIsLoading(false);
       return;
     }
 
     try {
-      const res = await signIn('credentials', {
+      const res = await signIn("credentials", {
         email,
         password: pwd,
-        redirect: false
-      })
-      
-      if(res?.error) {
+        redirect: false,
+      });
+
+      if (res?.error) {
         setErrorFront(res.error);
         return;
       }
 
-      router.push('/dashboard')
+      router.push("/dashboard");
     } catch (error) {
       console.error(error);
       setErrorFront("Erreur de connexion. Veuillez réessayer.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
