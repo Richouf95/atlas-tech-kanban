@@ -85,13 +85,14 @@ function FilterMenu({
 
   return (
     <div>
-      <div
+      <button
         onClick={toggleDrawer(true)}
-        className="cursor-pointer"
+        className="cursor-pointer specialBtn"
         aria-label="Open settings"
+        tabIndex={0}
       >
         <FilterListIcon /> <span>Filter</span>
-      </div>
+      </button>
       <Drawer
         anchor={isLargeScreen ? "right" : "bottom"}
         open={open}

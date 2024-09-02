@@ -20,16 +20,23 @@ function ThemeWrapper({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const htmlElement = document.documentElement;
-    htmlElement.classList.remove("light", "dark"); // Supprimer les classes de thème précédentes
-    htmlElement.classList.add(theme); // Ajouter la nouvelle classe de thème
+    htmlElement.classList.remove("light", "dark");
+    htmlElement.classList.add(theme);
+    // Dans un fichier JavaScript ou directement dans un script
+document.addEventListener("DOMContentLoaded", () => {
+  const buttons = document.querySelectorAll('.lb-root');
+  buttons.forEach(button => {
+    button.classList.add('my-custom-class'); // Remplace 'my-custom-class' par la classe que tu veux ajouter
+  });
+});
+
   }, [theme]);
 
   if (!isThemeLoaded) {
-    // Afficher un indicateur de chargement ou rien jusqu'à ce que le thème soit chargé
     return null;
   }
 
-  return <>{children}</>; // Ne pas inclure de balises <html> ou <body> ici
+  return <>{children}</>;
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

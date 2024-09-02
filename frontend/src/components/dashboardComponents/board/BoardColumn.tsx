@@ -72,39 +72,38 @@ function BoardColumn({
       }
 
       // Filtrer par due dates
-    if (
-      filterParams.selectedDueDates.length > 0
-    ) {
-      // Exclure les cartes ayant une dueDate égale à "N/A"
-      if (card.dueDate === "N/A") {
-        return false;
+      if (filterParams.selectedDueDates.length > 0) {
+        // Exclure les cartes ayant une dueDate égale à "N/A"
+        if (card.dueDate === "N/A") {
+          return false;
+        }
+
+        const today = new Date();
+        const cardDate = new Date(card.dueDate);
+
+        // Réinitialiser l'heure des dates pour ne comparer que les jours
+        today.setHours(0, 0, 0, 0);
+        cardDate.setHours(0, 0, 0, 0);
+
+        // Calculer la différence de jours entre la date actuelle et la dueDate de la carte
+        const diffTime = cardDate.getTime() - today.getTime();
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // Convertir le temps en jours
+
+        // Déterminer si la carte correspond à l'une des options de deadline
+        const isOverdue = diffDays < 0;
+        const isToday = diffDays === 0;
+        const isDueTomorrow = diffDays === 1;
+
+        // Vérifier si la carte correspond aux filtres de dates sélectionnés
+        if (
+          (isOverdue && !filterParams.selectedDueDates.includes("overdue")) ||
+          (isToday && !filterParams.selectedDueDates.includes("today")) ||
+          (isDueTomorrow &&
+            !filterParams.selectedDueDates.includes("dueTomorrow"))
+        ) {
+          return false;
+        }
       }
-
-      const today = new Date();
-      const cardDate = new Date(card.dueDate);
-
-      // Réinitialiser l'heure des dates pour ne comparer que les jours
-      today.setHours(0, 0, 0, 0);
-      cardDate.setHours(0, 0, 0, 0);
-
-      // Calculer la différence de jours entre la date actuelle et la dueDate de la carte
-      const diffTime = cardDate.getTime() - today.getTime();
-      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // Convertir le temps en jours
-
-      // Déterminer si la carte correspond à l'une des options de deadline
-      const isOverdue = diffDays < 0;
-      const isToday = diffDays === 0;
-      const isDueTomorrow = diffDays === 1;
-
-      // Vérifier si la carte correspond aux filtres de dates sélectionnés
-      if (
-        (isOverdue && !filterParams.selectedDueDates.includes("overdue")) ||
-        (isToday && !filterParams.selectedDueDates.includes("today")) ||
-        (isDueTomorrow && !filterParams.selectedDueDates.includes("dueTomorrow"))
-      ) {
-        return false;
-      }
-    }
 
       // Filtrer par labels
       if (
@@ -182,7 +181,13 @@ function BoardColumn({
           group={"Cards"}
         >
           {onlyMatchedCards.map((item) => (
-            <div key={item.id} className="mx-2">
+            <div
+              key={item.id}
+              className="mx-2"
+              tabIndex={0}
+              aria-label={`Card ${item.name}`}
+              role="region"
+            >
               <BoardCard {...item} />
             </div>
           ))}

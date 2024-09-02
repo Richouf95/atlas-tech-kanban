@@ -27,8 +27,8 @@ function FilterSection({
 
   return (
     <div>
-      <h3
-        className="cursor-pointer font-bold flex items-center p-2"
+      <button
+        className="cursor-pointer font-bold flex items-center p-2 my-2 specialBtn"
         onClick={() => setOpen(!open)}
       >
         {title}
@@ -37,7 +37,7 @@ function FilterSection({
             open ? "rotate-180" : "rotate-0"
           }`}
         />
-      </h3>
+      </button>
       <div
         className={`transition-height duration-300 ${
           open ? "max-h-[1000px]" : "max-h-0"

@@ -76,6 +76,14 @@ html.light {
   .navItem {
     background-color: $color-room-card-light;
   }
+
+  
+  .specialBtn {
+    background-color: transparent;
+    padding: 0;
+    color: black;
+    border-radius: 0;
+  }
 }
 
 html.dark {
@@ -141,6 +149,10 @@ html.dark {
     background-color: $color-bg-dark;
   }
 
+  .navItem {
+    background-color: $color-room-navBar-dark;
+  }
+
   .MuiPaper-root.MuiPopover-paper,
   .MuiPaper-root.MuiPaper-elevation {
     background-color: $color-room-card-dark;
@@ -163,9 +175,15 @@ html.dark {
 
   .create {
     label {
-    color: white;
-
+      color: white;
     }
+  }
+
+  .specialBtn {
+    background-color: transparent;
+    padding: 0;
+    color: white;
+    border-radius: 0;
   }
 }
 
@@ -212,4 +230,12 @@ input {
 
 .colorPicker::-webkit-color-swatch-wrapper {
   padding: 0;
+}
+
+.lb-root {
+  z-index: 1500 !important;
+}
+
+.lb-emoji-picker-emoji {
+  background: none !important;
 }

@@ -15,7 +15,10 @@ function HomeHeader({ session }: { session: any }) {
   const pathName = usePathname();
 
   return (
-    <div className="flex justify-between items-center px-5 pt-5">
+    <header
+      role="banner"
+      className="flex justify-between items-center px-5 pt-5"
+    >
       <div className="ml-5">
         <Link href={"/"}>
           <Image
@@ -26,15 +29,22 @@ function HomeHeader({ session }: { session: any }) {
           />
         </Link>
       </div>
-      <div className="flex flex-row items-center gap-5 md:mr-5 mr-0">
-        {pathName === "/" && !session && (
-          <Link href={"/signin"}>
-            <button>Signin</button>
-          </Link>
-        )}
-        <ThemeToggle />
-      </div>
-    </div>
+      <nav role="navigation">
+        <ul className="flex flex-row items-center gap-5 md:mr-5 mr-0">
+          <li>
+            {" "}
+            {pathName === "/" && !session && (
+              <Link href={"/signin"} className="btn">
+                Signin
+              </Link>
+            )}
+          </li>
+          <li>
+            <ThemeToggle />
+          </li>
+        </ul>
+      </nav>
+    </header>
   );
 }
 

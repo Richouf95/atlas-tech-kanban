@@ -62,7 +62,7 @@ function SigninForm() {
   };
 
   return (
-    <div className="flex justify-center items-center px-5 p-10">
+    <main className="flex justify-center items-center px-5 p-10">
       <div className="p-6 rounded-lg py-10 max-w-lg loginForm loginShadow">
         <h2 className="text-3xl mb-5 mt-2 text-center font-bold">Login</h2>
         <GoogleAuthProvider />
@@ -167,7 +167,7 @@ function SigninForm() {
           </Box>
         </form>
       </div>
-    </div>
+    </main>
   );
 }
 

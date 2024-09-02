@@ -36,6 +36,7 @@ function UpdateBoardDescription({
         <textarea
           name="Description"
           id="Description"
+          autoFocus
           value={
             newDescription === "N/A"
               ? "Describe your board here ..."
