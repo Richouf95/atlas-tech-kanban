@@ -1,7 +1,5 @@
 # Atlas Tech Kanban - Frontend Project
 
-(**Note**) : For the tests, I invite you to use the goole provider to connect to the application. I'm still working on the backend server.
-
 ![Appercu](/frontend/public/Capture_dark.png);
 
 ## Description
@@ -97,7 +95,6 @@ Several planned features have not yet been implemented.
 
 These include
 
-- **Connection to personal backend**: for testing purposes, please use the google provider
 - **Offline mode**: Functionality allowing the application to be used without an internet connection.
 - **Notifications**: Real-time notification system to inform users of important updates.
 - **Mailings**: Sends emails for alerts, updates or invitations.
