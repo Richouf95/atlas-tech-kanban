@@ -40,6 +40,7 @@ function SignupForm() {
 
     if (!email || !pwd) {
       setErrorFront("Veuillez remplir tous les champs.");
+      setIsLoading(false);
       return;
     }
 
@@ -73,6 +74,8 @@ function SignupForm() {
     } catch (error) {
       console.error(error);
       setErrorFront("Erreur de connexion. Veuillez réessayer. signup");
+    } finally {
+      setIsLoading(false);
     }
   };
 
