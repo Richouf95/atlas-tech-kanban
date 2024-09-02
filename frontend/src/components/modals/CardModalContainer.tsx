@@ -196,7 +196,7 @@ function CardModalContainer({
           <ChatIcon />
           Comments
         </h2>
-        <div className="max-h-72 overflow-y-auto rounded-lg p-0 noScrollBar">
+        <div className="max-h-72 overflow-y-auto rounded-lg p-0 noScrollBar" style={{zIndex: "100"}}>
           {threads &&
             threads.map((thread) => (
               <Thread

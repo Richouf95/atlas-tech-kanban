@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import ThemeToggle from "@/components/ThemeToggle";
 import SettingsSuggestIcon from "@mui/icons-material/SettingsSuggest";
@@ -11,20 +11,18 @@ import Menu from "@mui/material/Menu";
 import Divider from "@mui/material/Divider";
 import { signOut } from "next-auth/react";
 import Spinner from "./Spinner";
+import { ClickAwayListener } from "@mui/material";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
 function UserMenuBtn({ session }: { session: any }) {
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const open = Boolean(anchorEl);
+  const [isOpen, setIsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const menuRef = useRef<HTMLDivElement | null>(null);
+  const triggerRef = useRef<HTMLButtonElement | null>(null);
   const router = useRouter();
 
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+  const theme = useSelector((state: RootState) => state.theme.theme);
 
   const user = session?.user;
 
@@ -32,66 +30,108 @@ function UserMenuBtn({ session }: { session: any }) {
     router.push("/");
   }
 
+  const handleToggleMenu = () => {
+    setIsOpen(!isOpen);
+  };
+
+  const handleCloseMenu = () => {
+    setIsOpen(false);
+  };
+
+  const handleSignOut = async () => {
+    setIsLoading(true);
+    try {
+      await signOut({ redirect: false });
+      router.push("/");
+    } catch (error) {
+      console.error("Erreur lors de la déconnexion :", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>) => {
+    // Ouverture du menu avec Entrée ou Espace
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      handleToggleMenu();
+    }
+  };
+
+  const handleMenuKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    // Fermer le menu avec Échappement
+    if (e.key === "Escape") {
+      e.preventDefault();
+      handleCloseMenu();
+      triggerRef.current?.focus(); // Remettre le focus sur le bouton
+    }
+  };
+
+  // Focuser le premier élément du menu quand il s'ouvre
+  useEffect(() => {
+    if (isOpen && menuRef.current) {
+      const firstFocusableElement = menuRef.current.querySelector(
+        "button, [href], input, select, textarea, [tabindex]:not([tabindex='-1'])"
+      ) as HTMLElement | null;
+      firstFocusableElement?.focus();
+    }
+  }, [isOpen]);
+
   return (
-    <React.Fragment>
+    <nav>
       <Box sx={{ display: "flex", alignItems: "center", textAlign: "center" }}>
-        <div
-          onClick={handleClick}
-          className="cursor-pointer"
-          aria-controls={open ? "account-menu" : undefined}
+        <button
+          ref={triggerRef}
+          onClick={handleToggleMenu}
+          onKeyDown={handleKeyDown}
           aria-haspopup="true"
-          aria-expanded={open ? "true" : undefined}
+          aria-expanded={isOpen ? "true" : "false"}
+          aria-controls="custom-menu"
+          style={{ borderRadius: "50%", padding: "0" }}
         >
           <AccountCircleIcon fontSize="large" />
-        </div>
+        </button>
       </Box>
-      <Menu
-        anchorEl={anchorEl}
-        id="account-menu"
-        open={open}
-        onClose={handleClose}
-        PaperProps={{
-          elevation: 0,
-          sx: {
-            overflow: "visible",
-            mt: 1.5,
-          },
-        }}
-        transformOrigin={{ horizontal: "right", vertical: "top" }}
-        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
-      >
-        <div className="min-w-72 shadow-lg rounded-lg">
-          <div className="mb-2">
-            <div className="flex justify-center mt-2">
-              <AccountCircleIcon sx={{ fontSize: 40 }} />
+      {isOpen && (
+        <ClickAwayListener onClickAway={handleCloseMenu}>
+          <div
+            ref={menuRef}
+            id="custom-menu"
+            role="menu"
+            aria-labelledby="menu-button"
+            onKeyDown={handleMenuKeyDown}
+            className={`absolute right-5 z-20 mt-2 min-w-72 shadow-xl rounded-lg p-2 ${
+              theme === "light" ? "bg-white border" : "bg-[#212121] border"
+            }`}
+          >
+            <div className="mb-2">
+              <div className="flex justify-center mt-2">
+                <AccountCircleIcon sx={{ fontSize: 40 }} />
+              </div>
+              <p className="text-center font-bold">{user?.name}</p>
+              <p className="text-center">{user?.email}</p>
             </div>
-            <p className="text-center font-bold">{user?.name}</p>
-            <p className="text-center">{user?.email}</p>
-          </div>
-          <Divider className="divider" />
-          <div className="p-2 my-2 flex gap-3 items-center navItem mx-2 rounded-lg cursor-pointer">
-            <SettingsSuggestIcon /> <p>Params</p>
-          </div>
+            <Divider className="divider" />
+            <div className="p-2 my-2 flex gap-3 items-center navItem mx-2 rounded-lg cursor-pointer">
+              <SettingsSuggestIcon /> <p>Params</p>
+            </div>
 
-          <div className="flex flex-row items-center justify-between gap-5 px-2 navItem mx-2 rounded-lg cursor-pointer">
-            <p>Switch theme</p>
-            <ThemeToggle />
+            <div className="flex flex-row items-center justify-between gap-5 px-2 navItem mx-2 rounded-lg cursor-pointer">
+              <p>Switch theme</p>
+              <ThemeToggle />
+            </div>
+            <div className="p-2 my-2">
+              <button
+                onClick={handleSignOut}
+                className="w-full flex items-center justify-center gap-2"
+              >
+                {isLoading && <Spinner />} Logout <LogoutIcon />
+              </button>
+            </div>
           </div>
-          <div className="p-2 my-2">
-            <button
-              onClick={() => {
-                setIsLoading(true);
-                router.push("/");
-                signOut();
-              }}
-              className="w-full flex items-center justify-center gap-2"
-            >
-              Logout <LogoutIcon />
-            </button>
-          </div>
-        </div>
-      </Menu>
-    </React.Fragment>
+        </ClickAwayListener>
+      )}
+    </nav>
   );
 }
 

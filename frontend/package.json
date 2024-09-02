@@ -28,6 +28,7 @@
     "@tiptap/pm": "^2.6.6",
     "@tiptap/react": "^2.6.6",
     "@tiptap/starter-kit": "^2.6.6",
+    "bcryptjs": "^2.4.3",
     "frontend": "file:",
     "material-ui-popup-state": "^5.1.2",
     "mongodb": "^6.8.0",
@@ -47,6 +48,7 @@
     "yjs": "^13.6.18"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

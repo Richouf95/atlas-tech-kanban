@@ -28,6 +28,7 @@ function NewCollaborator({ id, setAddCollaborator }: NewCollaboratorProps) {
           <input
             type="email"
             name="Collaborator"
+            autoFocus
             id="Collaborator"
             placeholder={"Collaborator email ..."}
             onChange={(e) => setCollaboratorEmail(e.target.value)}

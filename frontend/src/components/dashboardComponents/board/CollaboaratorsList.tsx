@@ -5,11 +5,10 @@ import { useRouter } from "next/navigation";
 
 interface CollaboaratorsListProps {
   id: string;
-  usersAccesses: Record<string, any>; 
+  usersAccesses: Record<string, any>;
 }
 
 function CollaboaratorsList({ id, usersAccesses }: CollaboaratorsListProps) {
-  
   const [removeCollaborator, setRemoveCollaborator] = useState<
     Record<string, boolean>
   >({});
@@ -44,12 +43,12 @@ function CollaboaratorsList({ id, usersAccesses }: CollaboaratorsListProps) {
             <div className="flex justify-between p-2">
               <p>{email}</p>{" "}
               {!removeCollaborator[email] && (
-                <span
+                <button
                   onClick={() => handleRemoveClick(email)}
-                  className="cursor-pointer"
+                  className="cursor-pointer specialBtn"
                 >
                   <DeleteIcon />
-                </span>
+                </button>
               )}
             </div>
             {removeCollaborator[email] && (
@@ -60,6 +59,7 @@ function CollaboaratorsList({ id, usersAccesses }: CollaboaratorsListProps) {
                   <button
                     onClick={() => handleConfirmRemove(email)}
                     className="w-full !bg-red-300"
+                    tabIndex={0}
                   >
                     Remove
                   </button>

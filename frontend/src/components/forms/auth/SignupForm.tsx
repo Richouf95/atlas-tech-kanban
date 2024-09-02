@@ -14,15 +14,16 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useSignup } from "@/hooks/useSignup";
 import GoogleAuthProvider from "./GoogleAuthProvider";
+import { signIn } from "next-auth/react";
 
 function SignupForm() {
   const [showPassword, setShowPassword] = React.useState<boolean>(false);
   const [name, setName] = React.useState<string>("");
   const [email, setEmail] = React.useState<string>("");
   const [pwd, setPwd] = React.useState<string>("");
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [errorFront, setErrorFront] = React.useState<string | null>(null);
 
-  const { signup, isLoading, error } = useSignup();
   const router = useRouter();
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -33,14 +34,9 @@ function SignupForm() {
     event.preventDefault();
   };
 
-  React.useEffect(() => {
-    if (!isLoading && localStorage.getItem("atlas-user")) {
-      router.push("/dashboard");
-    }
-  }, [isLoading]);
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
 
     if (!email || !pwd) {
       setErrorFront("Veuillez remplir tous les champs.");
@@ -48,18 +44,40 @@ function SignupForm() {
     }
 
     try {
-      // await signup(name, email, pwd);
-      alert(
-        "Notre service backend est actuellement en cours de développement. Pour continuer, veuillez vous authentifier avec Google. Merci pour votre compréhension !"
-      );
+      const res = await fetch("api/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, password: pwd }),
+      });
+
+      const response = await res.json();
+
+      if (res.ok) {
+        console.log("User registered successfully", response);
+
+        const loginUser = await signIn("credentials", {
+          email,
+          password: pwd,
+          redirect: false,
+        });
+
+        if (loginUser?.error) {
+          setErrorFront(loginUser.error);
+          return;
+        }
+
+        router.push("/dashboard");
+      } else {
+        setErrorFront(response.error || "Une erreur s'est produite.");
+      }
     } catch (error) {
       console.error(error);
-      setErrorFront("Erreur de connexion. Veuillez réessayer.");
+      setErrorFront("Erreur de connexion. Veuillez réessayer. signup");
     }
   };
 
   return (
-    <div className="flex justify-center items-center px-5 p-10">
+    <main className="flex justify-center items-center px-5 p-10">
       <div className="p-6 rounded-lg py-10 max-w-lg loginForm loginShadow">
         <h2 className="text-3xl mb-5 mt-2 text-center font-bold">Signup</h2>
         <GoogleAuthProvider />
@@ -126,7 +144,6 @@ function SignupForm() {
             </FormControl>
 
             <div className="ml-5">
-              {error && <p className="text-red-500">{error}</p>}
               {errorFront && <p className="text-red-500">{errorFront}</p>}
               <Link href={"#"} className="hover:underline">
                 Forgot your password?
@@ -175,7 +192,7 @@ function SignupForm() {
           </Box>
         </form>
       </div>
-    </div>
+    </main>
   );
 }
 

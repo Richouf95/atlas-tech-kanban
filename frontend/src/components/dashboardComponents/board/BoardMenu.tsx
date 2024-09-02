@@ -17,17 +17,31 @@ function BoardMenu({
   setFilterParams: (items: any) => any;
 }) {
   return (
-    <div
-      className="p-5 sticky top-0 flex justify-end gap-5 roomNavBar z-10"
+    <nav
+      className="p-5 sticky top-0 roomNavBar z-10"
       id="BoardMenu"
+      aria-label="Board menu"
     >
-      <FilterMenu setFilterParams={setFilterParams} id={id} usersAccesses={usersAccesses} metadata={metadata} />
-      <BoardSettings
-        id={id}
-        usersAccesses={usersAccesses}
-        metadata={metadata}
-      />
-    </div>
+      <ul className=" flex justify-end gap-5">
+        <li>
+          <FilterMenu
+            setFilterParams={setFilterParams}
+            id={id}
+            usersAccesses={usersAccesses}
+            metadata={metadata}
+            aria-label="Filter board items"
+          />
+        </li>
+        <li>
+          <BoardSettings
+            id={id}
+            usersAccesses={usersAccesses}
+            metadata={metadata}
+            aria-label="Board settings"
+          />
+        </li>
+      </ul>
+    </nav>
   );
 }
 

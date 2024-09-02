@@ -5,6 +5,7 @@ type ModelsType = {
 };
 
 export type UserType = {
+  id: string;
   name: string;
   email: string;
   image: string;
@@ -13,6 +14,7 @@ export type UserType = {
 const userSchema = new Schema({
   name: String,
   email: String,
+  password: String,
   image: String,
   emailVerified: Date,
 });

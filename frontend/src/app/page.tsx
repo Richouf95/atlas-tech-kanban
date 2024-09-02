@@ -8,7 +8,7 @@ export default async function Home() {
   const session = await getServerSession(authOptions);
 
   return (
-    <main className="h-screen flex flex-col">
+    <main className="h-screen container mx-auto flex flex-col">
       <HomeHeader session={session} />
       <HomePageMaine />
     </main>

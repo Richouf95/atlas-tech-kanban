@@ -56,7 +56,7 @@ function BoardSettings({
         <div className="flex text-lg gap-2 justify-center items-center my-2">
           <span>Administrator</span>
         </div>
-        <div className="flex justify-center gap-2 items-center gap-2 mb-5">
+        <div className="flex justify-center gap-2 items-center mb-5">
           <AccountCircleIcon sx={{ fontSize: 60 }} />
           <div>
             <h2 className="text-lg font-bold">{metadata.ownerName}</h2>
@@ -108,13 +108,14 @@ function BoardSettings({
 
   return (
     <div>
-      <div
+      <button
         onClick={toggleDrawer(true)}
-        className="cursor-pointer"
+        className="cursor-pointer specialBtn"
         aria-label="Open settings"
+        tabIndex={0}
       >
         <SettingsIcon /> <span>Settings</span> 
-      </div>
+      </button>
       <Drawer
         anchor={isLargeScreen ? "right" : "bottom"}
         open={open}

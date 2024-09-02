@@ -15,27 +15,29 @@ function HomePageMain() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   return (
     <div className="flex flex-col flex-grow items-center justify-center">
-      <div className="max-w-[800px] mx-2 text-center">
+      <section className="max-w-[800px] mx-2 text-center">
         <h1 className="text-5xl font-bold">
           Let's work together to turn your ideas into successes.
         </h1>
-      </div>
-      <div className="flex justify-center my-5">
-        <Link href={"/signin"}>
-          <button className="w-52" onClick={() => setIsLoading(true)}>
+        <div className="flex justify-center my-5">
+          <Link
+            href={"/signin"}
+            onClick={() => setIsLoading(true)}
+            className="w-52 btn text-center"
+          >
             {isLoading && <Spinner />}
             Start
-          </button>
-        </Link>
-      </div>
-      <div className="w-full flex justify-center px-2">
+          </Link>
+        </div>
+      </section>
+      <section className="w-full flex justify-center px-2">
         <Image
           src={theme === "light" ? CaptureDark : CaptureLigh}
           alt="Background Image"
           className="w-auto max-w-[900px] rounded-2xl"
           layout="responsive"
         />
-      </div>
+      </section>
     </div>
   );
 }

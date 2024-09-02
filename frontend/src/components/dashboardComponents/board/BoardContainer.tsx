@@ -59,7 +59,7 @@ function BoardContainer({ filterParams }: { filterParams: any }) {
   }
 
   return (
-    <div className="flex overflow-x-auto space-x-4">
+    <div className="flex overflow-x-auto space-x-4" aria-label="board coloumns">
       {filteredColumns && (
         <ReactSortable
           group={"columns"}
@@ -70,7 +70,13 @@ function BoardContainer({ filterParams }: { filterParams: any }) {
         >
           {filteredColumns.length > 0 &&
             filteredColumns.map((col) => (
-              <div key={col.id} className="flex-shrink-0">
+              <div
+                key={col.id}
+                className="flex-shrink-0"
+                tabIndex={0}
+                aria-label={`Column ${col.name}`}
+                role="region"
+              >
                 <BoardColumn {...col} filterParams={filterParams} />
               </div>
             ))}
