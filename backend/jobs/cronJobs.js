@@ -21,7 +21,7 @@ function logWithTimestamp(message) {
     console.log(`[${new Date().toISOString()}] ${message}`);
 }
 
-cron.schedule('0 * * * *', async () => {
+cron.schedule('*/5 * * * *', async () => {
     try {
         logWithTimestamp('Starting backup ...');
 
