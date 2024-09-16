@@ -10,7 +10,7 @@ import CaptureLigh from "/public/Capture_light.png";
 import CaptureDark from "/public/Capture_dark.png";
 import Spinner from "./Spinner";
 
-function HomePageMain() {
+function HomePageMain({ session }: { session: any }) {
   const theme = useSelector((state: RootState) => state.theme.theme);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   return (
@@ -21,7 +21,7 @@ function HomePageMain() {
         </h1>
         <div className="flex justify-center my-5">
           <Link
-            href={"/signin"}
+            href={session ? "/dashboard" : "/signin"}
             onClick={() => setIsLoading(true)}
             className="w-52 btn text-center"
           >

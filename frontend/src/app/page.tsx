@@ -10,7 +10,7 @@ export default async function Home() {
   return (
     <main className="h-screen container mx-auto flex flex-col">
       <HomeHeader session={session} />
-      <HomePageMaine />
+      <HomePageMaine  session={session} />
     </main>
   );
 }
