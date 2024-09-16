@@ -3,7 +3,11 @@ const mongoose = require("mongoose");
 require('dotenv').config();
 const cors = require('cors');
 const userRoutes = require('./routes/userRoutes');
-require('./jobs/cronJobs')
+// require('./jobs/cronJobs')
+const boardRoutes = require('./routes/boardRoutes');
+const columnRoutes = require('./routes/columnRoutes');
+const cardRoutes = require('./routes/cardRoutes');
+const labelRoutes = require('./routes/labelRoutes');
 
 // Express app instance
 const app = express();
@@ -16,13 +20,12 @@ app.use(cors({
 
 app.use(express.json({ limit: '50mb' }));
 
-app.use((req, res, next) => {
-    console.log(req.path, req.method)
-    next()
-})
-
 // Routes
 app.use('/user', userRoutes);
+app.use('/board', boardRoutes);
+app.use('/column', columnRoutes);
+app.use('/card', cardRoutes);
+app.use('/label', labelRoutes);
 
 // MongoDB connection & server launch
 mongoose.connect(process.env.MONGO_URI)
@@ -33,5 +36,6 @@ mongoose.connect(process.env.MONGO_URI)
         })
     })
     .catch(err => {
-        console.error(err);
+        console.error('Failed to connect to MongoDB', err);
+        process.exit(1);
     })
