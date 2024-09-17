@@ -53,8 +53,6 @@ function Borad() {
   const updateMyPresence = useUpdateMyPresence();
   const router = useRouter();
 
-  console.log("Fetched from redux : ", thisBoard);
-
   useEffect(() => {
     updateMyPresence({ boardId: thisBoard._id });
 
@@ -133,7 +131,7 @@ function Borad() {
         </section>
       )}
 
-      {/* <BoardContainer filterParams={filterParams} /> */}
+      <BoardContainer filterParams={filterParams} />
     </div>
   );
 }

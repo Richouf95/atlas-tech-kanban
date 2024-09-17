@@ -18,7 +18,7 @@ app.use(cors({
     optionsSuccessStatus: 200
 }));
 
-app.use(express.json({ limit: '50mb' }));
+app.use(express.json());
 
 // Routes
 app.use('/user', userRoutes);

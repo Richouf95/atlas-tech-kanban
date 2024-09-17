@@ -25,24 +25,7 @@ async function BoardPage({
     redirect("/");
   }
 
-  const boardData = {
-    id: thisBoard._id,
-    name: thisBoard.boardName,
-    metadata: {
-      boardName: thisBoard.boardName,
-      ownerName: thisBoard.ownerName,
-      ownerEmail: thisBoard.ownerEmail,
-      ...(thisBoard.projectId && { projectId: thisBoard.projectId }),
-      ...(thisBoard.description && { description: thisBoard.description }),
-    },
-    usersAccesses: thisBoard.usersAccesses
-  };
-
-  return (
-    <>
-      <Room id={boardId}>{thisBoard && <Borad />}</Room>
-    </>
-  );
+  return <Room id={boardId}>{thisBoard && <Borad />}</Room>;
 }
 
 export default BoardPage;
