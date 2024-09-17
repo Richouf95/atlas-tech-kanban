@@ -18,10 +18,10 @@ function NewRoom() {
 
   const handleNewRoom = async (e: React.FormEvent) => {
     e.preventDefault();
-    const room = await createBoard(newRoomName, "N/A");
+    const room = await createBoard(newRoomName);
     if (room) {
       dispatch(onRoomCreated());
-      router.push(`/dashboard/board/${room.id}`);
+      router.push(`/dashboard/board/${room._id}`);
     }
   };
 

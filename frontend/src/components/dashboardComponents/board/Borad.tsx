@@ -13,26 +13,50 @@ import EditIcon from "@mui/icons-material/Edit";
 import { deleteBoard, updateBoardName } from "@/lib/boardActions";
 import { useRouter } from "next/navigation";
 import BoardMenu from "./BoardMenu";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+import { updateBoard } from "@/store/reducers/board/boardSlice";
 
-function Borad({
-  id,
-  name,
-  usersAccesses,
-  metadata,
-}: {
+export type BoardMetatData = {
+  boardName: string;
+  ownerName: string;
+  ownerEmail: string;
+  description?: string;
+  projectId?: string;
+};
+
+export interface BoardProps {
   id: string;
   name: string;
-  usersAccesses: any;
-  metadata: any;
-}) {
+  metadata: BoardMetatData;
+  usersAccesses: object;
+}
+
+function Borad() {
+  const thisBoard = useSelector((state: RootState) => state.board.board);
+  const dispatch = useDispatch();
+  // const [id] = useState<string>(_id);
+  // const [bName, setName] = useState<string>(metadata.boardName);
+  // const [metadata] = useState<any>({
+  //   boardName,
+  //   ownerName,
+  //   ownerEmail,
+  // });
+
+  if (!thisBoard) return <>Hehehehe</>;
+
   const [editBoarName, setEditBoarName] = useState<boolean>(false);
-  const [newBoardName, setNewBoardName] = useState<string>(name);
+  const [newBoardName, setNewBoardName] = useState<string>(
+    thisBoard?.boardName || ""
+  );
   const [filterParams, setFilterParams] = useState<any>();
   const updateMyPresence = useUpdateMyPresence();
   const router = useRouter();
 
+  console.log("Fetched from redux : ", thisBoard);
+
   useEffect(() => {
-    updateMyPresence({ boardId: id });
+    updateMyPresence({ boardId: thisBoard._id });
 
     return () => {
       updateMyPresence({ boardId: null });
@@ -44,25 +68,21 @@ function Borad({
     if (newBoardName === "") {
       alert("Name can not be empty !");
     }
-    await updateBoardName(id, { metadata: { boardName: newBoardName } });
+    const boardUpdated = await updateBoardName(thisBoard._id, { boardName: newBoardName });
+    dispatch(updateBoard(boardUpdated));
     setEditBoarName(false);
     router.refresh();
   };
-
-  console.log(filterParams);
 
   return (
     <div>
       <BoardMenu
         setFilterParams={setFilterParams}
-        id={id}
-        usersAccesses={usersAccesses}
-        metadata={metadata}
       />
       {!editBoarName && (
         <header className="text-2xl p-5 flex gap-2">
           <h1 aria-label={`Board: ${name}`}>
-            Board: {name}
+            Board: {thisBoard.boardName}
             <button
               aria-label="Edit board name"
               className="ml-2 specialBtn"
@@ -92,7 +112,7 @@ function Borad({
                 name="cardName"
                 id="cardName"
                 autoFocus
-                placeholder={name}
+                placeholder={thisBoard.boardName}
                 value={newBoardName}
                 onChange={(e) => setNewBoardName(e.target.value)}
                 className="w-full text-black"
@@ -102,13 +122,18 @@ function Borad({
               <button type="submit" className="mr-2" aria-label="Save new name">
                 Save
               </button>
-              <button aria-label="Cancel edit" onClick={() => setEditBoarName(false)}>Cancel</button>
+              <button
+                aria-label="Cancel edit"
+                onClick={() => setEditBoarName(false)}
+              >
+                Cancel
+              </button>
             </div>
           </form>
         </section>
       )}
 
-      <BoardContainer filterParams={filterParams} />
+      {/* <BoardContainer filterParams={filterParams} /> */}
     </div>
   );
 }

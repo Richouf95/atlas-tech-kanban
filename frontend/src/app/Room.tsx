@@ -1,12 +1,30 @@
 "use client";
 
-import { ReactNode } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { RoomProvider, ClientSideSuspense } from "@liveblocks/react/suspense";
 import { LiveList } from "@liveblocks/client";
 import { LiveblocksProvider } from "@liveblocks/react";
 import { UserMeta } from "./liveblocks.config";
+import { Card } from "@/types";
+import { getBoard } from "@/lib/boardActions";
+import { useDispatch } from "react-redux";
+import { setBoard } from "@/store/reducers/board/boardSlice";
+import { Board } from "@/types/Board";
 
 export function Room({ id, children }: { id: string; children: ReactNode }) {
+  const [roomBoard, setRoomBoard] = useState<Board | null>(null);
+  const dispatch = useDispatch();
+
+  const fetchBoard = async (id: string) => {
+    const response = await getBoard(id);
+    dispatch(setBoard(response));
+    setRoomBoard(response);
+  };
+
+  useEffect(() => {
+    fetchBoard(id);
+  }, [id]);
+
   return (
     <LiveblocksProvider
       authEndpoint="/api/liveblocks-auth"
@@ -24,13 +42,13 @@ export function Room({ id, children }: { id: string; children: ReactNode }) {
         id={id}
         initialPresence={{ cardId: null, boardId: null }}
         initialStorage={{
-          columns: new LiveList([]),
-          cards: new LiveList([]),
-          labels: new LiveList([]),
+          // columns: new LiveList([]),
+          cards: new LiveList<Card[]>([]),
+          // labels: new LiveList([]),
         }}
       >
         <ClientSideSuspense fallback={<div>Loading…</div>}>
-          {() => <>{children}</>}
+          {() => <>{roomBoard ? children : "Hehe"}</>}
         </ClientSideSuspense>
       </RoomProvider>
     </LiveblocksProvider>

@@ -4,18 +4,15 @@ import { deleteBoard } from "@/lib/boardActions";
 import { useRouter } from "next/navigation";
 import BoardSettings from "./BoardSettings";
 import FilterMenu from "./FilterMenu";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
 function BoardMenu({
-  id,
-  usersAccesses,
-  metadata,
   setFilterParams,
 }: {
-  id: string;
-  usersAccesses: any;
-  metadata: any;
   setFilterParams: (items: any) => any;
 }) {
+
   return (
     <nav
       className="p-5 sticky top-0 roomNavBar z-10"
@@ -26,17 +23,11 @@ function BoardMenu({
         <li>
           <FilterMenu
             setFilterParams={setFilterParams}
-            id={id}
-            usersAccesses={usersAccesses}
-            metadata={metadata}
             aria-label="Filter board items"
           />
         </li>
         <li>
           <BoardSettings
-            id={id}
-            usersAccesses={usersAccesses}
-            metadata={metadata}
             aria-label="Board settings"
           />
         </li>

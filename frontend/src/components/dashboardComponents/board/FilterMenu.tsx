@@ -9,18 +9,19 @@ import { shallow } from "@liveblocks/client";
 import FilterSection from "./FilterSection";
 import FilterHeader from "./FilterHeader";
 import FilterSearchBar from "./FilterSearchBar";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
 function FilterMenu({
-  id,
-  usersAccesses,
-  metadata,
   setFilterParams,
 }: {
-  id: string;
-  usersAccesses: any;
-  metadata: any;
   setFilterParams: (items: any) => any;
 }) {
+
+  const thisBoard = useSelector((state: RootState) => state.board.board);
+
+  if (!thisBoard) return null;
+
   const [open, setOpen] = useState(false);
   const isLargeScreen = useMediaQuery("(min-width: 1024px)");
   const [searchKey, setSearchKey] = useState<string>("");
@@ -32,21 +33,21 @@ function FilterMenu({
   const [selectedLabels, setSelectedLabels] = useState<string[]>([]);
 
   // Utilisation de Liveblocks pour récupérer les données nécessaires
-  const columns = useStorage(
-    (root) => root.columns.map((col) => ({ ...col })),
-    shallow
-  );
-  const cards = useStorage(
-    (root) => root.cards.map((card) => ({ ...card })),
-    shallow
-  );
-  const labels = useStorage(
-    (root) => root.labels.map((label) => ({ ...label })),
-    shallow
-  );
+  // const columns = useStorage(
+  //   (root) => root.columns.map((col) => ({ ...col })),
+  //   shallow
+  // );
+  // const cards = useStorage(
+  //   (root) => root.cards.map((card) => ({ ...card })),
+  //   shallow
+  // );
+  // const labels = useStorage(
+  //   (root) => root.labels.map((label) => ({ ...label })),
+  //   shallow
+  // );
   const collaborators: any = [];
 
-  Object.keys(usersAccesses).forEach((x) => {
+  Object.keys(thisBoard.usersAccesses).forEach((x) => {
     const item = {
       id: x,
       name: x,
@@ -116,7 +117,8 @@ function FilterMenu({
           {/* Sections de filtres réutilisables */}
           <FilterSection
             title="Columns"
-            items={columns}
+            // TODO
+            items={[]}
             selectedItems={selectedColumns}
             onSelectionChange={handleColumnsChange}
           />
@@ -147,7 +149,9 @@ function FilterMenu({
 
           <FilterSection
             title="Labels"
-            items={labels}
+            // items={labels}
+            // TODO
+            items={[]}
             selectedItems={selectedLabels}
             onSelectionChange={handleLabelsChange}
           />
