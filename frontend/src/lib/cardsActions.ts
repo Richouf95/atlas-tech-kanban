@@ -189,6 +189,29 @@ export async function updateCardDueDate(id: string, selectedDate: string) {
   }
 }
 
+export async function updateCardLabel(id: string, labelId: string) {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_DOMAIN}/card/${id}`,
+      {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ label: labelId }),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to update Card Label");
+    }
+
+    const data: Card = await response.json();
+
+    return data;
+  } catch (error: any) {
+    console.error("Error while updating Card Label", error.message);
+  }
+}
+
 export async function deleteCard(id: string) {
   try {
     const response = await fetch(

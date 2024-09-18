@@ -63,7 +63,7 @@ function CardModal({
         onClick={handleOpen}
       >
         <div className="absolute top-2 right-1">
-          {/* <CardLabel id={id} label={label} /> */}
+          <CardLabel id={_id} label={label} />
         </div>
         <h2 className="my-3">{name}</h2>
         {/* {dueDate !== "N/A" && (

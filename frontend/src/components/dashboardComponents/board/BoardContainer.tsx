@@ -13,27 +13,30 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { getAllColumns, updateColumnOrder } from "@/lib/columnsActions";
 import { setColumns } from "@/store/reducers/columns/columnsSlice";
+import { getAllLabels } from "@/lib/labelsActions";
+import { setLables } from "@/store/reducers/labels/labelsSlice";
 
 function BoardContainer({ filterParams }: { filterParams: any }) {
   const board = useSelector((state: RootState) => state.board.board);
   const columns = useSelector((state: RootState) => state.columns.columns);
   const dispatch = useDispatch();
-  console.log(columns);
   // const columns: any = [];
   // const columns = useStorage(
   //   (root) => root.columns.map((col) => ({ ...col })),
   //   shallow
   // );
 
-  const fetchColumns = useCallback(async () => {
+  const fetchColumnsAndLabels = useCallback(async () => {
     if (!board?._id) return;
-    const response = await getAllColumns(board._id);
-    dispatch(setColumns(response));
+    const columns = await getAllColumns(board._id);
+    const labels = await getAllLabels(board._id);
+    dispatch(setColumns(columns));
+    dispatch(setLables(labels || []));
   }, [board, dispatch]);
 
   useEffect(() => {
-    fetchColumns();
-  }, [fetchColumns]);
+    fetchColumnsAndLabels();
+  }, [fetchColumnsAndLabels]);
 
   // const updateColum = useMutation(
   //   ({ storage }, columns: LiveObject<Column>[]) => {
