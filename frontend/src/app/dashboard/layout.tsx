@@ -16,12 +16,15 @@ export default async function DashBoardLayout({
   if (!session) {
     redirect("/");
   }
+
+  const userEmail = session?.user?.email;
+
   return (
     <div className="mx-auto h-screen">
       <div className="flex flex-col flex-1">
         <DashboardHeader />
         <main className="flex flex-col lg:flex-row flex-1 h-full">
-          <DashboardMenu />
+          {userEmail && <DashboardMenu userEmail={userEmail} />}
           <DashboardChildren>{children}</DashboardChildren>
         </main>
       </div>

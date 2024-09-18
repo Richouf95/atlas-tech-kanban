@@ -8,22 +8,27 @@ import { createBoard } from "@/lib/boardActions";
 import { useRouter } from "next/navigation";
 import uniqid from "uniqid";
 import Spinner from "@/components/Spinner";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { onRoomCreated } from "@/store/reducers/roomCreated/roomCreatedSlice";
+import { createProject } from "@/lib/projectActions";
+import { setProjects } from "@/store/reducers/projects/projectSlice";
+import { RootState } from "@/store/store";
+import { Project } from "@/types";
 
 function NewProjectForm() {
-  const [newRoomName, setNewRoomName] = useState<string>("");
+  const [newProjectName, setNewProjectName] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const projects = useSelector((state: RootState) => state.projects.projects);
   const router = useRouter();
   const dispatch = useDispatch();
 
   const handleNewRoom = async (e: React.FormEvent) => {
     e.preventDefault();
-    const newProjectId = uniqid("project-");
-    const room = await createBoard(newRoomName, newProjectId);
-    if (room) {
-      dispatch(onRoomCreated());
-      router.push(`/dashboard/project/${newProjectId}`);
+    const project = await createProject(newProjectName);
+    if (project && projects) {
+      const projectsUpdated: Project[] = [...projects, project];
+      dispatch(setProjects(projectsUpdated));
+      router.push(`/dashboard/project/${project._id}`);
     }
   };
   return (
@@ -36,8 +41,8 @@ function NewProjectForm() {
             label="Project name"
             variant="outlined"
             type="text"
-            value={newRoomName}
-            onChange={(e) => setNewRoomName(e.target.value)}
+            value={newProjectName}
+            onChange={(e) => setNewProjectName(e.target.value)}
           />
         </FormControl>
         <div>

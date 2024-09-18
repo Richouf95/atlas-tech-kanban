@@ -7,20 +7,25 @@ import TextField from "@mui/material/TextField";
 import { createBoard } from "@/lib/boardActions";
 import { useRouter } from "next/navigation";
 import Spinner from "@/components/Spinner";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { onRoomCreated } from "@/store/reducers/roomCreated/roomCreatedSlice";
+import { RootState } from "@/store/store";
+import { setBoard } from "@/store/reducers/board/boardSlice";
+import { Board } from "@/types/Board";
 
 function NewRoom() {
   const [newRoomName, setNewRoomName] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const boards: Board[] = useSelector((state: RootState) => state.board.board);
   const router = useRouter();
   const dispatch = useDispatch();
 
   const handleNewRoom = async (e: React.FormEvent) => {
     e.preventDefault();
     const room = await createBoard(newRoomName);
-    if (room) {
-      dispatch(onRoomCreated());
+    if (room && boards) {
+      const boardsUpdated: Board[] = [...boards, room];
+      dispatch(setBoard(boardsUpdated));
       router.push(`/dashboard/board/${room._id}`);
     }
   };
