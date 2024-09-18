@@ -11,11 +11,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { onRoomCreated } from "@/store/reducers/roomCreated/roomCreatedSlice";
 import { RootState } from "@/store/store";
 import { setBoard } from "@/store/reducers/board/boardSlice";
+import { setBoardsList } from "@/store/reducers/boardList/boardListSlice";
+import { Board } from "@/types/Board";
 
 function NewProjectRoom() {
   const [newProjectRoomName, setNewProjectRoomName] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const boards = useSelector((state: RootState) => state.board.board);
+  const boardList: Board[] = useSelector((state: RootState) => state.boardsList.boardList);
+  // const boards = useSelector((state: RootState) => state.board.board);
   const router = useRouter();
   const pathName = usePathname();
   const dispatch = useDispatch();
@@ -27,9 +30,10 @@ function NewProjectRoom() {
   const handleNewRoom = async (e: React.FormEvent) => {
     e.preventDefault();
     const room = await createBoard(newProjectRoomName, projectId);
-    if (room && boards) {
-      const boardsUpdated = [...boards, room];
-      dispatch(setBoard(boardsUpdated));
+    if (room && boardList) {
+      const boardsUpdated = [...boardList, room];
+      dispatch(setBoardsList(boardsUpdated))
+      // dispatch(setBoard(boardsUpdated));
       router.push(`/dashboard/project/${projectId}/board/${room._id}`);
     }
   };

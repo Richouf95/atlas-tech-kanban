@@ -17,11 +17,16 @@ function DashBoardMenuContent({ userEmail }: { userEmail: string }) {
   const [currentPopover, setCurrentPopover] = useState<string | null>(null);
 
   const roomCreated = useSelector((state: RootState) => state.counter);
-  const boards: Board[] = useSelector((state: RootState) => state.board.board);
-  const projects: Project[] = useSelector((state: RootState) => state.projects.projects);
+  const boardList: Board[] = useSelector(
+    (state: RootState) => state.boardsList.boardList
+  );
+  // const boards: Board[] = useSelector((state: RootState) => state.board.board);
+  const projects: Project[] = useSelector(
+    (state: RootState) => state.projects.projects
+  );
 
   useEffect(() => {
-    if (projects && boards) {
+    if (projects && boardList) {
       setRoomsLoaded(true);
     }
   }, [roomCreated]);
@@ -40,9 +45,6 @@ function DashBoardMenuContent({ userEmail }: { userEmail: string }) {
   };
 
   const open = Boolean(anchorEl);
-
-  console.log("boards : ", boards)
-  console.log("projects : ", projects)
 
   return (
     <div className="lg:min-w-64 p-5 lg:mt-10 boardNavBar">
@@ -83,9 +85,9 @@ function DashBoardMenuContent({ userEmail }: { userEmail: string }) {
       >
         <div className="p-2 min-w-64">
           {!roomsLoaded && <SpinnerAddColumns />}
-          {boards &&
-            boards.length > 0 &&
-            boards.map((item: any) => (
+          {boardList &&
+            boardList.length > 0 &&
+            boardList.map((item: any) => (
               <Link
                 href={`/dashboard/board/${item._id}`}
                 key={item._id}
@@ -94,9 +96,9 @@ function DashBoardMenuContent({ userEmail }: { userEmail: string }) {
                 {item.boardName}
               </Link>
             ))}
-          {roomsLoaded &&
-            boards &&
-            boards.length === 0 && <span>No boards yet</span>}
+          {roomsLoaded && boardList && boardList.length === 0 && (
+            <span>No boards yet</span>
+          )}
         </div>
       </Popover>
 
@@ -144,9 +146,9 @@ function DashBoardMenuContent({ userEmail }: { userEmail: string }) {
           </Link>
           <h2>Boards</h2>
           {!roomsLoaded && <SpinnerAddColumns />}
-          {boards &&
-            boards.length > 0 &&
-            boards.map((item: Board) => (
+          {boardList &&
+            boardList.length > 0 &&
+            boardList.map((item: Board) => (
               <Link
                 href={`/dashboard/board/${item._id}`}
                 key={item._id}
@@ -155,11 +157,9 @@ function DashBoardMenuContent({ userEmail }: { userEmail: string }) {
                 {item.boardName}
               </Link>
             ))}
-          {roomsLoaded &&
-            boards &&
-            boards.length === 0 && (
-              <span className="ml-4">No boards yet</span>
-            )}
+          {roomsLoaded && boardList && boardList.length === 0 && (
+            <span className="ml-4">No boards yet</span>
+          )}
         </div>
         <div className="my-4">
           <h2>Projects</h2>

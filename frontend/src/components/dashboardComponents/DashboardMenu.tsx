@@ -14,6 +14,7 @@ import { setProjects } from "@/store/reducers/projects/projectSlice";
 import { getAllBoards } from "@/lib/boardActions";
 import { setBoard } from "@/store/reducers/board/boardSlice";
 import DashBoardMenuContent from "../DashBoardMenuContent";
+import { setBoardsList } from "@/store/reducers/boardList/boardListSlice";
 
 const DashboardMenu = ({ userEmail }: { userEmail: string }) => {
   const dispatch = useDispatch();
@@ -24,7 +25,8 @@ const DashboardMenu = ({ userEmail }: { userEmail: string }) => {
       const filteredBoards = allBoards.filter(
         (board: Board) => board.usersAccesses && board.usersAccesses[userEmail]
       );
-      dispatch(setBoard(filteredBoards));
+      dispatch(setBoardsList(filteredBoards));
+      // dispatch(setBoard(filteredBoards));
     } catch (error) {
       console.error("Error fetching boards:", error);
     }

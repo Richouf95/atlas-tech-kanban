@@ -12,20 +12,23 @@ import { onRoomCreated } from "@/store/reducers/roomCreated/roomCreatedSlice";
 import { RootState } from "@/store/store";
 import { setBoard } from "@/store/reducers/board/boardSlice";
 import { Board } from "@/types/Board";
+import { setBoardsList } from "@/store/reducers/boardList/boardListSlice";
 
 function NewRoom() {
   const [newRoomName, setNewRoomName] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const boards: Board[] = useSelector((state: RootState) => state.board.board);
+  const boardList: Board[] = useSelector((state: RootState) => state.boardsList.boardList);
+  // const boards: Board[] = useSelector((state: RootState) => state.board.board);
   const router = useRouter();
   const dispatch = useDispatch();
 
   const handleNewRoom = async (e: React.FormEvent) => {
     e.preventDefault();
     const room = await createBoard(newRoomName);
-    if (room && boards) {
-      const boardsUpdated: Board[] = [...boards, room];
-      dispatch(setBoard(boardsUpdated));
+    if (room && boardList) {
+      const boardsUpdated: Board[] = [...boardList, room];
+      dispatch(setBoardsList(boardsUpdated));
+      // dispatch(setBoard(boardsUpdated));
       router.push(`/dashboard/board/${room._id}`);
     }
   };

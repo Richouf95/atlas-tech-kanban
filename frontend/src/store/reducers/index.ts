@@ -7,6 +7,7 @@ import columnReducer from "./columns/columnsSlice";
 import cardReducer from "./cards/cardsSlice";
 import labelReducer from "./labels/labelsSlice";
 import projectReducer from "./projects/projectSlice";
+import boardsListReducer from "./boardList/boardListSlice";
 
 const rootReducer = combineReducers({
   theme: themeReducer,
@@ -17,6 +18,7 @@ const rootReducer = combineReducers({
   cards: cardReducer,
   labels: labelReducer,
   projects: projectReducer,
+  boardsList: boardsListReducer,
 });
 
 export default rootReducer;

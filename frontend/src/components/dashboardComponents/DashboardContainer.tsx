@@ -15,7 +15,8 @@ import { Project } from "@/types";
 const DashboardContainer = ({ session }: { session: any }) => {
   // const [boards, setBoards] = useState<Board[]>([]);
   // const userEmail = session.user?.email as string;
-  const boards: Board[] = useSelector((state: RootState) => state.board.board);
+  const boardList: Board[] = useSelector((state: RootState) => state.boardsList.boardList);
+  // const boards: Board[] = useSelector((state: RootState) => state.board.board);
   const projects: Project[] = useSelector((state: RootState) => state.projects.projects);
   const dispatch = useDispatch();
 
@@ -52,7 +53,7 @@ const DashboardContainer = ({ session }: { session: any }) => {
   return (
     <>
       <div>
-        <BoardsList roomList={boards} />
+        <BoardsList roomList={boardList} />
       </div>
       <div>
         <ProjectList roomList={projects} />
