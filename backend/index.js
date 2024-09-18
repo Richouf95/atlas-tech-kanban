@@ -8,6 +8,7 @@ const boardRoutes = require('./routes/boardRoutes');
 const columnRoutes = require('./routes/columnRoutes');
 const cardRoutes = require('./routes/cardRoutes');
 const labelRoutes = require('./routes/labelRoutes');
+const projectRoutes = require('./routes/projectRoutes');
 
 // Express app instance
 const app = express();
@@ -26,6 +27,7 @@ app.use('/board', boardRoutes);
 app.use('/column', columnRoutes);
 app.use('/card', cardRoutes);
 app.use('/label', labelRoutes);
+app.use('/project', projectRoutes);
 
 // MongoDB connection & server launch
 mongoose.connect(process.env.MONGO_URI)
