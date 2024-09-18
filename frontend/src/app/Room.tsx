@@ -10,6 +10,7 @@ import { getBoard } from "@/lib/boardActions";
 import { useDispatch } from "react-redux";
 import { setBoard } from "@/store/reducers/board/boardSlice";
 import { Board } from "@/types/Board";
+import { LivBlockCard } from "./liveblocks.config";
 
 export function Room({ id, children }: { id: string; children: ReactNode }) {
   const [roomBoard, setRoomBoard] = useState<Board | null>(null);
@@ -42,9 +43,7 @@ export function Room({ id, children }: { id: string; children: ReactNode }) {
         id={id}
         initialPresence={{ cardId: null, boardId: null }}
         initialStorage={{
-          // columns: new LiveList([]),
-          cards: new LiveList<Card[]>([]),
-          // labels: new LiveList([]),
+          cards: new LiveList<LivBlockCard[]>([]),
         }}
       >
         <ClientSideSuspense fallback={<div>Loading…</div>}>

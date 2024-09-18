@@ -39,16 +39,15 @@ export async function createBoard(name: string, projectId?: string) {
 
     const data: Board = await response.json();
 
-    // TODO
-    // await liveblocksClient.createRoom(data._id, {
-    //   defaultAccesses: [],
-    //   usersAccesses: {
-    //     [email]: ["room:write"],
-    //   },
-    //   metadata: {
-    //     boardName: name,
-    //   },
-    // });
+    await liveblocksClient.createRoom(data._id, {
+      defaultAccesses: [],
+      usersAccesses: {
+        [email]: ["room:write"],
+      },
+      metadata: {
+        boardName: name,
+      },
+    });
 
     return data;
   } catch (error: any) {
@@ -170,7 +169,6 @@ export async function deleteBoard(id: string) {
     throw new Error("Failed to delete board");
   }
   
-  // TODO
-  // await liveblocksClient.deleteRoom(id);
-  // return true;
+  await liveblocksClient.deleteRoom(id);
+  return true;
 }

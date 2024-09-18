@@ -39,7 +39,6 @@ export async function getAllColumns(id: string) {
     throw new Error("Failed to fetch boards");
   }
 
-  //   const data: Board[] = await response.json();
   const data: Column[] = await response.json();
   return data;
 }

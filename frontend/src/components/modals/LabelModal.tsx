@@ -16,7 +16,7 @@ import { LiveList, shallow } from "@liveblocks/client";
 import { LiveObject } from "@liveblocks/core";
 import uniqid from "uniqid";
 
-function LabelModal({ id, label }: { id: string; label: LabelType | string }) {
+function LabelModal({ id, label }: { id: string; label?: LabelType | string }) {
   const theme = useSelector((state: RootState) => state.theme.theme);
   const [open, setOpen] = React.useState(false);
   const [addLabel, setAddLabel] = React.useState<boolean>(false);
@@ -26,10 +26,10 @@ function LabelModal({ id, label }: { id: string; label: LabelType | string }) {
   });
   const [labelCreated, setLabelCreated] = React.useState<any>();
 
-  const allLabels = useStorage(
-    (root) => root.labels.map((label) => ({ ...label })),
-    shallow
-  );
+  // const allLabels = useStorage(
+  //   (root) => root.labels.map((label) => ({ ...label })),
+  //   shallow
+  // );
 
   const isLargeScreen = useMediaQuery("(min-width: 1024px)");
 
@@ -50,36 +50,36 @@ function LabelModal({ id, label }: { id: string; label: LabelType | string }) {
     borderRadius: 5,
   };
 
-  const newLabel = useMutation(({ storage }, labelData) => {
-    const labels = storage.get("labels");
-    const initialLabels = new LiveList([]);
+  // const newLabel = useMutation(({ storage }, labelData) => {
+  //   const labels = storage.get("labels");
+  //   const initialLabels = new LiveList([]);
 
-    if (!labels) {
-      storage.set("labels", initialLabels);
-    }
+  //   if (!labels) {
+  //     storage.set("labels", initialLabels);
+  //   }
 
-    const labelId = uniqid("label-");
+  //   const labelId = uniqid("label-");
 
-    const newLabelData = new LiveObject({
-      id: labelId,
-      ...labelData,
-    });
+  //   const newLabelData = new LiveObject({
+  //     id: labelId,
+  //     ...labelData,
+  //   });
 
-    return storage.get("labels").push(newLabelData);
-  }, []);
+  //   return storage.get("labels").push(newLabelData);
+  // }, []);
 
-  const updateCardLabel = useMutation(({ storage }, cardId, updateData) => {
-    const cards = storage.get("cards");
-    const index = cards.findIndex((card) => card.toObject().id === cardId);
-    const thisCard = storage.get("cards").get(index);
-    for (let key in updateData) {
-      thisCard?.set(key as keyof Card, updateData[key]);
-    }
-  }, []);
+  // const updateCardLabel = useMutation(({ storage }, cardId, updateData) => {
+  //   const cards = storage.get("cards");
+  //   const index = cards.findIndex((card) => card.toObject().id === cardId);
+  //   const thisCard = storage.get("cards").get(index);
+  //   for (let key in updateData) {
+  //     thisCard?.set(key as keyof Card, updateData[key]);
+  //   }
+  // }, []);
 
   const handleNewLabel = async (e: React.FormEvent) => {
     e.preventDefault();
-    newLabel(labelData);
+    // newLabel(labelData);
     setAddLabel(false);
     handleClose();
   };
@@ -91,13 +91,13 @@ function LabelModal({ id, label }: { id: string; label: LabelType | string }) {
     name: string,
     color: string
   ) => {
-    updateCardLabel(thisCardId, {
-      label: {
-        id: labelid,
-        name,
-        color,
-      },
-    });
+    // updateCardLabel(thisCardId, {
+    //   label: {
+    //     id: labelid,
+    //     name,
+    //     color,
+    //   },
+    // });
     handleClose();
   };
 

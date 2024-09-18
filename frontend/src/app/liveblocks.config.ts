@@ -17,11 +17,16 @@ export type Presence = {
   cardId?: null | string;
 };
 
+export type LivBlockCard = {
+  id: string;
+  name: string;
+}
+
 // The Storage tree for the room, for useMutation, useStorage, etc.
 export type Storage = {
   // Example, a conflict-free list
+  cards: LiveList<LiveObject<LivBlockCard>>;
   // columns: LiveList<LiveObject<Column>>;
-  cards: LiveList<LiveObject<Card>>;
   // labels: LiveList<LiveObject<LabelType>>;
 };
 

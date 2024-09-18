@@ -1,38 +1,44 @@
-import React from "react";
+"use client";
+
+import React, { useCallback, useEffect } from "react";
 import BoardCard from "./BoardCard";
 import { ReactSortable } from "react-sortablejs";
 import NewBoardCardForm from "@/components/forms/boardForms/NewBoardCardForm";
 import { useMutation, useStorage } from "@/app/liveblocks.config";
-import { Card } from "@/types";
 import { shallow } from "@liveblocks/client";
 import ColumnHeader from "./ColumnHeader";
+import { LivBlockCard } from "@/app/liveblocks.config";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllCards, updateCardOrder } from "@/lib/cardsActions";
+import { setCards } from "@/store/reducers/cards/cardsSlice";
+import { RootState } from "@/store/store";
+import CardModal from "@/components/modals/CardModal";
+import { Card } from "@/types";
 
 function BoardColumn({
   _id,
   name,
   filterParams,
+  boardId,
 }: {
   _id: string;
   name: string;
   filterParams: any;
+  boardId: string;
 }) {
-  // const columnsCards = useStorage<Card[]>((root) => {
-  //   const hasCards = root.cards;
-  //   if (!hasCards) {
-  //     const emptyCardList: Card[] = [];
-  //     return emptyCardList;
-  //   }
+  const cards = useSelector((state: RootState) => state.cards.cards);
+  const dispatch = useDispatch();
+  const fetchCards = useCallback(async () => {
+    if (!boardId) return;
+    const response = await getAllCards(boardId);
+    if (response) dispatch(setCards(response));
+  }, [boardId, dispatch]);
 
-  //   return root.cards
-  //     .filter((x) => x.columnId === id)
-  //     .map((y) => ({ ...y }))
-  //     .sort((a, b) => a.index - b.index);
-  // }, shallow);
+  useEffect(() => {
+    fetchCards();
+  }, [fetchCards]);
 
-  // const columns = useStorage(
-  //   (root) => root.columns.map((col) => ({ ...col })),
-  //   shallow
-  // );
+
 
   // const column = columns?.filter((x) => x.id === id)[0];
 
@@ -150,7 +156,7 @@ function BoardColumn({
   // }, []);
 
   // console.log(filteredCards);
-  const searchKeyLower = filterParams.searchKey.toLowerCase();
+  // const searchKeyLower = filterParams.searchKey.toLowerCase();
 
   // const onlyMatchedCards =
   //   filteredCards &&
@@ -171,16 +177,51 @@ function BoardColumn({
   //   return null;
   // }
 
+  const setCardOrder = useCallback(
+    async (cards: Card[], columnId: string) => {
+      // Mettre à jour les indices des cartes dans la colonne
+      const updatedCards = cards.map((card, index) => ({
+        ...card,
+        index,
+        columnId,
+      }));
+  
+      try {
+        // Mettre à jour l'ordre des cartes dans MongoDB
+        await Promise.all(
+          updatedCards.map((card) =>
+            updateCardOrder(card._id, columnId, card.index)
+          )
+        );
+        
+        // Mettre à jour l'état Redux
+        dispatch(setCards(updatedCards));
+      } catch (error) {
+        console.error("Erreur lors de la mise à jour de l'ordre des cartes :", error);
+      }
+    },
+    [dispatch]
+  );
+
+
+  const columnsCards = cards && cards.map(x => (
+    {
+      ...x,
+      id: x._id
+    }
+  )).filter(x => x.columnId === _id)
+
   return (
     <div className="min-w-72 max-w-72 rounded-xl columnsClass">
       <ColumnHeader id={_id} name={name} />
-      {/* {onlyMatchedCards && (
+      {columnsCards && (
         <ReactSortable
-          list={onlyMatchedCards}
-          setList={(item) => setCardOrder(item, id)}
+          list={columnsCards}
+          // setList={(item) => setCardOrder(item, id)}
+          setList={(newCards) => setCardOrder(newCards, _id)}
           group={"Cards"}
         >
-          {onlyMatchedCards.map((item) => (
+          {columnsCards.map((item) => (
             <div
               key={item.id}
               className="mx-2"
@@ -188,12 +229,13 @@ function BoardColumn({
               aria-label={`Card ${item.name}`}
               role="region"
             >
-              <BoardCard {...item} />
+              {/* <BoardCard {...item} /> */}
+              <CardModal {...item} />
             </div>
           ))}
         </ReactSortable>
-      )} */}
-      <NewBoardCardForm colId={_id} />
+      )}
+      <NewBoardCardForm colId={_id} boardId={boardId} />
     </div>
   );
 }

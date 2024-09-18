@@ -8,7 +8,7 @@ const cardSchema = new Schema({
     boardId: { type: mongoose.Schema.Types.ObjectId, ref: 'Board', required: true },
     label: { type: mongoose.Schema.Types.ObjectId, ref: 'Label' },
     assigned: { type: String },
-    dueDate: { type: Date },
+    dueDate: { type: String },
     description: { type: String },
 }, { timestamps: true });
 

@@ -18,7 +18,7 @@ function BoardContainer({ filterParams }: { filterParams: any }) {
   const board = useSelector((state: RootState) => state.board.board);
   const columns = useSelector((state: RootState) => state.columns.columns);
   const dispatch = useDispatch();
-  console.log(columns)
+  console.log(columns);
   // const columns: any = [];
   // const columns = useStorage(
   //   (root) => root.columns.map((col) => ({ ...col })),
@@ -78,20 +78,19 @@ function BoardContainer({ filterParams }: { filterParams: any }) {
     }))
     .sort((a, b) => a.index - b.index);
 
-    
   const filteredColumns =
-  cols.length > 0 &&
-  cols.filter((column: any) => {
-    // Filtrer par ID de colonne
-    if (
-      filterParams.selectedColumns.length > 0 &&
-      !filterParams.selectedColumns.includes(column.id)
-    ) {
-      return false;
-    }
+    cols.length > 0 &&
+    cols.filter((column: any) => {
+      // Filtrer par ID de colonne
+      if (
+        filterParams.selectedColumns.length > 0 &&
+        !filterParams.selectedColumns.includes(column.id)
+      ) {
+        return false;
+      }
 
-    return true;
-  });
+      return true;
+    });
 
   return (
     <div className="flex overflow-x-auto space-x-4" aria-label="board coloumns">
@@ -111,7 +110,11 @@ function BoardContainer({ filterParams }: { filterParams: any }) {
               aria-label={`Column ${col.name}`}
               role="region"
             >
-              <BoardColumn {...col} filterParams={filterParams} />
+              <BoardColumn
+                {...col}
+                filterParams={filterParams}
+                boardId={board?._id}
+              />
             </div>
           ))}
         </ReactSortable>
