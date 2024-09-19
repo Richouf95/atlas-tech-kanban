@@ -2,11 +2,11 @@ import { Column } from "@/types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 type columnState = {
-  columns: Column[] | null;
+  columns: Column[];
 };
 
 const initialState: columnState = {
-  columns: null,
+  columns: [],
 };
 
 const columnSlice = createSlice({

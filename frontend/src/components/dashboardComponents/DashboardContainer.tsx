@@ -20,36 +20,6 @@ const DashboardContainer = ({ session }: { session: any }) => {
   const projects: Project[] = useSelector((state: RootState) => state.projects.projects);
   const dispatch = useDispatch();
 
-  // const fetchBoards = async () => {
-  //   try {
-  //     const allBoards = await getAllBoards();
-  //     const filteredBoards = allBoards.filter(
-  //       (board: Board) => board.usersAccesses && board.usersAccesses[userEmail]
-  //     );
-  //     setBoards(filteredBoards);
-  //   } catch (error) {
-  //     console.error("Error fetching boards:", error);
-  //   }
-  // };
-
-  // const fetchProjects = async () => {
-  //   try {
-  //     const allProjects = await getAllProjects();
-  //     if (allProjects) {
-  //       dispatch(setProjects(allProjects));
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching project:", error);
-  //   }
-  // };
-  // useEffect(() => {
-  //   fetchBoards();
-  //   fetchProjects();
-  // }, []);
-  
-  // const boardsWithoutProject = boards.filter((board) => !board.projectId);
-  // const boardsWithProject = boards.filter((board) => board.projectId);
-
   return (
     <>
       <div>

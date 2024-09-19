@@ -29,7 +29,7 @@ function DashBoardMenuContent({ userEmail }: { userEmail: string }) {
     if (projects && boardList) {
       setRoomsLoaded(true);
     }
-  }, [roomCreated]);
+  }, [projects, boardList]);
 
   const handleClick = (
     event: React.MouseEvent<HTMLElement>,

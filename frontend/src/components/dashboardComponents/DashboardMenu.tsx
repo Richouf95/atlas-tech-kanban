@@ -17,6 +17,10 @@ import DashBoardMenuContent from "../DashBoardMenuContent";
 import { setBoardsList } from "@/store/reducers/boardList/boardListSlice";
 
 const DashboardMenu = ({ userEmail }: { userEmail: string }) => {
+  const boardList = useSelector(
+    (state: RootState) => state.boardsList.boardList
+  );
+  const projects = useSelector((state: RootState) => state.projects.projects);
   const dispatch = useDispatch();
 
   const fetchBoards = async () => {
@@ -26,7 +30,6 @@ const DashboardMenu = ({ userEmail }: { userEmail: string }) => {
         (board: Board) => board.usersAccesses && board.usersAccesses[userEmail]
       );
       dispatch(setBoardsList(filteredBoards));
-      // dispatch(setBoard(filteredBoards));
     } catch (error) {
       console.error("Error fetching boards:", error);
     }
@@ -44,29 +47,15 @@ const DashboardMenu = ({ userEmail }: { userEmail: string }) => {
   };
 
   useEffect(() => {
-    fetchBoards();
-    fetchProjects();
+    if (!boardList.length) {
+      fetchBoards();
+    }
+    if (!projects.length) {
+      fetchProjects();
+    }
   }, []);
 
   return <DashBoardMenuContent userEmail={userEmail} />;
 };
 
 export default DashboardMenu;
-
-// import React from "react";
-// import DashBoardMenuContent from "../DashBoardMenuContent";
-// import { getServerSession } from "next-auth";
-// import { authOptions } from "@/lib/authOptions";
-
-// async function DashboardMenu() {
-
-//   const session = await getServerSession(authOptions);
-
-//   const userEmail = session?.user?.email;
-
-//   return (
-//     <DashBoardMenuContent userEmail={userEmail ? userEmail : ""} />
-//   );
-// }
-
-// export default DashboardMenu;

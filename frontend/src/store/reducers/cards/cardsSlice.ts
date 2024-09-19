@@ -2,11 +2,11 @@ import { Card } from "@/types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 type cardsState = {
-  cards: Card[] | null;
+  cards: Card[];
 };
 
 const initialState: cardsState = {
-  cards: null,
+  cards: [],
 };
 
 const cardSlice = createSlice({

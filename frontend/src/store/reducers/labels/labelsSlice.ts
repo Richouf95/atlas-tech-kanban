@@ -2,11 +2,11 @@ import { LabelType } from "@/types"
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 
 type lableState = {
-    labels: LabelType[] | null
+    labels: LabelType[]
 }
 
 const initialState: lableState = {
-    labels: null
+    labels: []
 }
 
 const labelSlicce = createSlice({
