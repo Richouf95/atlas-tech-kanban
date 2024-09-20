@@ -1,13 +1,36 @@
+"use server";
+
 import { Project } from "@/types";
+import { getServerSession } from "next-auth";
+import { authOptions } from "./authOptions";
 
 export async function createProject(name: string) {
+  const session = await getServerSession(authOptions);
+
+  if (!session?.user) {
+    throw new Error("User session is not available");
+  }
+
+  const email = session?.user?.email as string;
+  const currentUserName = session?.user?.name as string;
+
+  if (!email || !currentUserName) {
+    throw new Error("Failed to Create Project => userEmail & userName");
+  }
+
+  const newProject = {
+    name,
+    ownerName: currentUserName,
+    ownerEmail: email,
+  };
+
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_DOMAIN}/project/create-project`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name }),
+        body: JSON.stringify(newProject),
       }
     );
 

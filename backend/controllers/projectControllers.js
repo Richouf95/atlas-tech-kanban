@@ -32,9 +32,17 @@ const getSingleProject = async (req, res) => {
 
 // Create project
 const createProject = async (req, res) => {
-    const { name } = req.body;
+    const { name, ownerName, ownerEmail } = req.body;
+    console.log({name, ownerName, ownerEmail})
     try {
-        const project = await ProjectModel.create({ name });
+        const projectAccess = {};
+        projectAccess[ownerEmail] = ['room:write'];
+
+        const project = await ProjectModel.create({
+            name,
+            ownerName,
+            usersAccesses: projectAccess,
+         });
 
         return res.status(200).json(project);
     } catch (err) {
