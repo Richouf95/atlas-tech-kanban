@@ -12,7 +12,7 @@ import { Project } from "@/types";
 
 function DashBoardMenuContent({ userEmail }: { userEmail: string }) {
   // const [simpleBoards, setSimpleBoards] = useState<Board[]>([]);
-  const [roomsLoaded, setRoomsLoaded] = useState<boolean>(false);
+  const [roomsLoaded, setRoomsLoaded] = useState<boolean>(true);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [currentPopover, setCurrentPopover] = useState<string | null>(null);
 

@@ -25,7 +25,7 @@ export default async function DashBoardLayout({
         <DashboardHeader />
         <main className="flex flex-col lg:flex-row flex-1 h-full">
           {userEmail && <DashboardMenu userEmail={userEmail} />}
-          <DashboardChildren>{children}</DashboardChildren>
+          <DashboardChildren session={session}>{children}</DashboardChildren>
         </main>
       </div>
     </div>

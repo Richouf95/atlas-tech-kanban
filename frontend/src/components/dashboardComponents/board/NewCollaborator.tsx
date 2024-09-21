@@ -1,6 +1,7 @@
 "use client";
 
 import { newCollaboratorOnBoard } from "@/lib/boardActions";
+import { newCollaboratorOnProject } from "@/lib/projectActions";
 import { updateBoard } from "@/store/reducers/board/boardSlice";
 import { useRouter } from "next/navigation";
 import React, { FormEvent, useState } from "react";
@@ -9,10 +10,11 @@ import { useDispatch } from "react-redux";
 interface NewCollaboratorProps {
   id: string;
   setAddCollaborator: (value: boolean) => void;
-  usersAccesses: any
+  usersAccesses: any,
+  projectId?: string
 }
 
-function NewCollaborator({ id, setAddCollaborator, usersAccesses }: NewCollaboratorProps) {
+function NewCollaborator({ id, setAddCollaborator, usersAccesses, projectId }: NewCollaboratorProps) {
   const router = useRouter();
   const [collaboratorEmail, setCollaboratorEmail] = useState<string>("");
   const dispatch = useDispatch();
@@ -22,6 +24,9 @@ function NewCollaborator({ id, setAddCollaborator, usersAccesses }: NewCollabora
     const newCollaboratorList = {...usersAccesses};
     newCollaboratorList[collaboratorEmail] = ["room:write"];
     const boardUpdated = await newCollaboratorOnBoard(id, newCollaboratorList);
+    if (projectId) {
+      await newCollaboratorOnProject(projectId, newCollaboratorList);
+    }
     dispatch(updateBoard(boardUpdated));
     setCollaboratorEmail('');
     setAddCollaborator(false);

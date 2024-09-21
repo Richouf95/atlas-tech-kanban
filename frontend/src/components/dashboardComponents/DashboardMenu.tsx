@@ -43,7 +43,7 @@ const DashboardMenu = ({ userEmail }: { userEmail: string }) => {
           (project: Project) =>
             project.usersAccesses && project.usersAccesses[userEmail]
         );
-        dispatch(setProjects(allProjects));
+        dispatch(setProjects(filteredProjects));
       }
     } catch (error) {
       console.error("Error fetching project:", error);

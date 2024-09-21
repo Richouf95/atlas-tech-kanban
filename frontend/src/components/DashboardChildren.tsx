@@ -1,6 +1,7 @@
 "use client";
 
 import { useApp } from "@/hooks/useMongoTiggerApp";
+import { setBoard } from "@/store/reducers/board/boardSlice";
 import {
   setBoardsList,
   addBoard,
@@ -13,7 +14,7 @@ import React, { ReactNode, useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import * as Realm from "realm-web";
 
-function DashboardChildren({ children }: { children: ReactNode }) {
+function DashboardChildren({ children, session }: { children: ReactNode; session: any }) {
   const [exempleHeight, setExempleHeight] = useState("0px");
   const dispatch = useDispatch();
   const triggerApp = useApp();
@@ -21,6 +22,8 @@ function DashboardChildren({ children }: { children: ReactNode }) {
   const boardList: Board[] = useSelector(
     (state: RootState) => state.boardsList.boardList
   );
+
+  const userEmail = session.user.email;
 
   useEffect(() => {
     if (!triggerApp) return;
@@ -44,7 +47,14 @@ function DashboardChildren({ children }: { children: ReactNode }) {
               ...change.fullDocument,
               _id: change.fullDocument._id.toString(),
             };
-            dispatch(addBoard(newBoard));
+            const thisBoardUserAccess = change.usersAccesses?.[userEmail];
+            const thisUserHasAccess =
+              thisBoardUserAccess && [...thisBoardUserAccess].includes("room:write");
+          
+            if (thisUserHasAccess) {
+              dispatch(addBoard(newBoard));
+            }
+            
             console.log("New Board Added:", newBoard);
           }
           if (change.operationType === "update") {
@@ -52,6 +62,8 @@ function DashboardChildren({ children }: { children: ReactNode }) {
               ...change.fullDocument,
               _id: change.documentKey._id.toString(),
             };
+            
+            dispatch(setBoard(updatedBoard));
             dispatch(updateBoardsList(updatedBoard));
             console.log("Board Updated:", updatedBoard);
           }

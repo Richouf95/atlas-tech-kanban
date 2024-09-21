@@ -81,3 +81,21 @@ export async function getProject(id: string) {
     console.error("Error while Fetching Project", error.message);
   }
 }
+
+export async function newCollaboratorOnProject (id: string, newCollaboratorList: any) {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_DOMAIN}/project/${id}`,
+    {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ usersAccesses: newCollaboratorList }),
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to add new collaborator on project");
+  }
+
+  const data: Project = await response.json();
+  return data;
+}

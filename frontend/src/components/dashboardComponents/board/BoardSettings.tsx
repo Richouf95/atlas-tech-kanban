@@ -96,7 +96,7 @@ function BoardSettings() {
           )}
         </div>
         {addCollaborator && (
-          <NewCollaborator id={thisBoard._id} setAddCollaborator={setAddCollaborator} usersAccesses={thisBoard.usersAccesses} />
+          <NewCollaborator id={thisBoard._id} setAddCollaborator={setAddCollaborator} usersAccesses={thisBoard.usersAccesses} projectId={thisBoard.projectId} />
         )}
         <CollaboaratorsList id={thisBoard._id} usersAccesses={thisBoard.usersAccesses} />
       </div>

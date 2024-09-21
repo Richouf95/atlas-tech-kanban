@@ -66,12 +66,12 @@ function CardModal({
           <CardLabel id={_id} label={label} />
         </div>
         <h2 className="my-3">{name}</h2>
-        {/* {dueDate !== "N/A" && (
+        {dueDate && (
           <p className="">
             <AccessTimeIcon />
             <span className="ml-1">{dueDate}</span>
           </p>
-        )} */}
+        )}
       </div>
 
       <Modal
