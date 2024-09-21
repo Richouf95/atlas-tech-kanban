@@ -30,7 +30,7 @@ function NewBoardColumnForm({
       boardId,
     );
     const newColumnsList = [...columns, newColumn];
-    dispatch(setColumns(newColumnsList));
+    // dispatch(setColumns(newColumnsList));
     setEditMode(false);
   };
   return (

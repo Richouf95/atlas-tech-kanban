@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useCallback } from "react";
+import React, { useEffect, useCallback, useRef } from "react";
 import { ReactSortable } from "react-sortablejs";
 import BoardColumn from "./BoardColumn";
 import NewBoardColumnForm from "@/components/forms/boardForms/NewBoardColumnForm";
@@ -12,14 +12,18 @@ import SpinnerAddColumns from "@/components/SpinnerAddColumns";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { getAllColumns, updateColumnOrder } from "@/lib/columnsActions";
-import { setColumns } from "@/store/reducers/columns/columnsSlice";
+import { addColumn, removeColumn, setColumns, updateColumns } from "@/store/reducers/columns/columnsSlice";
 import { getAllLabels } from "@/lib/labelsActions";
-import { setLables } from "@/store/reducers/labels/labelsSlice";
+import { addLabel, setLables } from "@/store/reducers/labels/labelsSlice";
+import { useApp } from "@/hooks/useMongoTiggerApp";
 
 function BoardContainer({ filterParams }: { filterParams: any }) {
   const board = useSelector((state: RootState) => state.board.board);
   const columns = useSelector((state: RootState) => state.columns.columns);
   const dispatch = useDispatch();
+  const triggerApp = useApp();
+  const columnChangeStreamRef: any = useRef(null);
+  const labelChangeStreamRef: any = useRef(null);
   // const columns: any = [];
   // const columns = useStorage(
   //   (root) => root.columns.map((col) => ({ ...col })),
@@ -37,6 +41,70 @@ function BoardContainer({ filterParams }: { filterParams: any }) {
   useEffect(() => {
     fetchColumnsAndLabels();
   }, [fetchColumnsAndLabels]);
+
+  useEffect(() => {
+    if (!triggerApp) return;
+
+    const columnsTrigger = async () => {
+      try {
+        const mongodb = triggerApp.currentUser?.mongoClient("Cluster0");
+        const columnsCollection = mongodb
+          ?.db("atlas-tech-db")
+          .collection("columns");
+
+        columnChangeStreamRef.current = columnsCollection?.watch();
+        const labelChangeStream = columnChangeStreamRef.current;
+
+        for await (const change of labelChangeStream) {
+          if (change.operationType === "insert") {
+            const newColumn = {
+              ...change.fullDocument,
+              _id: change.documentKey._id.toString(),
+            }
+            dispatch(addColumn(newColumn));
+          }
+          if (change.operationType === "update") {
+            const updatedColumn = {
+              ...change.fullDocument,
+              _id:change.documentKey._id.toString(),
+            }
+            dispatch(updateColumns(updatedColumn));
+          }
+          if (change.operationType === "delete") {
+            dispatch(removeColumn(change.documentKey._id.toString()))
+          }
+        }
+      } catch (error) {
+        console.error("Erreur lors de la connexion :", error);
+      }
+    };
+
+    const labelTrigger = async () => {
+      try {
+        const mongodb = triggerApp.currentUser?.mongoClient("Cluster0");
+        const labelCollection = mongodb
+          ?.db("atlas-tech-db")
+          .collection("labels");
+
+        labelChangeStreamRef.current = labelCollection?.watch();
+        const labelChangeStream = labelChangeStreamRef.current;
+
+        for await (const change of labelChangeStream) {
+          if (change.operationType === "insert") {
+            const newLabel = {
+              ...change.fullDocument,
+              _id: change.fullDocument._id.toString(),
+            }
+            dispatch(addLabel(newLabel));
+          }
+        }
+      } catch (error) {
+        console.error("Erreur lors de la connexion :", error);
+      }
+    };
+
+    columnsTrigger()
+  }, [triggerApp]);
 
   // const updateColum = useMutation(
   //   ({ storage }, columns: LiveObject<Column>[]) => {
@@ -62,7 +130,7 @@ function BoardContainer({ filterParams }: { filterParams: any }) {
       console.error("Erreur lors de la mise à jour des colonnes :", error);
     }
 
-    dispatch(setColumns(newColumns));
+    // dispatch(setColumns(newColumns));
   };
 
   if (!columns) {

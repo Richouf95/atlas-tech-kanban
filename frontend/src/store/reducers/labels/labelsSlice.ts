@@ -16,11 +16,14 @@ const labelSlicce = createSlice({
         setLables(state, action: PayloadAction<LabelType[]>) {
             state.labels = action.payload;
         },
+        addLabel(state, action: PayloadAction<LabelType>) {
+            state.labels.push(action.payload);
+        },
         clearLabels(state) {
             state.labels = [];
         }
     }
 })
 
-export const {setLables, clearLabels} = labelSlicce.actions;
+export const {setLables, addLabel, clearLabels} = labelSlicce.actions;
 export default labelSlicce.reducer;

@@ -32,7 +32,7 @@ function ColumnHeader({ id, name }: { id: string; name: string }) {
 
         if (response && columns) {
           const updatedColumns = columns.filter((col) => col._id !== id);
-          dispatch(setColumns(updatedColumns));
+          // dispatch(setColumns(updatedColumns));
         }
       } catch (error) {
         console.error("Erreur lors de la suppression de la colonne :", error);
@@ -51,7 +51,7 @@ function ColumnHeader({ id, name }: { id: string; name: string }) {
           const updatedColumns = columns.map((col) =>
             col._id === id ? { ...col, name: newColumnName } : col
           );
-          dispatch(setColumns(updatedColumns));
+          // dispatch(setColumns(updatedColumns));
 
           setRenameColumn(false);
         }
