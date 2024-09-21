@@ -39,6 +39,10 @@ const DashboardMenu = ({ userEmail }: { userEmail: string }) => {
     try {
       const allProjects = await getAllProjects();
       if (allProjects) {
+        const filteredProjects = allProjects.filter(
+          (project: Project) =>
+            project.usersAccesses && project.usersAccesses[userEmail]
+        );
         dispatch(setProjects(allProjects));
       }
     } catch (error) {

@@ -16,10 +16,23 @@ const boardsListSlice = createSlice({
     setBoardsList(state, action: PayloadAction<Board[]>) {
       state.boardList = action.payload;
     },
-    updateBoardsList(state, action: PayloadAction<Partial<Board>>) {
-      if (state.boardList) {
-        state.boardList = { ...state.boardList, ...action.payload };
+    addBoard(state, action: PayloadAction<Board>) {
+      state.boardList.push(action.payload);
+    },
+    updateBoardsList(state, action: PayloadAction<Board>) {
+      const index = state.boardList.findIndex(
+        (board) => board._id === action.payload._id
+      );
+
+      if (index !== -1) {
+        state.boardList[index] = {
+          ...state.boardList[index],
+          ...action.payload,
+        };
       }
+    },
+    removeBoard(state, action: PayloadAction<string>) {
+      state.boardList = state.boardList.filter(board => board._id !== action.payload);
     },
     clearBoardsList(state) {
       state.boardList = [];
@@ -27,5 +40,6 @@ const boardsListSlice = createSlice({
   },
 });
 
-export const { setBoardsList, updateBoardsList, clearBoardsList } = boardsListSlice.actions;
+export const { setBoardsList, updateBoardsList, clearBoardsList, addBoard, removeBoard } =
+  boardsListSlice.actions;
 export default boardsListSlice.reducer;

@@ -1,9 +1,70 @@
-"use client"
+"use client";
 
-import React, { ReactNode, useEffect, useState } from "react";
+import { useApp } from "@/hooks/useMongoTiggerApp";
+import { setBoardsList, addBoard, updateBoardsList, removeBoard } from "@/store/reducers/boardList/boardListSlice";
+import { RootState } from "@/store/store";
+import { Board } from "@/types/Board";
+import React, { ReactNode, useEffect, useState, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import * as Realm from "realm-web";
 
 function DashboardChildren({ children }: { children: ReactNode }) {
   const [exempleHeight, setExempleHeight] = useState("0px");
+  const dispatch = useDispatch();
+  const triggerApp = useApp();
+  const boardChangeStreamRef: any = useRef(null);
+  const boardList: Board[] = useSelector(
+    (state: RootState) => state.boardsList.boardList
+  );
+
+  console.log(boardList)
+
+  useEffect(() => {
+    if (!triggerApp) return;
+
+    const login = async () => {
+      try {
+        await triggerApp.logIn(Realm.Credentials.anonymous());
+
+        const mongodb = triggerApp.currentUser?.mongoClient('Cluster0');
+
+        const boardCollection = mongodb?.db('atlas-tech-db').collection('boards');
+
+        boardChangeStreamRef.current = boardCollection?.watch();
+        const boardChangeStream = boardChangeStreamRef.current;
+
+        for await (const change of boardChangeStream) {
+          if (change.operationType === "insert") {
+            if (change.operationType === "insert") {
+              const newBoard = { 
+                ...change.fullDocument, 
+                _id: change.fullDocument._id.toString() 
+              };
+              dispatch(addBoard(newBoard));
+              console.log("New Board Added:", newBoard);
+            }
+          }
+          if (change.operationType === "update") {
+            const updatedBoard = {
+              ...change.fullDocument,
+              _id: change.documentKey._id.toString(),
+            };
+            dispatch(updateBoardsList(updatedBoard));
+            console.log("Board Updated:", updatedBoard);
+          }
+          if (change.operationType === "delete") {
+            dispatch(removeBoard(change.documentKey._id.toString()));
+            console.log("Board Deleted:", change.documentKey._id.toString());
+          }
+        }
+      } catch (error) {
+        console.error("Erreur lors de la connexion :", error);
+      }
+    };
+
+    login();
+  }, [triggerApp]);
+
   useEffect(() => {
     const updateHeight = () => {
       const screenHeight = window.innerHeight;
