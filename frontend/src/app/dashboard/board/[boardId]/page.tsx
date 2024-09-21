@@ -22,7 +22,7 @@ async function BoardPage({
     thisBoardUserAccess && [...thisBoardUserAccess].includes("room:write");
 
   if (!thisUserHasAccess) {
-    redirect("/");
+    redirect("/dashboard");
   }
 
   return <Room id={boardId}>{thisBoard && <Borad />}</Room>;

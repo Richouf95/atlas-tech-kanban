@@ -23,6 +23,7 @@ export function Room({ id, children }: { id: string; children: ReactNode }) {
   };
 
   useEffect(() => {
+    setRoomBoard(null);
     fetchBoard(id);
   }, [id]);
 

@@ -19,7 +19,7 @@ function DashBoardMenuContent({ userEmail }: { userEmail: string }) {
   const roomCreated = useSelector((state: RootState) => state.counter);
   const boardList: Board[] = useSelector(
     (state: RootState) => state.boardsList.boardList
-  );
+  ).filter(board => !board.projectId);
   // const boards: Board[] = useSelector((state: RootState) => state.board.board);
   const projects: Project[] = useSelector(
     (state: RootState) => state.projects.projects

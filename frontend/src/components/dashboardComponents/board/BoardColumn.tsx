@@ -21,7 +21,7 @@ import CardModal from "@/components/modals/CardModal";
 import { Card } from "@/types";
 import { useApp } from "@/hooks/useMongoTiggerApp";
 
-const BoardColumn = React.memo(
+const BoardColumn = 
   ({
     _id,
     name,
@@ -34,11 +34,11 @@ const BoardColumn = React.memo(
     boardId: string;
   }) => {
     const columnsCards = useSelector((state: RootState) => state.cards.cards);
-    const columns = useSelector((state: RootState) => state.columns.columns);
-    // const [cards, setCardsState] = useState<Card[]>([]);
     const dispatch = useDispatch();
     const triggerApp = useApp();
     const cardChangeStreamRef: any = useRef(null);
+
+    // useEffect(() => {if(columnsCards) alert('gege')},[boardId])
 
     const fetchCards = useCallback(async () => {
       if (!boardId) return;
@@ -51,7 +51,7 @@ const BoardColumn = React.memo(
 
     useEffect(() => {
       fetchCards();
-    }, [fetchCards, dispatch]);
+    }, [fetchCards, dispatch, boardId]);
 
     const setCardOrder = useCallback(
       async (cards: Card[], columnId: string) => {
@@ -82,19 +82,17 @@ const BoardColumn = React.memo(
       [dispatch]
     );
 
-    const column = columns?.filter((x) => x._id === _id)[0];
-
-    console.log(filterParams)
-
     const filteredCards =
       columnsCards &&
       columnsCards.filter((card) => {
+        if (!filterParams) return;
+
         // Filtrer par searchKey
-        if (filterParams.searchKey && column) {
+        if (filterParams.searchKey) {
           const searchKey = filterParams.searchKey.toLowerCase();
 
           // Vérifier si le nom de la colonne correspond au searchKey
-          const columnMatchesSearch = column.name
+          const columnMatchesSearch = name
             .toLowerCase()
             .includes(searchKey);
 
@@ -169,7 +167,9 @@ const BoardColumn = React.memo(
         return true;
       });
 
-    const searchKeyLower = filterParams.searchKey.toLowerCase();
+    const searchKeyLower = filterParams
+      ? filterParams.searchKey.toLowerCase()
+      : "";
 
     const onlyMatchedCards =
       filteredCards &&
@@ -179,6 +179,7 @@ const BoardColumn = React.memo(
           card.description?.toLowerCase().includes(searchKeyLower)
       );
 
+    if (!filterParams) return;
     if (
       onlyMatchedCards?.length === 0 &&
       (filterParams.searchKey !== "" ||
@@ -190,7 +191,7 @@ const BoardColumn = React.memo(
       return null;
     }
 
-    const cols =
+    const colsCards =
       onlyMatchedCards &&
       onlyMatchedCards
         .map((x) => ({
@@ -200,17 +201,19 @@ const BoardColumn = React.memo(
         .filter((x) => x.columnId === _id)
         .sort((a, b) => a.index - b.index);
 
+        console.log(colsCards)
+
     return (
       <div className="min-w-72 max-w-72 rounded-xl columnsClass">
         <ColumnHeader id={_id} name={name} />
-        {cols && (
+        {colsCards && (
           <ReactSortable
-            list={cols}
+            list={colsCards}
             // setList={(item) => setCardOrder(item, id)}
             setList={(newCards) => setCardOrder(newCards, _id)}
             group={"Cards"}
           >
-            {cols.map((item) => (
+            {colsCards.map((item) => (
               <div
                 key={item.id}
                 className="mx-2"
@@ -228,6 +231,6 @@ const BoardColumn = React.memo(
       </div>
     );
   }
-);
+;
 
 export default BoardColumn;

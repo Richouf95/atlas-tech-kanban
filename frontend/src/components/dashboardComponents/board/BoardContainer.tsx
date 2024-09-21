@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useCallback, useRef } from "react";
+import React, { useEffect, useCallback, useRef, useState } from "react";
 import { ReactSortable } from "react-sortablejs";
 import BoardColumn from "./BoardColumn";
 import NewBoardColumnForm from "@/components/forms/boardForms/NewBoardColumnForm";
@@ -30,12 +30,13 @@ import {
 function BoardContainer({ filterParams }: { filterParams: any }) {
   const board = useSelector((state: RootState) => state.board.board);
   const columns = useSelector((state: RootState) => state.columns.columns);
+  const boardCards = useSelector((state: RootState) => state.cards.cards);
   const dispatch = useDispatch();
   const triggerApp = useApp();
   const columnChangeStreamRef: any = useRef(null);
   const labelChangeStreamRef: any = useRef(null);
   const cardChangeStreamRef: any = useRef(null);
-
+  const [loading, setIsLoading] = useState<boolean>(true);
 
   // console.log(filterParams)
 
@@ -47,15 +48,16 @@ function BoardContainer({ filterParams }: { filterParams: any }) {
 
   const fetchColumnsAndLabels = useCallback(async () => {
     if (!board?._id) return;
-    const columns = await getAllColumns(board._id);
-    const labels = await getAllLabels(board._id);
-    dispatch(setColumns(columns));
-    dispatch(setLables(labels || []));
+    const columnsFetched = await getAllColumns(board._id);
+    const labelsFetched = await getAllLabels(board._id);
+    dispatch(setColumns(columnsFetched));
+    dispatch(setLables(labelsFetched || []));
+    setIsLoading(false);
   }, [board, dispatch]);
 
   useEffect(() => {
     fetchColumnsAndLabels();
-  }, [fetchColumnsAndLabels]);
+  }, [fetchColumnsAndLabels, board?._id]);
 
   useEffect(() => {
     if (!triggerApp) return;
@@ -141,7 +143,9 @@ function BoardContainer({ filterParams }: { filterParams: any }) {
               ...change.fullDocument,
               _id: change.fullDocument._id.toString(),
               columnId: change.fullDocument.columnId.toString(),
-              ...(change.fullDocument.label && { label: change.fullDocument.label.toString() }),
+              ...(change.fullDocument.label && {
+                label: change.fullDocument.label.toString(),
+              }),
             };
             dispatch(updateCard(updatedCard));
           }
@@ -184,15 +188,6 @@ function BoardContainer({ filterParams }: { filterParams: any }) {
     // dispatch(setColumns(newColumns));
   };
 
-  if (!columns) {
-    return (
-      <div className="flex overflow-x-auto space-x-4">
-        <SpinnerBlock />
-        <SpinnerAddColumns />
-      </div>
-    );
-  }
-
   const cols = columns
     .map((element: any) => ({
       ...element,
@@ -204,15 +199,27 @@ function BoardContainer({ filterParams }: { filterParams: any }) {
     cols.length > 0 &&
     cols.filter((column: any) => {
       // Filtrer par ID de colonne
-      if (
-        filterParams.selectedColumns.length > 0 &&
-        !filterParams.selectedColumns.includes(column._id)
-      ) {
-        return false;
-      }
+      if (filterParams)
+        if (filterParams.selectedColumns)
+          if (
+            filterParams.selectedColumns.length > 0 &&
+            !filterParams.selectedColumns.includes(column._id)
+          ) {
+            return false;
+          }
 
       return true;
     });
+
+    
+  if (loading) {
+    return (
+      <div className="flex overflow-x-auto space-x-4">
+        <SpinnerBlock />
+        <SpinnerAddColumns />
+      </div>
+    );
+  }
 
   return (
     <div className="flex overflow-x-auto space-x-4" aria-label="board coloumns">

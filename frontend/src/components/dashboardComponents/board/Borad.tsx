@@ -59,7 +59,7 @@ function Borad() {
     return () => {
       updateMyPresence({ boardId: null });
     };
-  }, []);
+  }, [thisBoard._id]);
 
   const handleBoardNewName = async (e: FormEvent) => {
     e.preventDefault();
@@ -79,7 +79,7 @@ function Borad() {
       />
       {!editBoarName && (
         <header className="text-2xl p-5 flex gap-2">
-          <h1 aria-label={`Board: ${name}`}>
+          <h1 aria-label={`Board: ${thisBoard.boardName}`}>
             Board: {thisBoard.boardName}
             <button
               aria-label="Edit board name"
