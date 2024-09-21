@@ -12,10 +12,20 @@ import SpinnerAddColumns from "@/components/SpinnerAddColumns";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { getAllColumns, updateColumnOrder } from "@/lib/columnsActions";
-import { addColumn, removeColumn, setColumns, updateColumns } from "@/store/reducers/columns/columnsSlice";
+import {
+  addColumn,
+  removeColumn,
+  setColumns,
+  updateColumns,
+} from "@/store/reducers/columns/columnsSlice";
 import { getAllLabels } from "@/lib/labelsActions";
 import { addLabel, setLables } from "@/store/reducers/labels/labelsSlice";
 import { useApp } from "@/hooks/useMongoTiggerApp";
+import {
+  addCard,
+  removeCard,
+  updateCard,
+} from "@/store/reducers/cards/cardsSlice";
 
 function BoardContainer({ filterParams }: { filterParams: any }) {
   const board = useSelector((state: RootState) => state.board.board);
@@ -24,6 +34,7 @@ function BoardContainer({ filterParams }: { filterParams: any }) {
   const triggerApp = useApp();
   const columnChangeStreamRef: any = useRef(null);
   const labelChangeStreamRef: any = useRef(null);
+  const cardChangeStreamRef: any = useRef(null);
   // const columns: any = [];
   // const columns = useStorage(
   //   (root) => root.columns.map((col) => ({ ...col })),
@@ -60,18 +71,18 @@ function BoardContainer({ filterParams }: { filterParams: any }) {
             const newColumn = {
               ...change.fullDocument,
               _id: change.documentKey._id.toString(),
-            }
+            };
             dispatch(addColumn(newColumn));
           }
           if (change.operationType === "update") {
             const updatedColumn = {
               ...change.fullDocument,
-              _id:change.documentKey._id.toString(),
-            }
+              _id: change.documentKey._id.toString(),
+            };
             dispatch(updateColumns(updatedColumn));
           }
           if (change.operationType === "delete") {
-            dispatch(removeColumn(change.documentKey._id.toString()))
+            dispatch(removeColumn(change.documentKey._id.toString()));
           }
         }
       } catch (error) {
@@ -94,7 +105,7 @@ function BoardContainer({ filterParams }: { filterParams: any }) {
             const newLabel = {
               ...change.fullDocument,
               _id: change.fullDocument._id.toString(),
-            }
+            };
             dispatch(addLabel(newLabel));
           }
         }
@@ -103,7 +114,44 @@ function BoardContainer({ filterParams }: { filterParams: any }) {
       }
     };
 
-    columnsTrigger()
+    const cardTrigger = async () => {
+      try {
+        const mongodb = triggerApp.currentUser?.mongoClient("Cluster0");
+        const cardCollection = mongodb?.db("atlas-tech-db").collection("cards");
+
+        cardChangeStreamRef.current = cardCollection?.watch();
+        const cardChangeStream = cardChangeStreamRef.current;
+
+        for await (const change of cardChangeStream) {
+          if (change.operationType === "insert") {
+            const newCard = {
+              ...change.fullDocument,
+              _id: change.fullDocument._id.toString(),
+              columnId: change.fullDocument.columnId.toString(),
+            };
+            dispatch(addCard(newCard));
+            console.log(newCard);
+          }
+          if (change.operationType === "update") {
+            const updatedCard = {
+              ...change.fullDocument,
+              _id: change.fullDocument._id.toString(),
+              columnId: change.fullDocument.columnId.toString(),
+            };
+            dispatch(updateCard(updatedCard));
+          }
+          if (change.operationType === "delete") {
+            dispatch(removeCard(change.documentKey._id.toString()));
+          }
+        }
+      } catch (error) {
+        console.error("Erreur lors de la connexion :", error);
+      }
+    };
+
+    columnsTrigger();
+    labelTrigger();
+    cardTrigger();
   }, [triggerApp]);
 
   // const updateColum = useMutation(
@@ -143,7 +191,7 @@ function BoardContainer({ filterParams }: { filterParams: any }) {
   }
 
   const cols = columns
-    .map((element) => ({
+    .map((element: any) => ({
       ...element,
       id: element._id,
     }))
