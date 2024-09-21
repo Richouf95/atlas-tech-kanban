@@ -35,6 +35,10 @@ function BoardContainer({ filterParams }: { filterParams: any }) {
   const columnChangeStreamRef: any = useRef(null);
   const labelChangeStreamRef: any = useRef(null);
   const cardChangeStreamRef: any = useRef(null);
+
+
+  // console.log(filterParams)
+
   // const columns: any = [];
   // const columns = useStorage(
   //   (root) => root.columns.map((col) => ({ ...col })),
@@ -137,6 +141,7 @@ function BoardContainer({ filterParams }: { filterParams: any }) {
               ...change.fullDocument,
               _id: change.fullDocument._id.toString(),
               columnId: change.fullDocument.columnId.toString(),
+              ...(change.fullDocument.label && { label: change.fullDocument.label.toString() }),
             };
             dispatch(updateCard(updatedCard));
           }
@@ -166,8 +171,6 @@ function BoardContainer({ filterParams }: { filterParams: any }) {
       ...col,
       index: newIndex,
     }));
-
-    console.log(newColumns);
 
     try {
       const updatePromises = newColumns.map((col) =>
@@ -203,7 +206,7 @@ function BoardContainer({ filterParams }: { filterParams: any }) {
       // Filtrer par ID de colonne
       if (
         filterParams.selectedColumns.length > 0 &&
-        !filterParams.selectedColumns.includes(column.id)
+        !filterParams.selectedColumns.includes(column._id)
       ) {
         return false;
       }

@@ -22,8 +22,6 @@ function DashboardChildren({ children }: { children: ReactNode }) {
     (state: RootState) => state.boardsList.boardList
   );
 
-  console.log(boardList);
-
   useEffect(() => {
     if (!triggerApp) return;
 

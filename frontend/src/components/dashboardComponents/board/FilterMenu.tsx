@@ -26,6 +26,10 @@ function FilterMenu({
   const isLargeScreen = useMediaQuery("(min-width: 1024px)");
   const [searchKey, setSearchKey] = useState<string>("");
 
+  const columns = useSelector((state: RootState) => state.columns.columns);
+  // const cards = useSelector((state: RootState) => state.cards.cards);
+  const labels = useSelector((state: RootState) => state.labels.labels);
+
   // Ajout d'états pour les filtres sélectionnés
   const [selectedColumns, setSelectedColumns] = useState<string[]>([]);
   const [selectedAssignees, setSelectedAssignees] = useState<string[]>([]);
@@ -49,7 +53,7 @@ function FilterMenu({
 
   Object.keys(thisBoard.usersAccesses).forEach((x) => {
     const item = {
-      id: x,
+      _id: x,
       name: x,
     };
     collaborators.push(item);
@@ -117,8 +121,7 @@ function FilterMenu({
           {/* Sections de filtres réutilisables */}
           <FilterSection
             title="Columns"
-            // TODO
-            items={[]}
+            items={columns}
             selectedItems={selectedColumns}
             onSelectionChange={handleColumnsChange}
           />
@@ -137,9 +140,9 @@ function FilterMenu({
           <FilterSection
             title="Due Date"
             items={[
-              { id: "overdue", name: "Overdue" },
-              { id: "today", name: "Today" },
-              { id: "dueTomorrow", name: "Due tomorrow" },
+              { _id: "overdue", name: "Overdue" },
+              { _id: "today", name: "Today" },
+              { _id: "dueTomorrow", name: "Due tomorrow" },
             ]}
             selectedItems={selectedDueDates}
             onSelectionChange={handleDueDatesChange}
@@ -149,9 +152,7 @@ function FilterMenu({
 
           <FilterSection
             title="Labels"
-            // items={labels}
-            // TODO
-            items={[]}
+            items={labels}
             selectedItems={selectedLabels}
             onSelectionChange={handleLabelsChange}
           />
