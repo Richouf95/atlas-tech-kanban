@@ -15,7 +15,7 @@ const app = express();
 
 // Middlewares
 app.use(cors({
-    origin: process.env.DEV_DOMAINE,
+    origin: "https://atlas-tech-kanban.vercel.app",
     optionsSuccessStatus: 200
 }));
 
