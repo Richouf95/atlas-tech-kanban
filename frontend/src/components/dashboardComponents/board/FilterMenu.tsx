@@ -25,16 +25,15 @@ function FilterMenu({
   const [open, setOpen] = useState(false);
   const isLargeScreen = useMediaQuery("(min-width: 1024px)");
   const [searchKey, setSearchKey] = useState<string>("");
+  const [selectedColumns, setSelectedColumns] = useState<string[]>([]);
+  const [selectedAssignees, setSelectedAssignees] = useState<string[]>([]);
+  const [selectedDueDates, setSelectedDueDates] = useState<string[]>([]);
+  const [selectedLabels, setSelectedLabels] = useState<string[]>([]);
 
   const columns = useSelector((state: RootState) => state.columns.columns);
   // const cards = useSelector((state: RootState) => state.cards.cards);
   const labels = useSelector((state: RootState) => state.labels.labels);
 
-  // Ajout d'états pour les filtres sélectionnés
-  const [selectedColumns, setSelectedColumns] = useState<string[]>([]);
-  const [selectedAssignees, setSelectedAssignees] = useState<string[]>([]);
-  const [selectedDueDates, setSelectedDueDates] = useState<string[]>([]);
-  const [selectedLabels, setSelectedLabels] = useState<string[]>([]);
 
   // Utilisation de Liveblocks pour récupérer les données nécessaires
   // const columns = useStorage(

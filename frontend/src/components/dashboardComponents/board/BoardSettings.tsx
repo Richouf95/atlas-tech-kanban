@@ -17,12 +17,10 @@ function BoardSettings() {
 
   const thisBoard = useSelector((state: RootState) => state.board.board);
 
-  if (!thisBoard) return null;
-
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const [addCollaborator, setAddCollaborator] = useState<boolean>(false);
   const [editDescription, setEditDescription] = useState<boolean>(false);
-
+  
   const isLargeScreen = useMediaQuery("(min-width: 1024px)");
 
   const toggleDrawer = (state: boolean) => () => {
@@ -36,6 +34,8 @@ function BoardSettings() {
   const handleContentKeyDown = (event: React.KeyboardEvent) => {
     event.stopPropagation();
   };
+
+  if (!thisBoard) return null;
 
   const list = (
     <Box
