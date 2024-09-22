@@ -7,62 +7,29 @@ import Link from "next/link";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import SpinnerAddColumns from "./SpinnerAddColumns";
+import { Board } from "@/types/Board";
+import { Project } from "@/types";
 
 function DashBoardMenuContent({ userEmail }: { userEmail: string }) {
-  const [allRooms, setAllRooms] = useState<any>([]);
-  const [roomsLoaded, setRoomsLoaded] = useState<boolean>(false);
+  // const [simpleBoards, setSimpleBoards] = useState<Board[]>([]);
+  const [roomsLoaded, setRoomsLoaded] = useState<boolean>(true);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [currentPopover, setCurrentPopover] = useState<string | null>(null);
-  const roomCreated = useSelector((state: RootState) => state.counter);
 
-  const fetchRooms = async () => {
-    const response = await liveblocksClient.getRooms();
-    return response;
-  };
+  const roomCreated = useSelector((state: RootState) => state.counter);
+  const boardList: Board[] = useSelector(
+    (state: RootState) => state.boardsList.boardList
+  ).filter(board => !board.projectId);
+  // const boards: Board[] = useSelector((state: RootState) => state.board.board);
+  const projects: Project[] = useSelector(
+    (state: RootState) => state.projects.projects
+  );
 
   useEffect(() => {
-    const getRooms = async () => {
-      const rooms = await fetchRooms();
-      setAllRooms(rooms.data);
+    if (projects && boardList) {
       setRoomsLoaded(true);
-    };
-
-    getRooms();
-  }, [roomCreated]);
-
-  const myBoards = allRooms.filter((items: any) =>
-    items.usersAccesses.hasOwnProperty(userEmail)
-  );
-
-  const boardsWithoutProject = myBoards.filter(
-    (x: any) => x.metadata.projectId === "N/A"
-  );
-  const boardsWithProject = myBoards.filter(
-    (x: any) => x.metadata.projectId !== "N/A"
-  );
-
-  // Grouper par projectId
-  const groupedByProject = boardsWithProject.reduce((acc: any, room: any) => {
-    const projectId = room.metadata.projectId;
-    if (!acc[projectId]) {
-      acc[projectId] = [];
     }
-    acc[projectId].push(room);
-    return acc;
-  }, {});
-
-  // Trier chaque groupe par createdAt
-  for (const projectId in groupedByProject) {
-    groupedByProject[projectId].sort(
-      (a: any, b: any) =>
-        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-    );
-  }
-
-  // Récupérer le plus ancien élément de chaque groupe
-  const projects = Object.values(groupedByProject).map(
-    (group: any) => group[0]
-  );
+  }, [projects, boardList]);
 
   const handleClick = (
     event: React.MouseEvent<HTMLElement>,
@@ -118,20 +85,20 @@ function DashBoardMenuContent({ userEmail }: { userEmail: string }) {
       >
         <div className="p-2 min-w-64">
           {!roomsLoaded && <SpinnerAddColumns />}
-          {boardsWithoutProject &&
-            boardsWithoutProject.length > 0 &&
-            boardsWithoutProject.map((item: any) => (
+          {boardList &&
+            boardList.length > 0 &&
+            boardList.map((item: any) => (
               <Link
-                href={`/dashboard/board/${item.id}`}
-                key={item.id}
+                href={`/dashboard/board/${item._id}`}
+                key={item._id}
                 className="p-2 rounded-lg m-2 navItem block cursor-pointer boardAndProjectNavItem"
               >
-                {item.metadata.boardName}
+                {item.boardName}
               </Link>
             ))}
-          {roomsLoaded &&
-            boardsWithoutProject &&
-            boardsWithoutProject.length === 0 && <span>No boards yet</span>}
+          {roomsLoaded && boardList && boardList.length === 0 && (
+            <span>No boards yet</span>
+          )}
         </div>
       </Popover>
 
@@ -154,11 +121,12 @@ function DashBoardMenuContent({ userEmail }: { userEmail: string }) {
             projects.length > 0 &&
             projects.map((item: any) => (
               <Link
-                href={`/dashboard/project/${item.metadata.projectId}`}
-                key={item.id}
+                href={`#}`}
+                // href={`/dashboard/project/${item.metadata.projectId}`}
+                key={item._id}
                 className="p-2 rounded-lg m-2 navItem block cursor-pointer boardAndProjectNavItem"
               >
-                {item.metadata.boardName}
+                {item.name}
               </Link>
             ))}
           {roomsLoaded && projects && projects.length === 0 && (
@@ -178,22 +146,20 @@ function DashBoardMenuContent({ userEmail }: { userEmail: string }) {
           </Link>
           <h2>Boards</h2>
           {!roomsLoaded && <SpinnerAddColumns />}
-          {boardsWithoutProject &&
-            boardsWithoutProject.length > 0 &&
-            boardsWithoutProject.map((item: any) => (
+          {boardList &&
+            boardList.length > 0 &&
+            boardList.map((item: Board) => (
               <Link
-                href={`/dashboard/board/${item.id}`}
-                key={item.id}
+                href={`/dashboard/board/${item._id}`}
+                key={item._id}
                 className="p-2 rounded-lg m-2 navItem block cursor-pointer boardAndProjectNavItem"
               >
-                {item.metadata.boardName}
+                {item.boardName}
               </Link>
             ))}
-          {roomsLoaded &&
-            boardsWithoutProject &&
-            boardsWithoutProject.length === 0 && (
-              <span className="ml-4">No boards yet</span>
-            )}
+          {roomsLoaded && boardList && boardList.length === 0 && (
+            <span className="ml-4">No boards yet</span>
+          )}
         </div>
         <div className="my-4">
           <h2>Projects</h2>
@@ -202,11 +168,11 @@ function DashBoardMenuContent({ userEmail }: { userEmail: string }) {
             projects.length > 0 &&
             projects.map((item: any) => (
               <Link
-                href={`/dashboard/project/${item.metadata.projectId}`}
-                key={item.id}
+                href={`/dashboard/project/${item._id}`}
+                key={item._id}
                 className="p-2 rounded-lg m-2 navItem block cursor-pointer boardAndProjectNavItem"
               >
-                {item.metadata.boardName}
+                {item.name}
               </Link>
             ))}
           {roomsLoaded && projects && projects.length === 0 && (

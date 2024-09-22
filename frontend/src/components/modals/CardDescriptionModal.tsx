@@ -3,13 +3,15 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/store";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import DescriptionIcon from "@mui/icons-material/Description";
 import EditIcon from "@mui/icons-material/Edit";
 import { useMutation } from "@/app/liveblocks.config";
 import { Card } from "@/types";
+import { setCards } from "@/store/reducers/cards/cardsSlice";
+import { updateCardDescription } from "@/lib/cardsActions";
 
 function CardDescriptionModal({
   id,
@@ -18,12 +20,15 @@ function CardDescriptionModal({
 }: {
   id: string;
   name: string;
-  description: string;
+  description?: string;
 }) {
   const theme = useSelector((state: RootState) => state.theme.theme);
+  const cards = useSelector((state: RootState) => state.cards.cards);
   const [open, setOpen] = React.useState(false);
-  const [newDescription, setNewDescription] =
-    React.useState<string>(description);
+  const [newDescription, setNewDescription] = React.useState<string>(
+    description || ""
+  );
+  const dispatch = useDispatch();
 
   const isLargeScreen = useMediaQuery("(min-width: 1024px)");
 
@@ -44,22 +49,33 @@ function CardDescriptionModal({
     borderRadius: 5,
   };
 
-  const updateCardDescription = useMutation(
-    ({ storage }, cardId, updateData) => {
-      const cards = storage.get('cards');
-      const index = cards.findIndex(card => card.toObject().id === cardId);
-      const thisCard = storage.get('cards').get(index);
-      for (let key in updateData) {
-        thisCard?.set(key as keyof Card, updateData[key]);
-      }
-    },
-    []
-  );
+  // const updateCardDescription = useMutation(
+  //   ({ storage }, cardId, updateData) => {
+  //     const cards = storage.get("cards");
+  //     const index = cards.findIndex((card) => card.toObject().id === cardId);
+  //     const thisCard = storage.get("cards").get(index);
+  //     for (let key in updateData) {
+  //       thisCard?.set(key as keyof Card, updateData[key]);
+  //     }
+  //   },
+  //   []
+  // );
 
   const handleNewDescription = async (e: React.FormEvent) => {
     e.preventDefault();
-    updateCardDescription(id, {description : newDescription})
-    handleClose();
+    try {
+      const response = await updateCardDescription(id, newDescription);
+      if (cards && response) {
+        const cardsUpdated = cards.map((card) =>
+          card._id === id ? { ...card, description: newDescription } : card
+        );
+        dispatch(setCards(cardsUpdated));
+        handleClose();
+      }
+    } catch (error) {
+      console.error("Erreur lors de la description de la card :", error);
+    }
+    // updateCardDescription(id, { description: newDescription });
   };
 
   return (
@@ -89,9 +105,14 @@ function CardDescriptionModal({
                 name="Description"
                 id="Description"
                 value={
-                  newDescription === "N/A"
-                    ? "Describe your task here ..."
-                    : newDescription
+                  typeof newDescription === "string" && newDescription !== ""
+                    ? newDescription
+                    : ""
+                }
+                placeholder={
+                  !description || description === ""
+                    ? "Describe your cards here ..."
+                    : ""
                 }
                 onChange={(e) => setNewDescription(e.target.value)}
                 className="w-full text-black p-2 border-2 rounded-lg"

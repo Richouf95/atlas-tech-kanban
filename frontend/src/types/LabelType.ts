@@ -1,5 +1,6 @@
 export type LabelType = {
-  id: string;
+  _id: string;
   name: string;
   color: string;
+  boardId: string;
 };

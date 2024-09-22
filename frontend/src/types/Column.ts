@@ -1,5 +1,6 @@
 export type Column = {
+  _id: string;
   name: string;
-  id: string;
   index: number;
+  boardId: string;
 };

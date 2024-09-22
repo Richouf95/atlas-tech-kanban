@@ -17,12 +17,17 @@ export type Presence = {
   cardId?: null | string;
 };
 
+export type LivBlockCard = {
+  id: string;
+  name: string;
+}
+
 // The Storage tree for the room, for useMutation, useStorage, etc.
 export type Storage = {
   // Example, a conflict-free list
-  columns: LiveList<LiveObject<Column>>;
-  cards: LiveList<LiveObject<Card>>;
-  labels: LiveList<LiveObject<LabelType>>;
+  cards: LiveList<LiveObject<LivBlockCard>>;
+  // columns: LiveList<LiveObject<Column>>;
+  // labels: LiveList<LiveObject<LabelType>>;
 };
 
 // Custom user info set when authenticating with a secret key

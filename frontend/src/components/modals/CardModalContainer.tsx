@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import Typography from "@mui/material/Typography";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import Popover from "@mui/material/Popover";
@@ -15,10 +15,14 @@ import CardLabel from "../dashboardComponents/board/CardLabel";
 import AssignedTo from "../dashboardComponents/board/AssignedTo";
 import DueDate from "../dashboardComponents/board/DueDate";
 import LabelModal from "./LabelModal";
+import { deleteCard, updateCardName } from "@/lib/cardsActions";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+import { setCards } from "@/store/reducers/cards/cardsSlice";
 
 function CardModalContainer({
   name,
-  id,
+  _id,
   index,
   columnId,
   assigned,
@@ -30,11 +34,13 @@ function CardModalContainer({
   const [cardNewName, setCardNewName] = React.useState<string>(name);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [confirmDelete, setConfirmDelete] = React.useState<boolean>(false);
+  const cards = useSelector((state: RootState) => state.cards.cards);
+  const dispatch = useDispatch();
 
   const { threads } = useThreads({
     query: {
       metadata: {
-        cardId: id,
+        cardId: _id,
       },
     },
   });
@@ -47,32 +53,59 @@ function CardModalContainer({
     setAnchorEl(null);
   };
 
-  const handleDeletCard = useMutation(({ storage }, id) => {
-    const cards = storage.get("cards");
-    const cardIndex = cards.findIndex((card) => card.toObject().id === id);
-    cards.delete(cardIndex);
-    handleClose();
-  }, []);
+  // const updateCard = useMutation(({ storage }, cardId, updateData) => {
+  //   const cards = storage.get("cards");
+  //   const index = cards.findIndex((card) => card.toObject().id === cardId);
+  //   const thisCard = storage.get("cards").get(index);
+  //   for (let key in updateData) {
+  //     thisCard?.set(key as keyof Card, updateData[key]);
+  //   }
+  // }, []);
 
-  const updateCard = useMutation(({ storage }, cardId, updateData) => {
-    const cards = storage.get("cards");
-    const index = cards.findIndex((card) => card.toObject().id === cardId);
-    const thisCard = storage.get("cards").get(index);
-    for (let key in updateData) {
-      thisCard?.set(key as keyof Card, updateData[key]);
-    }
-  }, []);
+  const handleRenameCard = useCallback(
+    async (e: React.FormEvent) => {
+      e.preventDefault();
+      try {
+        const response = await updateCardName(_id, cardNewName);
+        if (response) {
+          if (cards) {
+            const cardsUpdated = cards.map((card) =>
+              card._id === _id ? { ...card, name: cardNewName } : card
+            );
+            dispatch(setCards(cardsUpdated));
+            setEditCardName(false);
+            handleClose();
+          }
+        }
+      } catch (error) {
+        console.error(
+          "Erreur lors de la modification du nom de la card :",
+          error
+        );
+      }
+    },
+    [cards, dispatch, cardNewName, _id]
+  );
+  
 
-  const handleRenameCard = async (e: React.FormEvent) => {
-    e.preventDefault();
-    updateCard(id, { name: cardNewName });
-    setEditCardName(false);
-    handleClose();
-  };
+  const handleDeletCard = useCallback(
+    async (id: string) => {
+      try {
+        const response = await deleteCard(id);
+        if (response && cards) {
+          const cardsUpdated = cards.filter((card) => card._id != _id);
+          dispatch(setCards(cardsUpdated));
+        }
+      } catch (error) {
+        console.error("Erreur lors de la suppression de la card :", error);
+      }
+    },
+    [cards, dispatch]
+  );
 
   const cardData = {
     name,
-    id,
+    _id,
     index,
     columnId,
     assigned,
@@ -143,7 +176,7 @@ function CardModalContainer({
               <button
                 className="w-full !bg-red-300"
                 onClick={() => {
-                  handleDeletCard(id);
+                  handleDeletCard(_id);
                   setConfirmDelete(false);
                 }}
               >
@@ -182,21 +215,22 @@ function CardModalContainer({
         </form>
       )}
       <div className="flex justify-between items-center">
-        <div>
-          <LabelModal id={id} label={label} />
-        </div>
-        <AssignedTo id={id} assigned={assigned} />
+        <div><LabelModal id={_id} label={label} /></div>
+        <AssignedTo id={_id} assigned={assigned} />
       </div>
-      <DueDate id={id} dueDate={dueDate} />
+      <DueDate id={_id} dueDate={dueDate} />
       <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-        <CardDescription id={id} name={name} description={description} />
+        <CardDescription id={_id} name={name} description={description} />
       </Typography>
       <div>
         <h2 className="font-bold my-2">
           <ChatIcon />
           Comments
         </h2>
-        <div className="max-h-72 overflow-y-auto rounded-lg p-0 noScrollBar" style={{zIndex: "100"}}>
+        <div
+          className="max-h-72 overflow-y-auto rounded-lg p-0 noScrollBar"
+          style={{ zIndex: "100" }}
+        >
           {threads &&
             threads.map((thread) => (
               <Thread
@@ -207,7 +241,7 @@ function CardModalContainer({
               />
             ))}
         </div>
-        <Composer metadata={{ cardId: id }} className="composer" />
+        <Composer metadata={{ cardId: _id }} className="composer" />
       </div>
     </>
   );

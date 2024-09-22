@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { removeCollaboratorOnBoard } from "@/lib/boardActions";
 import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
+import { updateBoard } from "@/store/reducers/board/boardSlice";
 
 interface CollaboaratorsListProps {
   id: string;
@@ -12,6 +14,8 @@ function CollaboaratorsList({ id, usersAccesses }: CollaboaratorsListProps) {
   const [removeCollaborator, setRemoveCollaborator] = useState<
     Record<string, boolean>
   >({});
+
+  const dispatch = useDispatch();
 
   const router = useRouter();
 
@@ -30,7 +34,13 @@ function CollaboaratorsList({ id, usersAccesses }: CollaboaratorsListProps) {
   };
 
   const handleConfirmRemove = async (email: string) => {
-    await removeCollaboratorOnBoard(id, email);
+    const newCollaboratorList = { ...usersAccesses };
+    delete newCollaboratorList[email];
+    const boardUpdated = await removeCollaboratorOnBoard(
+      id,
+      newCollaboratorList
+    );
+    dispatch(updateBoard(boardUpdated));
     alert(`Removed ${email}`);
     router.refresh();
   };

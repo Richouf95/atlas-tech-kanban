@@ -1,39 +1,37 @@
 "use client";
 
 import { useMutation, useRoom, useStorage } from "@/app/liveblocks.config";
+import { createColumn } from "@/lib/columnsActions";
+import { setColumns } from "@/store/reducers/columns/columnsSlice";
 import { LiveList } from "@liveblocks/client";
 import { LiveObject } from "@liveblocks/core";
 import React, { FormEvent, useState } from "react";
+import { useDispatch } from "react-redux";
 import uniqid from "uniqid";
 
-function NewBoardColumnForm() {
+function NewBoardColumnForm({
+  boardId,
+  columns,
+}: {
+  boardId: string;
+  columns: any;
+}) {
   const [editMode, setEditMode] = useState<boolean>(false);
   const [newColumnName, setNewColumnName] = useState<string>("");
 
-  const addColumn = useMutation(({ storage }, colName) => {
-    const columns = storage.get("columns");
-    const initialColumn = new LiveList([]);
-    const columIndex = !columns ? 0 : columns.length;
+  const dispatch = useDispatch();
 
-    if (!columns) {
-      storage.set("columns", initialColumn);
-    }
-
-    const columnId = uniqid("column-");
-    return storage.get("columns").push(
-      new LiveObject({
-        name: colName,
-        id: columnId,
-        index: columIndex
-      })
-    );
-  }, []);
-  const storage = useStorage((root) => root.columns);
-
-  const handleNewBoardColum = (e: FormEvent) => {
+  const handleNewBoardColum = async (e: FormEvent) => {
     e.preventDefault();
+    const index = columns.length + 1;
+    const newColumn = await createColumn(
+      newColumnName,
+      index,
+      boardId,
+    );
+    const newColumnsList = [...columns, newColumn];
+    // dispatch(setColumns(newColumnsList));
     setEditMode(false);
-    addColumn(newColumnName);
   };
   return (
     <>

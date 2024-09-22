@@ -31,14 +31,13 @@ function HomeHeader({ session }: { session: any }) {
       </div>
       <nav role="navigation">
         <ul className="flex flex-row items-center gap-5 md:mr-5 mr-0">
-          <li>
-            {" "}
-            {pathName === "/" && !session && (
+          {!session && pathName === "/" && (
+            <li>
               <Link href={"/signin"} className="btn">
                 Signin
               </Link>
-            )}
-          </li>
+            </li>
+          )}
           <li>
             <ThemeToggle />
           </li>

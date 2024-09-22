@@ -11,7 +11,7 @@ function DeleteBoardBtn({ id }: { id: string }) {
   const router = useRouter();
   const handleDeleteBoard = async () => {
     await deleteBoard(id);
-    router.push("/");
+    router.push("/dashboard");
   };
 
   return (

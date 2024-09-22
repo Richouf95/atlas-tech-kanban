@@ -10,20 +10,17 @@ import NewCollaborator from "./NewCollaborator";
 import CollaboaratorsList from "./CollaboaratorsList";
 import UpdateBoardDescription from "./UpdateBoardDescription";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
-function BoardSettings({
-  id,
-  usersAccesses,
-  metadata,
-}: {
-  id: string;
-  usersAccesses: any;
-  metadata: any;
-}) {
-  const [open, setOpen] = React.useState(false);
+function BoardSettings() {
+
+  const thisBoard = useSelector((state: RootState) => state.board.board);
+
+  const [open, setOpen] = useState(false);
   const [addCollaborator, setAddCollaborator] = useState<boolean>(false);
   const [editDescription, setEditDescription] = useState<boolean>(false);
-
+  
   const isLargeScreen = useMediaQuery("(min-width: 1024px)");
 
   const toggleDrawer = (state: boolean) => () => {
@@ -37,6 +34,8 @@ function BoardSettings({
   const handleContentKeyDown = (event: React.KeyboardEvent) => {
     event.stopPropagation();
   };
+
+  if (!thisBoard) return null;
 
   const list = (
     <Box
@@ -59,8 +58,8 @@ function BoardSettings({
         <div className="flex justify-center gap-2 items-center mb-5">
           <AccountCircleIcon sx={{ fontSize: 60 }} />
           <div>
-            <h2 className="text-lg font-bold">{metadata.ownerName}</h2>
-            <h3 className="text-lg">{metadata.ownerEmail}</h3>
+            <h2 className="text-lg font-bold">{thisBoard.ownerName}</h2>
+            <h3 className="text-lg">{thisBoard.ownerEmail}</h3>
           </div>
         </div>
         <Divider className="divider" />
@@ -73,16 +72,16 @@ function BoardSettings({
           </div>
           {editDescription ? (
             <UpdateBoardDescription
-              id={id}
-              currentDescription={metadata.description}
+              id={thisBoard._id}
+              currentDescription={thisBoard.description as string}
               setEditDescription={setEditDescription}
             />
           ) : (
             <div>
               <p>
-                {metadata.description === "N/A"
+                {!thisBoard.description
                   ? "Describe your board here"
-                  : metadata.description}
+                  : thisBoard.description}
               </p>
             </div>
           )}
@@ -97,12 +96,12 @@ function BoardSettings({
           )}
         </div>
         {addCollaborator && (
-          <NewCollaborator id={id} setAddCollaborator={setAddCollaborator} />
+          <NewCollaborator id={thisBoard._id} setAddCollaborator={setAddCollaborator} usersAccesses={thisBoard.usersAccesses} projectId={thisBoard.projectId} />
         )}
-        <CollaboaratorsList id={id} usersAccesses={usersAccesses} />
+        <CollaboaratorsList id={thisBoard._id} usersAccesses={thisBoard.usersAccesses} />
       </div>
       <Divider className="divider" />
-      <DeleteBoardBtn id={id} />
+      <DeleteBoardBtn id={thisBoard._id} />
     </Box>
   );
 

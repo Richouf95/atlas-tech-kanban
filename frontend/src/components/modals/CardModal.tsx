@@ -13,9 +13,10 @@ import AccessTimeIcon from "@mui/icons-material/AccessTime";
 
 function CardModal({
   name,
-  id,
+  _id,
   index,
   columnId,
+  boardId,
   assigned,
   dueDate,
   label,
@@ -31,9 +32,10 @@ function CardModal({
 
   const cardData = {
     name,
-    id,
+    _id,
     index,
     columnId,
+    boardId,
     assigned,
     dueDate,
     label,
@@ -61,10 +63,10 @@ function CardModal({
         onClick={handleOpen}
       >
         <div className="absolute top-2 right-1">
-          <CardLabel id={id} label={label} />
+          <CardLabel id={_id} label={label} />
         </div>
         <h2 className="my-3">{name}</h2>
-        {dueDate !== "N/A" && (
+        {dueDate && (
           <p className="">
             <AccessTimeIcon />
             <span className="ml-1">{dueDate}</span>

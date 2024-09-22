@@ -1,15 +1,21 @@
-import React, { FormEvent, useState } from "react";
+import React, { FormEvent, useState, useCallback } from "react";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import Popover from "@mui/material/Popover";
 import { useMutation } from "@/app/liveblocks.config";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import { updateColumnName, deleteColumn } from "@/lib/columnsActions";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+import { setColumns } from "@/store/reducers/columns/columnsSlice";
 
 function ColumnHeader({ id, name }: { id: string; name: string }) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [renameColumn, setRenameColumn] = useState<boolean>(false);
   const [newColumnName, setNewColumnName] = useState<string>(name);
   const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
+  const columns = useSelector((state: RootState) => state.columns.columns);
+  const dispatch = useDispatch();
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -19,23 +25,45 @@ function ColumnHeader({ id, name }: { id: string; name: string }) {
     setAnchorEl(null);
   };
 
-  const updateColumnName = useMutation(({ storage }, id, newName) => {
-    const columns = storage.get("columns");
-    columns.find((col) => col.toObject().id === id)?.set("name", newName);
-  }, []);
+  const handleDeleteColumn = useCallback(
+    async (id: string) => {
+      try {
+        const response = await deleteColumn(id);
 
-  const deleteColumn = useMutation(({ storage }, id) => {
-    const columns = storage.get("columns");
-    const colIndex = columns.findIndex((col) => col.toObject().id === id);
-    columns.delete(colIndex);
-  }, []);
+        if (response && columns) {
+          const updatedColumns = columns.filter((col) => col._id !== id);
+          // dispatch(setColumns(updatedColumns));
+        }
+      } catch (error) {
+        console.error("Erreur lors de la suppression de la colonne :", error);
+      }
+    },
+    [columns, dispatch]
+  );
 
-  const handleChangeColumnName = async (e: FormEvent) => {
-    e.preventDefault();
-    updateColumnName(id, newColumnName);
-    setNewColumnName("");
-    setRenameColumn(false);
-  };
+  const handleChangeColumnName = useCallback(
+    async (e: FormEvent) => {
+      e.preventDefault();
+      try {
+        const response = await updateColumnName(id, newColumnName);
+
+        if (response && columns) {
+          const updatedColumns = columns.map((col) =>
+            col._id === id ? { ...col, name: newColumnName } : col
+          );
+          // dispatch(setColumns(updatedColumns));
+
+          setRenameColumn(false);
+        }
+      } catch (error) {
+        console.error(
+          "Erreur lors de la modification du nom de la colonne :",
+          error
+        );
+      }
+    },
+    [columns, dispatch, id, newColumnName]
+  );
 
   const open = Boolean(anchorEl);
   const popoverId = open ? "simple-popover" : undefined;
@@ -117,13 +145,19 @@ function ColumnHeader({ id, name }: { id: string; name: string }) {
             <p className="font-bold">Confirmation</p>
             <p>Do you want to delete this column?</p>
             <div className="flex justify-center mt-2 gap-2">
-              <button className="w-full !bg-red-300" onClick={() => {
-                deleteColumn(id);
-                setConfirmDelete(false);
-              }}>
+              <button
+                className="w-full !bg-red-300"
+                onClick={() => {
+                  handleDeleteColumn(id);
+                  setConfirmDelete(false);
+                }}
+              >
                 Delete
               </button>
-              <button onClick={() => setConfirmDelete(false)} className="w-full">
+              <button
+                onClick={() => setConfirmDelete(false)}
+                className="w-full"
+              >
                 Cancel
               </button>
             </div>

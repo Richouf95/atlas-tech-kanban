@@ -18,10 +18,10 @@ function FilterSection({
   const [open, setOpen] = useState(false);
 
   const handleCheckboxChange = (item: any) => {
-    if (selectedItems.includes(item.id)) {
-      onSelectionChange(selectedItems.filter((id) => id !== item.id));
+    if (selectedItems.includes(item._id)) {
+      onSelectionChange(selectedItems.filter((id) => id !== item._id));
     } else {
-      onSelectionChange([...selectedItems, item.id]);
+      onSelectionChange([...selectedItems, item._id]);
     }
   };
 
@@ -48,13 +48,13 @@ function FilterSection({
           {title === "Labels" && items && items.length === 0 && <span className="ml-5">No labels yet</span>}
           {items &&
             items.map((item: any) => (
-              <li key={item.id} className="px-4 py-2 flex items-center gap-2">
+              <li key={item._id} className="px-4 py-2 flex items-center gap-2">
                 <input
                   className="cursor-pointer w-4 h-4"
                   type="checkbox"
                   id={item.name}
                   name={item.name}
-                  checked={selectedItems.includes(item.id)}
+                  checked={selectedItems.includes(item._id)}
                   onChange={() => handleCheckboxChange(item)}
                 />
                 <label
