@@ -201,8 +201,6 @@ const BoardColumn =
         .filter((x) => x.columnId === _id)
         .sort((a, b) => a.index - b.index);
 
-        console.log(colsCards)
-
     return (
       <div className="min-w-72 max-w-72 rounded-xl columnsClass">
         <ColumnHeader id={_id} name={name} />

@@ -38,8 +38,6 @@ function BoardContainer({ filterParams }: { filterParams: any }) {
   const cardChangeStreamRef: any = useRef(null);
   const [loading, setIsLoading] = useState<boolean>(true);
 
-  // console.log(filterParams)
-
   // const columns: any = [];
   // const columns = useStorage(
   //   (root) => root.columns.map((col) => ({ ...col })),
@@ -136,7 +134,6 @@ function BoardContainer({ filterParams }: { filterParams: any }) {
               columnId: change.fullDocument.columnId.toString(),
             };
             dispatch(addCard(newCard));
-            console.log(newCard);
           }
           if (change.operationType === "update") {
             const updatedCard = {

@@ -27,8 +27,6 @@ function NewProjectRoom() {
 
   const projectId = pathName.replace("/dashboard/project/", "");
 
-  console.log("New project board => hehe : ", projectId);
-
   const handleNewRoom = async (e: React.FormEvent) => {
     e.preventDefault();
     const room = await createBoard(newProjectRoomName, projectId);

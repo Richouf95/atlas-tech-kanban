@@ -54,8 +54,6 @@ function DashboardChildren({ children, session }: { children: ReactNode; session
             if (thisUserHasAccess) {
               dispatch(addBoard(newBoard));
             }
-            
-            console.log("New Board Added:", newBoard);
           }
           if (change.operationType === "update") {
             const updatedBoard = {
@@ -65,11 +63,9 @@ function DashboardChildren({ children, session }: { children: ReactNode; session
             
             dispatch(setBoard(updatedBoard));
             dispatch(updateBoardsList(updatedBoard));
-            console.log("Board Updated:", updatedBoard);
           }
           if (change.operationType === "delete") {
             dispatch(removeBoard(change.documentKey._id.toString()));
-            console.log("Board Deleted:", change.documentKey._id.toString());
           }
         }
       } catch (error) {

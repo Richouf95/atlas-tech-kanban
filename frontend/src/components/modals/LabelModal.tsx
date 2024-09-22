@@ -17,7 +17,7 @@ import { LiveObject } from "@liveblocks/core";
 import uniqid from "uniqid";
 import { createLabel } from "@/lib/labelsActions";
 import { usePathname } from "next/navigation";
-import { setLables } from "@/store/reducers/labels/labelsSlice";
+import { setLables, addLabel } from "@/store/reducers/labels/labelsSlice";
 import { updateCardLabel } from "@/lib/cardsActions";
 import { setCards } from "@/store/reducers/cards/cardsSlice";
 
@@ -26,7 +26,7 @@ function LabelModal({ id, label }: { id: string; label?: LabelType | string }) {
   const allLabels = useSelector((state: RootState) => state.labels.labels);
   const cards = useSelector((state: RootState) => state.cards.cards);
   const [open, setOpen] = React.useState(false);
-  const [addLabel, setAddLabel] = React.useState<boolean>(false);
+  const [addLabelOpen, setAddLabel] = React.useState<boolean>(false);
   const [labelData, setLabelData] = React.useState<any>({
     name: "",
     color: "#ff5733",
@@ -60,8 +60,6 @@ function LabelModal({ id, label }: { id: string; label?: LabelType | string }) {
     outline: "none",
     borderRadius: 5,
   };
-
-  console.log(allLabels);
 
   // const newLabel = useMutation(({ storage }, labelData) => {
   //   const labels = storage.get("labels");
@@ -100,9 +98,9 @@ function LabelModal({ id, label }: { id: string; label?: LabelType | string }) {
           boardId
         );
         if (response && allLabels) {
-          const labelsUpdated = [...allLabels];
-          labelsUpdated.push(response);
-          dispatch(setLables(labelsUpdated));
+          // const labelsUpdated = [...allLabels];
+          // labelsUpdated.push(response);
+          dispatch(addLabel(response));
         }
       } catch (error) {
         console.error("Erreur lors de la création d'une label :", error);
@@ -112,7 +110,7 @@ function LabelModal({ id, label }: { id: string; label?: LabelType | string }) {
       }
       // newLabel(labelData);
     },
-    [labelData, allLabels, dispatch, boardId, addLabel]
+    [labelData, allLabels, dispatch, boardId, addLabelOpen]
   );
 
   const thisCardId = id;
@@ -184,7 +182,7 @@ function LabelModal({ id, label }: { id: string; label?: LabelType | string }) {
                 </div>
               </div>
             </div>
-            {addLabel && (
+            {addLabelOpen && (
               <form
                 onSubmit={handleNewLabel}
                 className={`${

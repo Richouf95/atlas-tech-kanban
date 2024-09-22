@@ -6,7 +6,6 @@ export async function PUT(req: NextRequest) {
   const liveblocks = new Liveblocks({
     secret: process.env.NEXT_PUBLIC_LIVEBLOCKS_SECRET_KEY as string,
   });
-  console.log({ id, update });
   await liveblocks.updateRoom(id, update);
   return Response.json(true);
 }
