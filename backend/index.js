@@ -32,12 +32,14 @@ app.use('/project', projectRoutes);
 // MongoDB connection & server launch
 mongoose.connect(process.env.MONGO_URI)
     .then(() => {
-        app.listen(process.env.PORT, () => {
-            console.log(`App connected to DB`)
-            console.log(`And runing on port ${process.env.PORT}`)
-        })
+        console.log(`App connected to DB`);
+        // app.listen(process.env.PORT, () => {
+        //     console.log(`And runing on port ${process.env.PORT}`)
+        // })
     })
     .catch(err => {
         console.error('Failed to connect to MongoDB', err);
         process.exit(1);
     })
+
+module.exports = app;
