@@ -50,7 +50,7 @@ function BoardContainer({ filterParams }: { filterParams: any }) {
     if (!board?._id) return;
     const columnsFetched = await getAllColumns(board._id);
     const labelsFetched = await getAllLabels(board._id);
-    dispatch(setColumns(columnsFetched));
+    if (columnsFetched) dispatch(setColumns(columnsFetched));
     dispatch(setLables(labelsFetched || []));
     setIsLoading(false);
   }, [board, dispatch]);
@@ -211,7 +211,6 @@ function BoardContainer({ filterParams }: { filterParams: any }) {
       return true;
     });
 
-    
   if (loading) {
     return (
       <div className="flex overflow-x-auto space-x-4">
