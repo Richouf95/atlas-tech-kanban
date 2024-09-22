@@ -20,8 +20,6 @@ function FilterMenu({
 
   const thisBoard = useSelector((state: RootState) => state.board.board);
 
-  if (!thisBoard) return null;
-
   const [open, setOpen] = useState(false);
   const isLargeScreen = useMediaQuery("(min-width: 1024px)");
   const [searchKey, setSearchKey] = useState<string>("");
@@ -33,6 +31,23 @@ function FilterMenu({
   const columns = useSelector((state: RootState) => state.columns.columns);
   // const cards = useSelector((state: RootState) => state.cards.cards);
   const labels = useSelector((state: RootState) => state.labels.labels);
+
+  useEffect(() => {
+    const filterParams = {
+      searchKey,
+      selectedColumns,
+      selectedAssignees,
+      selectedDueDates,
+      selectedLabels,
+    };
+    setFilterParams(filterParams);
+  }, [
+    searchKey,
+    selectedColumns,
+    selectedAssignees,
+    selectedDueDates,
+    selectedLabels,
+  ]);
 
 
   // Utilisation de Liveblocks pour récupérer les données nécessaires
@@ -49,7 +64,8 @@ function FilterMenu({
   //   shallow
   // );
   const collaborators: any = [];
-
+  
+  if (!thisBoard) return null;
   Object.keys(thisBoard.usersAccesses).forEach((x) => {
     const item = {
       _id: x,
@@ -69,23 +85,6 @@ function FilterMenu({
     setSelectedDueDates(selected);
   const handleLabelsChange = (selected: string[]) =>
     setSelectedLabels(selected);
-
-  useEffect(() => {
-    const filterParams = {
-      searchKey,
-      selectedColumns,
-      selectedAssignees,
-      selectedDueDates,
-      selectedLabels,
-    };
-    setFilterParams(filterParams);
-  }, [
-    searchKey,
-    selectedColumns,
-    selectedAssignees,
-    selectedDueDates,
-    selectedLabels,
-  ]);
 
   return (
     <div>

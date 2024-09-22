@@ -36,12 +36,23 @@ function Borad() {
   
   const thisBoard = useSelector((state: RootState) => state.board.board);
   const theme = useSelector((state: RootState) => state.theme.theme);
-  const [editBoarName, setEditBoarName] = useState<boolean>(false);
+  const [editBoarName, setEditBoarName] = useState<boolean>(false)
   const [newBoardName, setNewBoardName] = useState<string>(
     thisBoard?.boardName || ""
   );
   const [filterParams, setFilterParams] = useState<any>();
   const dispatch = useDispatch();
+  const updateMyPresence = useUpdateMyPresence();
+  const router = useRouter();
+
+  useEffect(() => {
+    updateMyPresence({ boardId: thisBoard?._id });
+
+    return () => {
+      updateMyPresence({ boardId: null });
+    };
+  }, [thisBoard?._id]);
+
   // const [id] = useState<string>(_id);
   // const [bName, setName] = useState<string>(metadata.boardName);
   // const [metadata] = useState<any>({
@@ -74,16 +85,6 @@ function Borad() {
         </svg>
       </div>
     );
-  const updateMyPresence = useUpdateMyPresence();
-  const router = useRouter();
-
-  useEffect(() => {
-    updateMyPresence({ boardId: thisBoard._id });
-
-    return () => {
-      updateMyPresence({ boardId: null });
-    };
-  }, [thisBoard._id]);
 
   const handleBoardNewName = async (e: FormEvent) => {
     e.preventDefault();
