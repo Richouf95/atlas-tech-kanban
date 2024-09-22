@@ -4,7 +4,7 @@ import { Card } from "@/types";
 
 function BoardCard({
   name,
-  id,
+  _id,
   index,
   columnId,
   assigned,
@@ -14,7 +14,7 @@ function BoardCard({
 }: Card) {
   const cardData = {
     name,
-    id,
+    _id,
     index,
     columnId,
     assigned,
@@ -24,7 +24,7 @@ function BoardCard({
   };
   return (
     <>
-      <CardModal {...cardData} />
+      {/* <CardModal {...cardData} /> */}
     </>
   );
 }
