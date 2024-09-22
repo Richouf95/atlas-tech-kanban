@@ -31,16 +31,20 @@ export async function createColumn(
 }
 
 export async function getAllColumns(id: string) {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_DOMAIN}/column?boardId=${id}`
-  );
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_DOMAIN}/column?boardId=${id}`
+    );
 
-  if (!response.ok) {
-    throw new Error("Failed to fetch boards");
+    if (!response.ok) {
+      throw new Error("Failed to fetch boards");
+    }
+
+    const data: Column[] = await response.json();
+    return data;
+  } catch (error: any) {
+    console.error("Error while Fetching columns", error.message);
   }
-
-  const data: Column[] = await response.json();
-  return data;
 }
 
 export async function updateColumnOrder(id: string, index: number) {
