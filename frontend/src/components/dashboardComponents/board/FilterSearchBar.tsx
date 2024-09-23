@@ -1,4 +1,4 @@
-import React, {useRef, useEffect} from "react";
+import React, { useRef, useEffect } from "react";
 
 function FilterSearchBar({
   searchKey,
@@ -16,7 +16,7 @@ function FilterSearchBar({
   return (
     <form>
       <input
-      ref={inputRef}
+        ref={inputRef}
         type="text"
         name="Search Key"
         aria-label="Filter search input"

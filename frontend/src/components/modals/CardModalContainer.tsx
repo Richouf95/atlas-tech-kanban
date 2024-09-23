@@ -4,14 +4,11 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import Popover from "@mui/material/Popover";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import { useMutation, useThreads } from "@/app/liveblocks.config";
+import { useThreads } from "@/app/liveblocks.config";
 import { Card } from "@/types";
 import { Composer, Thread } from "@liveblocks/react-ui";
-import ThreadProvider from "@/app/ThreadProvider";
 import ChatIcon from "@mui/icons-material/Chat";
-import DescriptionIcon from "@mui/icons-material/Description";
 import CardDescription from "../dashboardComponents/board/CardDescription";
-import CardLabel from "../dashboardComponents/board/CardLabel";
 import AssignedTo from "../dashboardComponents/board/AssignedTo";
 import DueDate from "../dashboardComponents/board/DueDate";
 import LabelModal from "./LabelModal";
@@ -53,30 +50,13 @@ function CardModalContainer({
     setAnchorEl(null);
   };
 
-  // const updateCard = useMutation(({ storage }, cardId, updateData) => {
-  //   const cards = storage.get("cards");
-  //   const index = cards.findIndex((card) => card.toObject().id === cardId);
-  //   const thisCard = storage.get("cards").get(index);
-  //   for (let key in updateData) {
-  //     thisCard?.set(key as keyof Card, updateData[key]);
-  //   }
-  // }, []);
-
   const handleRenameCard = useCallback(
     async (e: React.FormEvent) => {
       e.preventDefault();
       try {
-        const response = await updateCardName(_id, cardNewName);
-        if (response) {
-          if (cards) {
-            const cardsUpdated = cards.map((card) =>
-              card._id === _id ? { ...card, name: cardNewName } : card
-            );
-            dispatch(setCards(cardsUpdated));
-            setEditCardName(false);
-            handleClose();
-          }
-        }
+        await updateCardName(_id, cardNewName);
+        setEditCardName(false);
+        handleClose();
       } catch (error) {
         console.error(
           "Erreur lors de la modification du nom de la card :",
@@ -91,11 +71,7 @@ function CardModalContainer({
   const handleDeletCard = useCallback(
     async (id: string) => {
       try {
-        const response = await deleteCard(id);
-        if (response && cards) {
-          const cardsUpdated = cards.filter((card) => card._id != _id);
-          dispatch(setCards(cardsUpdated));
-        }
+        await deleteCard(id);
       } catch (error) {
         console.error("Erreur lors de la suppression de la card :", error);
       }

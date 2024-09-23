@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { RoomData } from "@liveblocks/node";
 import Link from "next/link";
 import NewRoomModal from "@/components/modals/NewRoomModal";
 import { usePathname } from "next/navigation";

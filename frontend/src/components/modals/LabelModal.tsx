@@ -10,14 +10,10 @@ import CardLabel from "../dashboardComponents/board/CardLabel";
 import AddIcon from "@mui/icons-material/Add";
 import DoneIcon from "@mui/icons-material/Done";
 import CloseIcon from "@mui/icons-material/Close";
-import { Card, LabelType } from "@/types";
-import { useMutation, useStorage } from "@/app/liveblocks.config";
-import { LiveList, shallow } from "@liveblocks/client";
-import { LiveObject } from "@liveblocks/core";
-import uniqid from "uniqid";
+import { LabelType } from "@/types";
 import { createLabel } from "@/lib/labelsActions";
-import { usePathname } from "next/navigation";
-import { setLables, addLabel } from "@/store/reducers/labels/labelsSlice";
+import { usePathname, useRouter } from "next/navigation";
+import { addLabel } from "@/store/reducers/labels/labelsSlice";
 import { updateCardLabel } from "@/lib/cardsActions";
 import { setCards } from "@/store/reducers/cards/cardsSlice";
 
@@ -31,16 +27,15 @@ function LabelModal({ id, label }: { id: string; label?: LabelType | string }) {
     name: "",
     color: "#ff5733",
   });
-  const [labelCreated, setLabelCreated] = React.useState<any>();
   const pathName = usePathname();
   const pathNameSplited = pathName.split("/");
   const boardId = pathNameSplited[pathNameSplited.length - 1];
   const dispatch = useDispatch();
+  const router = useRouter();
 
-  // const allLabels = useStorage(
-  //   (root) => root.labels.map((label) => ({ ...label })),
-  //   shallow
-  // );
+  React.useEffect(() => {
+    router.refresh();
+  }, [addLabelOpen]);
 
   const isLargeScreen = useMediaQuery("(min-width: 1024px)");
 
@@ -61,79 +56,24 @@ function LabelModal({ id, label }: { id: string; label?: LabelType | string }) {
     borderRadius: 5,
   };
 
-  // const newLabel = useMutation(({ storage }, labelData) => {
-  //   const labels = storage.get("labels");
-  //   const initialLabels = new LiveList([]);
-
-  //   if (!labels) {
-  //     storage.set("labels", initialLabels);
-  //   }
-
-  //   const labelId = uniqid("label-");
-
-  //   const newLabelData = new LiveObject({
-  //     id: labelId,
-  //     ...labelData,
-  //   });
-
-  //   return storage.get("labels").push(newLabelData);
-  // }, []);
-
-  // const updateCardLabel = useMutation(({ storage }, cardId, updateData) => {
-  //   const cards = storage.get("cards");
-  //   const index = cards.findIndex((card) => card.toObject().id === cardId);
-  //   const thisCard = storage.get("cards").get(index);
-  //   for (let key in updateData) {
-  //     thisCard?.set(key as keyof Card, updateData[key]);
-  //   }
-  // }, []);
-
   const handleNewLabel = React.useCallback(
     async (e: React.FormEvent) => {
       e.preventDefault();
       try {
-        const response = await createLabel(
-          labelData.name,
-          labelData.color,
-          boardId
-        );
-        if (response && allLabels) {
-          // const labelsUpdated = [...allLabels];
-          // labelsUpdated.push(response);
-          dispatch(addLabel(response));
-        }
+        await createLabel(labelData.name, labelData.color, boardId);
       } catch (error) {
         console.error("Erreur lors de la création d'une label :", error);
       } finally {
         setAddLabel(false);
         handleClose();
       }
-      // newLabel(labelData);
     },
     [labelData, allLabels, dispatch, boardId, addLabelOpen]
   );
 
-  const thisCardId = id;
-
   const handleAssignedLabel = React.useCallback(async (labelId: string) => {
     try {
-      const response = await updateCardLabel(id, labelId);
-      if (response && cards) {
-        const cardsUpdated = cards.map((card) =>
-          card._id === id ? { ...card, label: labelId } : card
-        );
-        dispatch(setCards(cardsUpdated));
-      }
-      // const response = await createLabel(
-      //   labelData.name,
-      //   labelData.color,
-      //   boardId
-      // );
-      // if (response && allLabels) {
-      //   const labelsUpdated = [...allLabels];
-      //   labelsUpdated.push(response);
-      //   dispatch(setLables(labelsUpdated));
-      // }
+      await updateCardLabel(id, labelId);
     } catch (error) {
       console.error("Erreur lors de la updating d'une label :", error);
     } finally {
@@ -147,7 +87,6 @@ function LabelModal({ id, label }: { id: string; label?: LabelType | string }) {
         className="my-2 rounded-xl columCards cursor-pointer"
         onClick={handleOpen}
       >
-        {/* {typeof label !== "string" && label.name !== "N/A" ? ( */}
         {label ? (
           <CardLabel id={id} label={label} />
         ) : (

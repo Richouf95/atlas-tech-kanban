@@ -1,9 +1,6 @@
 "use client";
 
-import React, { FormEvent, useState } from "react";
-import { useRouter } from "next/navigation";
-import DescriptionIcon from "@mui/icons-material/Description";
-import EditIcon from "@mui/icons-material/Edit";
+import React from "react";
 import CardDescriptionModal from "@/components/modals/CardDescriptionModal";
 
 function CardDescription({

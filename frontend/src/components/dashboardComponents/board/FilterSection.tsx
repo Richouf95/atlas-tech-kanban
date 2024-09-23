@@ -44,8 +44,12 @@ function FilterSection({
         } overflow-hidden`}
       >
         <ul>
-          {title === "Columns" && items && items.length === 0 && <span className="ml-5">No columns yet</span>}
-          {title === "Labels" && items && items.length === 0 && <span className="ml-5">No labels yet</span>}
+          {title === "Columns" && items && items.length === 0 && (
+            <span className="ml-5">No columns yet</span>
+          )}
+          {title === "Labels" && items && items.length === 0 && (
+            <span className="ml-5">No labels yet</span>
+          )}
           {items &&
             items.map((item: any) => (
               <li key={item._id} className="px-4 py-2 flex items-center gap-2">

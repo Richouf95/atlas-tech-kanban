@@ -1,5 +1,4 @@
 import React from "react";
-import { RoomData } from "@liveblocks/node";
 import Link from "next/link";
 import NewProjectModal from "@/components/modals/NewProjectModal";
 import { useSelector } from "react-redux";

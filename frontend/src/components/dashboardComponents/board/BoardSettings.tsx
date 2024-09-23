@@ -14,13 +14,12 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 
 function BoardSettings() {
-
   const thisBoard = useSelector((state: RootState) => state.board.board);
 
   const [open, setOpen] = useState(false);
   const [addCollaborator, setAddCollaborator] = useState<boolean>(false);
   const [editDescription, setEditDescription] = useState<boolean>(false);
-  
+
   const isLargeScreen = useMediaQuery("(min-width: 1024px)");
 
   const toggleDrawer = (state: boolean) => () => {
@@ -96,9 +95,17 @@ function BoardSettings() {
           )}
         </div>
         {addCollaborator && (
-          <NewCollaborator id={thisBoard._id} setAddCollaborator={setAddCollaborator} usersAccesses={thisBoard.usersAccesses} projectId={thisBoard.projectId} />
+          <NewCollaborator
+            id={thisBoard._id}
+            setAddCollaborator={setAddCollaborator}
+            usersAccesses={thisBoard.usersAccesses}
+            projectId={thisBoard.projectId}
+          />
         )}
-        <CollaboaratorsList id={thisBoard._id} usersAccesses={thisBoard.usersAccesses} />
+        <CollaboaratorsList
+          id={thisBoard._id}
+          usersAccesses={thisBoard.usersAccesses}
+        />
       </div>
       <Divider className="divider" />
       <DeleteBoardBtn id={thisBoard._id} />
@@ -113,7 +120,7 @@ function BoardSettings() {
         aria-label="Open settings"
         tabIndex={0}
       >
-        <SettingsIcon /> <span>Settings</span> 
+        <SettingsIcon /> <span>Settings</span>
       </button>
       <Drawer
         anchor={isLargeScreen ? "right" : "bottom"}

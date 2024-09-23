@@ -1,18 +1,13 @@
 "use client";
 
-import { liveblocksClient } from "@/lib/liveblocksClient";
-import React, { useEffect, useState } from "react";
-import { Popover } from "@mui/material";
-import Link from "next/link";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
-import SpinnerAddColumns from "../SpinnerAddColumns";
 import { Board } from "@/types/Board";
 import { Project } from "@/types";
 import { getAllProjects } from "@/lib/projectActions";
 import { setProjects } from "@/store/reducers/projects/projectSlice";
 import { getAllBoards } from "@/lib/boardActions";
-import { setBoard } from "@/store/reducers/board/boardSlice";
 import DashBoardMenuContent from "../DashBoardMenuContent";
 import { setBoardsList } from "@/store/reducers/boardList/boardListSlice";
 

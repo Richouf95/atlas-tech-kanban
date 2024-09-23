@@ -134,7 +134,6 @@ export async function newCollaboratorOnBoard(
     throw new Error("Failed to add new collaborator");
   }
 
-  const room = await liveblocksClient.getRoom(id);
   const usersAccesses = newCollaboratorList;
   await liveblocksClient.updateRoom(id, { usersAccesses });
 

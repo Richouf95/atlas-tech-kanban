@@ -4,8 +4,6 @@ import React, { useEffect, useCallback, useRef, useState } from "react";
 import { ReactSortable } from "react-sortablejs";
 import BoardColumn from "./BoardColumn";
 import NewBoardColumnForm from "@/components/forms/boardForms/NewBoardColumnForm";
-import { useMutation, useStorage } from "@/app/liveblocks.config";
-import { LiveList, LiveObject, shallow } from "@liveblocks/client";
 import { Column } from "@/types";
 import SpinnerBlock from "@/components/SpinnerBlock";
 import SpinnerAddColumns from "@/components/SpinnerAddColumns";
@@ -30,19 +28,12 @@ import {
 function BoardContainer({ filterParams }: { filterParams: any }) {
   const board = useSelector((state: RootState) => state.board.board);
   const columns = useSelector((state: RootState) => state.columns.columns);
-  const boardCards = useSelector((state: RootState) => state.cards.cards);
   const dispatch = useDispatch();
   const triggerApp = useApp();
   const columnChangeStreamRef: any = useRef(null);
   const labelChangeStreamRef: any = useRef(null);
   const cardChangeStreamRef: any = useRef(null);
   const [loading, setIsLoading] = useState<boolean>(true);
-
-  // const columns: any = [];
-  // const columns = useStorage(
-  //   (root) => root.columns.map((col) => ({ ...col })),
-  //   shallow
-  // );
 
   const fetchColumnsAndLabels = useCallback(async () => {
     if (!board?._id) return;
@@ -160,13 +151,6 @@ function BoardContainer({ filterParams }: { filterParams: any }) {
     cardTrigger();
   }, [triggerApp]);
 
-  // const updateColum = useMutation(
-  //   ({ storage }, columns: LiveObject<Column>[]) => {
-  //     storage.set("columns", new LiveList(columns));
-  //   },
-  //   []
-  // );
-
   const setColumnOrder = async (cols: Column[]) => {
     const newColumns: Column[] = cols.map((col, newIndex) => ({
       ...col,
@@ -181,8 +165,6 @@ function BoardContainer({ filterParams }: { filterParams: any }) {
     } catch (error) {
       console.error("Erreur lors de la mise à jour des colonnes :", error);
     }
-
-    // dispatch(setColumns(newColumns));
   };
 
   const cols = columns

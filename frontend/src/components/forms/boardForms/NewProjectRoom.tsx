@@ -7,23 +7,13 @@ import TextField from "@mui/material/TextField";
 import { createBoard } from "@/lib/boardActions";
 import { usePathname, useRouter } from "next/navigation";
 import Spinner from "@/components/Spinner";
-import { useDispatch, useSelector } from "react-redux";
-import { onRoomCreated } from "@/store/reducers/roomCreated/roomCreatedSlice";
-import { RootState } from "@/store/store";
-import { setBoard } from "@/store/reducers/board/boardSlice";
-import { setBoardsList } from "@/store/reducers/boardList/boardListSlice";
-import { Board } from "@/types/Board";
 
 function NewProjectRoom() {
   const [newProjectRoomName, setNewProjectRoomName] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  // const boardList: Board[] = useSelector(
-  //   (state: RootState) => state.boardsList.boardList
-  // );
-  // const boards = useSelector((state: RootState) => state.board.board);
+
   const router = useRouter();
   const pathName = usePathname();
-  const dispatch = useDispatch();
 
   const projectId = pathName.replace("/dashboard/project/", "");
 
@@ -34,6 +24,7 @@ function NewProjectRoom() {
       router.push(`/dashboard/project/${projectId}/board/${room._id}`);
     }
   };
+  
   return (
     <form onSubmit={handleNewRoom} className="create">
       <Box sx={{ width: 1 }}>

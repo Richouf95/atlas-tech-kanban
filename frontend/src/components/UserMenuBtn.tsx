@@ -63,7 +63,7 @@ function UserMenuBtn({ session }: { session: any }) {
     if (e.key === "Escape") {
       e.preventDefault();
       handleCloseMenu();
-      triggerRef.current?.focus(); // Remettre le focus sur le bouton
+      triggerRef.current?.focus();
     }
   };
 

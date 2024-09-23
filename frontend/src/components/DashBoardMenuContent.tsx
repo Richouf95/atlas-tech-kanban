@@ -1,6 +1,5 @@
 "use client";
 
-import { liveblocksClient } from "@/lib/liveblocksClient";
 import React, { useEffect, useState } from "react";
 import { Popover } from "@mui/material";
 import Link from "next/link";
@@ -11,16 +10,14 @@ import { Board } from "@/types/Board";
 import { Project } from "@/types";
 
 function DashBoardMenuContent({ userEmail }: { userEmail: string }) {
-  // const [simpleBoards, setSimpleBoards] = useState<Board[]>([]);
   const [roomsLoaded, setRoomsLoaded] = useState<boolean>(true);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [currentPopover, setCurrentPopover] = useState<string | null>(null);
 
-  const roomCreated = useSelector((state: RootState) => state.counter);
   const boardList: Board[] = useSelector(
     (state: RootState) => state.boardsList.boardList
-  ).filter(board => !board.projectId);
-  // const boards: Board[] = useSelector((state: RootState) => state.board.board);
+  ).filter((board) => !board.projectId);
+
   const projects: Project[] = useSelector(
     (state: RootState) => state.projects.projects
   );
@@ -121,8 +118,7 @@ function DashBoardMenuContent({ userEmail }: { userEmail: string }) {
             projects.length > 0 &&
             projects.map((item: any) => (
               <Link
-                href={`#}`}
-                // href={`/dashboard/project/${item.metadata.projectId}`}
+                href={`/dashboard/project/${item._id}`}
                 key={item._id}
                 className="p-2 rounded-lg m-2 navItem block cursor-pointer boardAndProjectNavItem"
               >

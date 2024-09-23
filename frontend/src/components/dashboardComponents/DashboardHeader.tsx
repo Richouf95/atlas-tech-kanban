@@ -1,5 +1,4 @@
 import React from "react";
-import UserMenu from "../UserMenu";
 import AtlasLogo from "../AtlasLogo";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/authOptions";

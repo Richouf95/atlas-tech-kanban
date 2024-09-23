@@ -4,12 +4,9 @@ import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import FormControl from "@mui/material/FormControl";
 import TextField from "@mui/material/TextField";
-import { createBoard } from "@/lib/boardActions";
 import { useRouter } from "next/navigation";
-import uniqid from "uniqid";
 import Spinner from "@/components/Spinner";
 import { useDispatch, useSelector } from "react-redux";
-import { onRoomCreated } from "@/store/reducers/roomCreated/roomCreatedSlice";
 import { createProject } from "@/lib/projectActions";
 import { setProjects } from "@/store/reducers/projects/projectSlice";
 import { RootState } from "@/store/store";
@@ -31,6 +28,7 @@ function NewProjectForm() {
       router.push(`/dashboard/project/${project._id}`);
     }
   };
+
   return (
     <form onSubmit={handleNewRoom} className="create">
       <Box sx={{ width: 1 }}>

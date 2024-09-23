@@ -3,25 +3,29 @@
 import { useApp } from "@/hooks/useMongoTiggerApp";
 import { setBoard } from "@/store/reducers/board/boardSlice";
 import {
-  setBoardsList,
   addBoard,
   updateBoardsList,
   removeBoard,
 } from "@/store/reducers/boardList/boardListSlice";
 import { RootState } from "@/store/store";
 import { Board } from "@/types/Board";
+import { usePathname } from "next/navigation";
 import React, { ReactNode, useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import * as Realm from "realm-web";
 
-function DashboardChildren({ children, session }: { children: ReactNode; session: any }) {
+function DashboardChildren({
+  children,
+  session,
+}: {
+  children: ReactNode;
+  session: any;
+}) {
   const [exempleHeight, setExempleHeight] = useState("0px");
   const dispatch = useDispatch();
   const triggerApp = useApp();
   const boardChangeStreamRef: any = useRef(null);
-  const boardList: Board[] = useSelector(
-    (state: RootState) => state.boardsList.boardList
-  );
+  const pathName = usePathname();
 
   const userEmail = session.user.email;
 
@@ -42,16 +46,19 @@ function DashboardChildren({ children, session }: { children: ReactNode; session
         const boardChangeStream = boardChangeStreamRef.current;
 
         for await (const change of boardChangeStream) {
+          const boardIdFromUrl = pathName.split("/").pop();
           if (change.operationType === "insert") {
             const newBoard = {
               ...change.fullDocument,
-              _id: change.fullDocument._id.toString(),
+              _id: change.documentKey._id.toString(),
             };
-            const thisBoardUserAccess = change.usersAccesses?.[userEmail];
+            const thisBoardUserAccess =
+              change.fullDocument.usersAccesses?.[userEmail];
             const thisUserHasAccess =
-              thisBoardUserAccess && [...thisBoardUserAccess].includes("room:write");
-          
-            if (thisUserHasAccess) {
+              thisBoardUserAccess &&
+              [...thisBoardUserAccess].includes("room:write");
+
+            if (thisUserHasAccess && boardIdFromUrl === "dashboard") {
               dispatch(addBoard(newBoard));
             }
           }
@@ -60,9 +67,11 @@ function DashboardChildren({ children, session }: { children: ReactNode; session
               ...change.fullDocument,
               _id: change.documentKey._id.toString(),
             };
-            
-            dispatch(setBoard(updatedBoard));
-            dispatch(updateBoardsList(updatedBoard));
+
+            if (updatedBoard._id === boardIdFromUrl) {
+              dispatch(setBoard(updatedBoard));
+              dispatch(updateBoardsList(updatedBoard));
+            }
           }
           if (change.operationType === "delete") {
             dispatch(removeBoard(change.documentKey._id.toString()));
