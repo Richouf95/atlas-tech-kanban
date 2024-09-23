@@ -1,13 +1,11 @@
 import React, { FormEvent, useState, useCallback } from "react";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import Popover from "@mui/material/Popover";
-import { useMutation } from "@/app/liveblocks.config";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { updateColumnName, deleteColumn } from "@/lib/columnsActions";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
-import { setColumns } from "@/store/reducers/columns/columnsSlice";
 
 function ColumnHeader({ id, name }: { id: string; name: string }) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -15,7 +13,6 @@ function ColumnHeader({ id, name }: { id: string; name: string }) {
   const [newColumnName, setNewColumnName] = useState<string>(name);
   const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
   const columns = useSelector((state: RootState) => state.columns.columns);
-  const dispatch = useDispatch();
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -28,17 +25,12 @@ function ColumnHeader({ id, name }: { id: string; name: string }) {
   const handleDeleteColumn = useCallback(
     async (id: string) => {
       try {
-        const response = await deleteColumn(id);
-
-        if (response && columns) {
-          const updatedColumns = columns.filter((col) => col._id !== id);
-          // dispatch(setColumns(updatedColumns));
-        }
+        await deleteColumn(id);
       } catch (error) {
         console.error("Erreur lors de la suppression de la colonne :", error);
       }
     },
-    [columns, dispatch]
+    [columns]
   );
 
   const handleChangeColumnName = useCallback(
@@ -48,11 +40,6 @@ function ColumnHeader({ id, name }: { id: string; name: string }) {
         const response = await updateColumnName(id, newColumnName);
 
         if (response && columns) {
-          const updatedColumns = columns.map((col) =>
-            col._id === id ? { ...col, name: newColumnName } : col
-          );
-          // dispatch(setColumns(updatedColumns));
-
           setRenameColumn(false);
         }
       } catch (error) {
@@ -62,7 +49,7 @@ function ColumnHeader({ id, name }: { id: string; name: string }) {
         );
       }
     },
-    [columns, dispatch, id, newColumnName]
+    [columns, id, newColumnName]
   );
 
   const open = Boolean(anchorEl);

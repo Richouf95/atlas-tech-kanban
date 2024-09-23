@@ -15,7 +15,7 @@ async function DashBoardPage() {
       <h1 className="text-2xl font-bold mb-4 mt-2 uppercase">
         Your work space
       </h1>
-      <DashboardContainer session={session} />
+      <DashboardContainer />
     </div>
   );
 }

@@ -1,13 +1,7 @@
 "use client";
 
-import { useMutation } from "@/app/liveblocks.config";
-import { LiveList } from "@liveblocks/client";
-import { LiveObject } from "@liveblocks/core";
-import uniqid from "uniqid";
 import AddIcon from "@mui/icons-material/Add";
 import * as React from "react";
-import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
 import { createCards } from "@/lib/cardsActions";
 
 function NewBoardCardForm({
@@ -20,34 +14,9 @@ function NewBoardCardForm({
   const [cardName, setCardName] = React.useState<string>("");
   const [newCard, setNewCard] = React.useState<boolean>(false);
 
-  // const addCard = useMutation(({ storage }, name) => {
-  //   const cards = storage.get("cards");
-  //   const initialCard = new LiveList([]);
-  //   let cardIndex = !cards ? 0 : cards.length;
-
-  //   if (!cards) {
-  //     storage.set("cards", initialCard);
-  //   }
-
-  //   const cardId = uniqid("card-");
-  //   return storage.get("cards").push(
-  //     new LiveObject({
-  //       name: name,
-  //       id: cardId,
-  //       columnId: colId,
-  //       index: cardIndex,
-  //       label: "N/A",
-  //       dueDate: "N/A",
-  //       assigned: "N/A",
-  //       description: "N/A"
-  //     })
-  //   );
-  // }, []);
-
   const handleNewCard = async (e: React.FormEvent) => {
     e.preventDefault();
     await createCards(cardName, 555, colId, boardId);
-    // addCard(cardName);
     setCardName("");
     setNewCard(false);
   };

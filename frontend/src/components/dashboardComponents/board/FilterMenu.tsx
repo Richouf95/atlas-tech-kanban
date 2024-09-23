@@ -4,8 +4,6 @@ import Drawer from "@mui/material/Drawer";
 import Divider from "@mui/material/Divider";
 import { useMediaQuery } from "@mui/material";
 import FilterListIcon from "@mui/icons-material/FilterList";
-import { useStorage } from "@/app/liveblocks.config";
-import { shallow } from "@liveblocks/client";
 import FilterSection from "./FilterSection";
 import FilterHeader from "./FilterHeader";
 import FilterSearchBar from "./FilterSearchBar";
@@ -17,9 +15,6 @@ function FilterMenu({
 }: {
   setFilterParams: (items: any) => any;
 }) {
-
-  const thisBoard = useSelector((state: RootState) => state.board.board);
-
   const [open, setOpen] = useState(false);
   const isLargeScreen = useMediaQuery("(min-width: 1024px)");
   const [searchKey, setSearchKey] = useState<string>("");
@@ -28,8 +23,8 @@ function FilterMenu({
   const [selectedDueDates, setSelectedDueDates] = useState<string[]>([]);
   const [selectedLabels, setSelectedLabels] = useState<string[]>([]);
 
+  const thisBoard = useSelector((state: RootState) => state.board.board);
   const columns = useSelector((state: RootState) => state.columns.columns);
-  // const cards = useSelector((state: RootState) => state.cards.cards);
   const labels = useSelector((state: RootState) => state.labels.labels);
 
   useEffect(() => {
@@ -49,22 +44,8 @@ function FilterMenu({
     selectedLabels,
   ]);
 
-
-  // Utilisation de Liveblocks pour récupérer les données nécessaires
-  // const columns = useStorage(
-  //   (root) => root.columns.map((col) => ({ ...col })),
-  //   shallow
-  // );
-  // const cards = useStorage(
-  //   (root) => root.cards.map((card) => ({ ...card })),
-  //   shallow
-  // );
-  // const labels = useStorage(
-  //   (root) => root.labels.map((label) => ({ ...label })),
-  //   shallow
-  // );
   const collaborators: any = [];
-  
+
   if (!thisBoard) return null;
   Object.keys(thisBoard.usersAccesses).forEach((x) => {
     const item = {
@@ -162,7 +143,7 @@ function FilterMenu({
             <button
               className="w-full my-3"
               onClick={() => {
-                setSearchKey('');
+                setSearchKey("");
                 setSelectedColumns([]);
                 setSelectedAssignees([]);
                 setSelectedDueDates([]);

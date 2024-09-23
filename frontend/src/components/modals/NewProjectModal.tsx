@@ -5,7 +5,6 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
-import NewRoom from "../forms/boardForms/NewRoom";
 import NewProjectForm from "../forms/boardForms/NewProjectForm";
 
 function NewProjectModal() {
@@ -32,15 +31,20 @@ function NewProjectModal() {
     marginLeft: "auto",
     marginRight: "auto",
   };
+
   return (
     <>
       <button
         className={`roomCard w-full h-28 rounded-lg flex items-center px-5 cursor-pointer`}
         onClick={handleOpen}
       >
-        <span className={`text-xl ${
-          theme === "light" ? "text-black" : "text-white"
-        } transition duration-1000`}>+ New Project</span>
+        <span
+          className={`text-xl ${
+            theme === "light" ? "text-black" : "text-white"
+          } transition duration-1000`}
+        >
+          + New Project
+        </span>
       </button>
 
       <Modal

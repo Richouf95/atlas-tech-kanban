@@ -2,60 +2,22 @@
 
 import * as React from "react";
 import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
 import Popover from "@mui/material/Popover";
 import PopupState, { bindTrigger, bindPopover } from "material-ui-popup-state";
 import Skeleton from "@mui/material/Skeleton";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
-import { useMutation } from "@/app/liveblocks.config";
-import { Card } from "@/types";
-import { usePathname } from "next/navigation";
-import { liveblocksClient } from "@/lib/liveblocksClient";
 import { updateAssignment } from "@/lib/cardsActions";
-import { setCards } from "@/store/reducers/cards/cardsSlice";
 
 function AssignedTo({ id, assigned }: { id: string; assigned?: string }) {
-  // const [users, setUsers] = React.useState<string[] | null>(null);
   const theme = useSelector((store: RootState) => store.theme.theme);
   const board = useSelector((state: RootState) => state.board.board);
   const cards = useSelector((state: RootState) => state.cards.cards);
   const usersAccesses = board && Object.keys(board?.usersAccesses);
-  const dispatch = useDispatch();
-
-  // const pathName = usePathname();
-  // const spltitedPath = pathName.split("/");
-  // const boardId = spltitedPath[spltitedPath.length - 1];
-
-  // React.useEffect(() => {
-  //   const fetchUsers = async () => {
-  //     const response = await liveblocksClient.getRoom(boardId);
-  //     const usersAccesses = response.usersAccesses;
-  //     const userList = Object.keys(usersAccesses);
-  //     setUsers(userList);
-  //   };
-
-  //   fetchUsers();
-  // }, []);
-
-  // const updateAssignment = useMutation(({ storage }, cardId, updateData) => {
-  //   const cards = storage.get("cards");
-  //   const index = cards.findIndex((card) => card.toObject().id === cardId);
-  //   const thisCard = storage.get("cards").get(index);
-  //   for (let key in updateData) {
-  //     thisCard?.set(key as keyof Card, updateData[key]);
-  //   }
-  // }, []);
 
   const assignment = React.useCallback(async (id: string, user: string) => {
     try {
-      const response = await updateAssignment(id, user);
-      if (response && cards) {
-        const cardsUpdated = cards.map((card) =>
-          card._id === id ? { ...card, assigned: user } : card
-        );
-        dispatch(setCards(cardsUpdated));
-      }
+      await updateAssignment(id, user);
     } catch (error) {
       console.error("Erreur lors de l'assignement :", error);
     }

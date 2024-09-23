@@ -54,8 +54,6 @@ function SignupForm() {
       const response = await res.json();
 
       if (res.ok) {
-        console.log("User registered successfully", response);
-
         const loginUser = await signIn("credentials", {
           email,
           password: pwd,

@@ -30,22 +30,6 @@ export async function createCards(
 
     const data: Card = await response.json();
 
-    // TODO
-    // useMutation(({storage}) => {
-    //   const cards = storage.get('cards');
-    //   const initialCard = new LiveList([]);
-
-    //   if (!cards) {
-    //     storage.set('cards', initialCard);
-    //   }
-
-    //   return storage.get('cards').push(
-    //     new LiveObject({
-    //       id: data._id,
-    //       name: data.name
-    //     })
-    //   )
-    // }, [])
     return data;
   } catch (error: any) {
     console.error("Error while creating Card", error.message);

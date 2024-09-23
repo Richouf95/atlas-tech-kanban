@@ -1,36 +1,17 @@
 import React, { useCallback, useState } from "react";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
-import { useMutation, useStorage } from "@/app/liveblocks.config";
-import { Card } from "@/types";
 import { updateCardDueDate } from "@/lib/cardsActions";
-import { setCards } from "@/store/reducers/cards/cardsSlice";
 
 function DueDate({ id, dueDate }: { id: string; dueDate?: string }) {
   const theme = useSelector((state: RootState) => state.theme.theme);
   const [pickDate, setPickDate] = useState<boolean>(false);
   const cards = useSelector((state: RootState) => state.cards.cards);
-  const dispatch = useDispatch();
-
-  // const updateCardDueDate = useMutation(({ storage }, cardId, updateData) => {
-  //   const cards = storage.get("cards");
-  //   const index = cards.findIndex((card) => card.toObject().id === cardId);
-  //   const thisCard = storage.get("cards").get(index);
-  //   for (let key in updateData) {
-  //     thisCard?.set(key as keyof Card, updateData[key]);
-  //   }
-  // }, []);
 
   const addDueDate = useCallback(async (id: string, selectedDate: string) => {
     try {
-      const response = await updateCardDueDate(id, selectedDate);
-      if (response && cards) {
-        const cardsUpdated = cards.map((card) =>
-          card._id === id ? { ...card, dueDate: selectedDate } : card
-        );
-        dispatch(setCards(cardsUpdated));
-      }
+      await updateCardDueDate(id, selectedDate);
     } catch (error) {
       console.error("Erreur lors de l'ajour d'une dueDate' :", error);
     }

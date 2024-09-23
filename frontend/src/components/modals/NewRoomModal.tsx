@@ -41,9 +41,13 @@ function NewRoomModal() {
         className="roomCard w-full h-28 rounded-lg flex items-center px-5 cursor-pointer"
         onClick={handleOpen}
       >
-        <span className={`text-xl ${
-          theme === "light" ? "text-black" : "text-white"
-        } transition duration-1000`}>+ New Board</span>
+        <span
+          className={`text-xl ${
+            theme === "light" ? "text-black" : "text-white"
+          } transition duration-1000`}
+        >
+          + New Board
+        </span>
       </button>
 
       <Modal

@@ -8,8 +8,6 @@ import { RootState } from "../../store/store";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import DescriptionIcon from "@mui/icons-material/Description";
 import EditIcon from "@mui/icons-material/Edit";
-import { useMutation } from "@/app/liveblocks.config";
-import { Card } from "@/types";
 import { setCards } from "@/store/reducers/cards/cardsSlice";
 import { updateCardDescription } from "@/lib/cardsActions";
 
@@ -49,33 +47,14 @@ function CardDescriptionModal({
     borderRadius: 5,
   };
 
-  // const updateCardDescription = useMutation(
-  //   ({ storage }, cardId, updateData) => {
-  //     const cards = storage.get("cards");
-  //     const index = cards.findIndex((card) => card.toObject().id === cardId);
-  //     const thisCard = storage.get("cards").get(index);
-  //     for (let key in updateData) {
-  //       thisCard?.set(key as keyof Card, updateData[key]);
-  //     }
-  //   },
-  //   []
-  // );
-
   const handleNewDescription = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await updateCardDescription(id, newDescription);
-      if (cards && response) {
-        const cardsUpdated = cards.map((card) =>
-          card._id === id ? { ...card, description: newDescription } : card
-        );
-        dispatch(setCards(cardsUpdated));
-        handleClose();
-      }
+      await updateCardDescription(id, newDescription);
+      handleClose();
     } catch (error) {
       console.error("Erreur lors de la description de la card :", error);
     }
-    // updateCardDescription(id, { description: newDescription });
   };
 
   return (

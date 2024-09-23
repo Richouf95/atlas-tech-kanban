@@ -33,7 +33,6 @@ const getSingleProject = async (req, res) => {
 // Create project
 const createProject = async (req, res) => {
     const { name, ownerName, ownerEmail } = req.body;
-    console.log({name, ownerName, ownerEmail})
     try {
         const projectAccess = {};
         projectAccess[ownerEmail] = ['room:write'];

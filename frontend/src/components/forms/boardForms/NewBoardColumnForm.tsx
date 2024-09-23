@@ -1,13 +1,7 @@
 "use client";
 
-import { useMutation, useRoom, useStorage } from "@/app/liveblocks.config";
 import { createColumn } from "@/lib/columnsActions";
-import { setColumns } from "@/store/reducers/columns/columnsSlice";
-import { LiveList } from "@liveblocks/client";
-import { LiveObject } from "@liveblocks/core";
 import React, { FormEvent, useState } from "react";
-import { useDispatch } from "react-redux";
-import uniqid from "uniqid";
 
 function NewBoardColumnForm({
   boardId,
@@ -19,18 +13,10 @@ function NewBoardColumnForm({
   const [editMode, setEditMode] = useState<boolean>(false);
   const [newColumnName, setNewColumnName] = useState<string>("");
 
-  const dispatch = useDispatch();
-
   const handleNewBoardColum = async (e: FormEvent) => {
     e.preventDefault();
     const index = columns.length + 1;
-    const newColumn = await createColumn(
-      newColumnName,
-      index,
-      boardId,
-    );
-    const newColumnsList = [...columns, newColumn];
-    // dispatch(setColumns(newColumnsList));
+    await createColumn(newColumnName, index, boardId);
     setEditMode(false);
   };
   return (
